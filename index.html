@@ -19,11 +19,10 @@
       --accent: #49d3b4;
       --glow: 0 0 0 1px rgba(105, 183, 255, 0.15), 0 24px 80px rgba(0, 0, 0, 0.35);
       --radius: 22px;
-      --max: 1180px;
+      --max: 1160px;
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -68,7 +67,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      padding: 18px 0;
+      min-height: 78px;
     }
 
     .brand {
@@ -79,6 +78,7 @@
       color: var(--text);
       font-weight: 700;
       letter-spacing: 0.02em;
+      min-width: 0;
     }
 
     .brand-mark {
@@ -91,6 +91,7 @@
       color: white;
       box-shadow: 0 14px 30px rgba(35,135,230,0.25);
       font-size: 0.95rem;
+      flex: 0 0 auto;
     }
 
     .nav-links {
@@ -98,12 +99,14 @@
       align-items: center;
       gap: 18px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .nav-links a {
       color: var(--muted);
       text-decoration: none;
       font-size: 0.96rem;
+      white-space: nowrap;
     }
 
     .nav-links a:hover { color: var(--text); }
@@ -119,6 +122,7 @@
       text-decoration: none;
       background: rgba(105,183,255,0.1);
       transition: 180ms ease;
+      font-weight: 500;
     }
 
     .button:hover {
@@ -135,26 +139,27 @@
     }
 
     .hero {
-      padding: 84px 0 48px;
+      padding: 56px 0 26px;
     }
 
     .hero-wrap {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      align-items: stretch;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.78fr);
+      gap: 22px;
+      align-items: start;
     }
 
     .hero-card,
-    .panel {
+    .panel,
+    .card {
       border: 1px solid var(--line);
-      border-radius: 28px;
+      border-radius: 26px;
       background: linear-gradient(180deg, rgba(14, 28, 46, 0.88), rgba(8, 20, 34, 0.92));
       box-shadow: var(--glow);
     }
 
     .hero-card {
-      padding: 42px;
+      padding: 34px;
       position: relative;
       overflow: hidden;
     }
@@ -179,16 +184,17 @@
       color: var(--primary);
       background: rgba(105,183,255,0.08);
       border: 1px solid rgba(105,183,255,0.16);
-      font-size: 0.9rem;
-      margin-bottom: 20px;
+      font-size: 0.88rem;
+      margin-bottom: 18px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-size: clamp(2.6rem, 5.4vw, 4.9rem);
       line-height: 0.98;
       letter-spacing: -0.04em;
-      max-width: 10ch;
+      max-width: 12ch;
+      text-wrap: balance;
     }
 
     h1 span {
@@ -197,58 +203,62 @@
     }
 
     .hero-sub {
-      margin: 22px 0 0;
-      max-width: 62ch;
+      margin: 18px 0 0;
+      max-width: 60ch;
       color: var(--muted);
-      font-size: 1.06rem;
+      font-size: 1rem;
     }
 
     .hero-actions {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-top: 28px;
+      margin-top: 24px;
     }
 
     .metrics {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 30px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
     }
 
     .metric {
-      padding: 16px;
-      border-radius: 18px;
+      padding: 14px 14px 13px;
+      border-radius: 16px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.05);
+      min-width: 0;
     }
 
     .metric strong {
       display: block;
-      font-size: 1.4rem;
+      font-size: 1rem;
       color: var(--text);
+      line-height: 1.2;
     }
 
     .metric span {
       display: block;
-      margin-top: 4px;
+      margin-top: 6px;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      line-height: 1.4;
     }
 
     .hero-side {
       display: grid;
-      gap: 18px;
+      gap: 16px;
+      align-content: start;
     }
 
     .panel {
-      padding: 26px;
+      padding: 22px;
     }
 
     .panel h3 {
       margin: 0 0 10px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       letter-spacing: -0.02em;
     }
 
@@ -258,37 +268,39 @@
     }
 
     .question-list {
-      margin: 18px 0 0;
+      margin: 14px 0 0;
       padding: 0;
       list-style: none;
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
     .question-list li {
-      padding: 14px 16px;
-      border-radius: 16px;
+      padding: 13px 14px;
+      border-radius: 15px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.06);
       color: #dce8f7;
+      line-height: 1.45;
     }
 
     main section {
-      padding: 28px 0;
+      padding: 24px 0;
     }
 
     .section-head {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
       align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 22px;
+      gap: 18px;
+      margin-bottom: 18px;
     }
 
     .section-head h2 {
       margin: 0;
-      font-size: clamp(1.65rem, 2vw, 2.4rem);
+      font-size: clamp(1.7rem, 2.2vw, 2.35rem);
       letter-spacing: -0.03em;
+      text-wrap: balance;
     }
 
     .section-head p {
@@ -299,88 +311,86 @@
 
     .problem {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 24px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.82fr);
+      gap: 20px;
+      align-items: start;
     }
 
     .problem .panel.large {
-      padding: 32px;
+      padding: 28px;
     }
 
     .problem p {
       color: var(--muted);
-      margin: 0 0 18px;
+      margin: 0 0 16px;
     }
 
     .problem p:last-child { margin-bottom: 0; }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
     }
 
     .card {
-      padding: 24px;
+      padding: 22px;
       border-radius: 22px;
-      background: linear-gradient(180deg, rgba(13,27,46,0.96), rgba(8,20,34,0.96));
-      border: 1px solid var(--line);
-      box-shadow: var(--glow);
     }
 
     .card .num {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
       display: grid;
       place-items: center;
       background: rgba(105,183,255,0.1);
       color: var(--primary);
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
     }
 
     .card h3 {
-      margin: 0 0 10px;
-      font-size: 1.08rem;
+      margin: 0 0 8px;
+      font-size: 1.04rem;
       letter-spacing: -0.02em;
+      line-height: 1.3;
     }
 
     .card p {
       margin: 0;
       color: var(--muted);
-    }
-
-    .quote {
-      position: relative;
-      overflow: hidden;
+      font-size: 0.96rem;
     }
 
     .quote p {
       margin: 0;
-      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      font-size: clamp(1.12rem, 1.7vw, 1.4rem);
       line-height: 1.4;
       color: var(--text);
-      max-width: 40ch;
+      max-width: 28ch;
+      text-wrap: balance;
     }
 
     .quote small {
       display: block;
-      margin-top: 12px;
+      margin-top: 10px;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
+      line-height: 1.45;
     }
 
     .cta {
-      margin: 24px 0 80px;
+      margin: 18px 0 64px;
     }
 
     .cta-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      padding: 34px;
+      gap: 20px;
+      padding: 28px 30px;
       border-radius: 28px;
       border: 1px solid var(--line);
       background: linear-gradient(135deg, rgba(35,135,230,0.16), rgba(73,211,180,0.1));
@@ -389,26 +399,43 @@
 
     .cta-box h2 {
       margin: 0 0 8px;
-      font-size: clamp(1.55rem, 2.2vw, 2.4rem);
+      font-size: clamp(1.5rem, 2vw, 2.1rem);
       letter-spacing: -0.03em;
+      text-wrap: balance;
     }
 
     .cta-box p {
       margin: 0;
       color: #d4e2f2;
-      max-width: 58ch;
+      max-width: 56ch;
     }
 
     footer {
-      padding: 0 0 34px;
+      padding: 0 0 30px;
       color: var(--muted);
       font-size: 0.92rem;
     }
 
-    @media (max-width: 1040px) {
+    @media (max-width: 1100px) {
       .hero-wrap,
-      .problem,
-      .cards {
+      .problem {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+
+      .quote p,
+      .hero-sub,
+      .cta-box p {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .cards,
+      .metrics {
         grid-template-columns: 1fr;
       }
 
@@ -422,22 +449,29 @@
       .nav {
         align-items: flex-start;
         flex-direction: column;
+        padding: 14px 0;
       }
 
-      .hero { padding-top: 56px; }
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding-top: 36px;
+      }
 
       .hero-card,
       .panel,
       .card,
       .cta-box {
-        padding: 22px;
+        padding: 20px;
       }
 
-      .metrics {
-        grid-template-columns: 1fr;
+      h1 {
+        max-width: none;
+        font-size: clamp(2.1rem, 11vw, 3.4rem);
       }
-
-      h1 { max-width: none; }
     }
   </style>
 </head>
@@ -516,8 +550,7 @@
           <div>
             <h2>Het probleem zit zelden in de technologie</h2>
           </div>
-          <p>
-          </p>
+          <p></p>
         </div>
 
         <div class="problem">
@@ -555,8 +588,7 @@
           <div>
             <h2>Een aanpak die het proces volgt</h2>
           </div>
-          <p>
-          </p>
+          <p></p>
         </div>
 
         <div class="cards">
@@ -601,4 +633,3 @@
   </footer>
 </body>
 </html>
-
