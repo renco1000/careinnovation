@@ -14,6 +14,7 @@
       --primary: #69b7ff;
       --primary-strong: #2387e6;
       --accent: #49d3b4;
+      --status-green: #49d3b4;
       --max: 1160px;
     }
 
@@ -31,7 +32,6 @@
       line-height: 1.6;
     }
 
-    /* Canvas voor de bewegende deeltjes */
     #particle-canvas {
       position: fixed;
       inset: 0;
@@ -61,8 +61,50 @@
     }
 
     .nav { display: flex; align-items: center; justify-content: space-between; height: 80px; }
-    .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: white; font-weight: 700; font-size: 1.2rem; }
+    
+    .brand-box { display: flex; align-items: center; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 700; font-size: 1.2rem; }
     .brand-mark { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-strong), var(--accent)); border-radius: 12px; display: grid; place-items: center; }
+
+    /* Status Indicator Style */
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 12px;
+      border-radius: 99px;
+      border: 1px solid rgba(73, 211, 180, 0.2);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--status-green);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 10px var(--status-green);
+    }
+
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background-color: var(--status-green);
+      opacity: 0.4;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.4; }
+      70% { transform: scale(2.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 0; }
+    }
 
     .nav-links { display: flex; gap: 30px; align-items: center; }
     .nav-links a { text-decoration: none; color: var(--muted); transition: 0.3s; font-weight: 500; }
@@ -145,6 +187,7 @@
     @media (max-width: 1024px) {
       .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; }
       h1 { font-size: 2.8rem; }
+      .status-text { display: none; } /* Verberg tekst op kleine schermen, hou alleen bolletje */
     }
   </style>
 </head>
@@ -154,14 +197,20 @@
 
   <header>
     <div class="container nav">
-      <a href="#" class="brand">
-        <div class="brand-mark">CI</div>
-        <span>Care Innovation</span>
-      </a>
+      <div class="brand-box">
+        <a href="#" class="brand">
+          <div class="brand-mark">CI</div>
+          <span>Care Innovation</span>
+        </a>
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          <span class="status-text">Operationeel / Beschikbaar</span>
+        </div>
+      </div>
       <nav class="nav-links">
-        <a href="#probleem">Het Probleem</a>
+        <a href="#probleem">Probleem</a>
         <a href="#over-mij">Over Mij</a>
-        <a href="#aanpak">Onze Aanpak</a>
+        <a href="#aanpak">Aanpak</a>
         <a href="mailto:info@careinnovation.nl" class="btn btn-outline">Contact</a>
       </nav>
     </div>
@@ -255,8 +304,8 @@
     <section>
       <div class="cta-inner">
         <h2>Klaar om te kijken wat er echt blijft staan?</h2>
-        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie.<p>
-        </p>Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
+        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. <P>
+          <P>Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
         <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="background: #07111f; color: white; padding: 16px 40px;">Neem contact op</a>
       </div>
     </section>
@@ -264,12 +313,11 @@
 
   <footer>
     <div class="container">
-      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies | info@careinnovation.nl
+      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies | Info@careinnovation.nl 
     </div>
   </footer>
 
   <script>
-    // Scroll Reveal Script
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -282,7 +330,6 @@
       observer.observe(section);
     });
 
-    // Particle Network Script
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -291,7 +338,6 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
-
     window.addEventListener('resize', resize);
     resize();
 
@@ -303,14 +349,12 @@
         this.vy = (Math.random() - 0.5) * 0.4;
         this.radius = Math.random() * 1.5 + 1;
       }
-
       update() {
         this.x += this.vx;
         this.y += this.vy;
         if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
         if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
       }
-
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -322,9 +366,7 @@
     function init() {
       particles = [];
       const count = (canvas.width * canvas.height) / 15000;
-      for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
-      }
+      for (let i = 0; i < count; i++) { particles.push(new Particle()); }
     }
 
     function animate() {
@@ -348,7 +390,6 @@
       });
       requestAnimationFrame(animate);
     }
-
     init();
     animate();
   </script>
