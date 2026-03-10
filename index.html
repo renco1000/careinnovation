@@ -31,14 +31,22 @@
       line-height: 1.6;
     }
 
-    .grid-bg {
+    /* Canvas voor de bewegende deeltjes */
+    #particle-canvas {
       position: fixed;
       inset: 0;
       z-index: -1;
+      pointer-events: none;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
       background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
       background-size: 50px 50px;
       mask-image: radial-gradient(circle at center, black, transparent 85%);
-      opacity: 0.2;
+      opacity: 0.15;
     }
 
     .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
@@ -73,7 +81,6 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(35,135,230,0.4); }
     .btn-outline { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
 
-    /* Scroll Reveal Animation */
     section {
       opacity: 0;
       transform: translateY(30px);
@@ -95,6 +102,7 @@
       padding: 50px;
       border-radius: 32px;
       height: 100%;
+      backdrop-filter: blur(5px);
     }
 
     h1 { font-size: 3.5rem; line-height: 1.1; margin: 0 0 24px; letter-spacing: -0.05em; }
@@ -115,7 +123,6 @@
       padding: 40px 30px;
       border-radius: 24px;
       text-align: center;
-      transition: 0.3s;
     }
 
     .step-num { 
@@ -138,12 +145,12 @@
     @media (max-width: 1024px) {
       .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; }
       h1 { font-size: 2.8rem; }
-      .card { padding: 30px; }
     }
   </style>
 </head>
 <body>
   <div class="grid-bg"></div>
+  <canvas id="particle-canvas"></canvas>
 
   <header>
     <div class="container nav">
@@ -249,7 +256,7 @@
       <div class="cta-inner">
         <h2>Klaar om te kijken wat er echt blijft staan?</h2>
         <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie.<p>
-        <p></p>Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
+        </p>Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
         <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="background: #07111f; color: white; padding: 16px 40px;">Neem contact op</a>
       </div>
     </section>
@@ -262,6 +269,7 @@
   </footer>
 
   <script>
+    // Scroll Reveal Script
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -273,6 +281,76 @@
     document.querySelectorAll('section').forEach(section => {
       observer.observe(section);
     });
+
+    // Particle Network Script
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.radius = Math.random() * 1.5 + 1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(105, 183, 255, 0.4)';
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particles = [];
+      const count = (canvas.width * canvas.height) / 15000;
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.update();
+        p.draw();
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = p.x - particles[j].x;
+          const dy = p.y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(105, 183, 255, ${0.15 * (1 - dist / 150)})`;
+            ctx.lineWidth = 0.8;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
   </script>
 </body>
 </html>
