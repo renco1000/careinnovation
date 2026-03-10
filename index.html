@@ -7,7 +7,6 @@
   <style>
     :root {
       --bg: #07111f;
-      --bg-soft: #0d1b2e;
       --panel: rgba(15, 31, 52, 0.7);
       --line: rgba(131, 191, 255, 0.12);
       --text: #eef5ff;
@@ -15,11 +14,10 @@
       --primary: #69b7ff;
       --primary-strong: #2387e6;
       --accent: #49d3b4;
-      --glow: 0 20px 50px rgba(0, 0, 0, 0.3);
       --max: 1100px;
     }
 
-    * { box-sizing: border-box; outline: none; }
+    * { box-sizing: border-box; }
     html { scroll-behavior: smooth; background: var(--bg); }
 
     body {
@@ -27,21 +25,22 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: var(--text);
       background: 
-        radial-gradient(circle at 0% 0%, rgba(35,135,230,0.15), transparent 40%),
-        radial-gradient(circle at 100% 100%, rgba(73,211,180,0.1), transparent 40%),
+        radial-gradient(circle at 0% 0%, rgba(35,135,230,0.12), transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(73,211,180,0.08), transparent 40%),
         var(--bg);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
+    /* Apple-stijl Grid Achtergrond */
     .grid-bg {
       position: fixed;
       inset: 0;
       z-index: -1;
       background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(circle at center, black, transparent 80%);
-      opacity: 0.2;
+      background-size: 60px 60px;
+      mask-image: radial-gradient(circle at center, black, transparent 90%);
+      opacity: 0.15;
     }
 
     .container { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; }
@@ -51,107 +50,94 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(20px);
-      background: rgba(7, 17, 31, 0.8);
+      background: rgba(7, 17, 31, 0.75);
       border-bottom: 1px solid var(--line);
     }
 
-    .nav { display: flex; align-items: center; justify-content: space-between; height: 80px; }
-    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 700; font-size: 1.2rem; }
-    .brand-mark { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary-strong), var(--accent)); border-radius: 10px; display: grid; place-items: center; font-size: 0.8rem; box-shadow: 0 0 20px rgba(35,135,230,0.3); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 700; }
+    .brand-mark { width: 34px; height: 34px; background: linear-gradient(135deg, var(--primary-strong), var(--accent)); border-radius: 8px; display: grid; place-items: center; font-size: 0.7rem; }
 
-    .nav-links { display: flex; gap: 32px; align-items: center; }
-    .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; transition: 0.3s; font-weight: 500; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.85rem; transition: 0.3s; }
     .nav-links a:hover { color: var(--primary); }
 
+    /* Buttons */
     .btn {
-      padding: 12px 24px;
-      border-radius: 12px;
+      padding: 10px 22px;
+      border-radius: 10px;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.9rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 0.85rem;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       display: inline-flex;
       align-items: center;
     }
-    .btn-primary { background: var(--primary-strong); color: white; box-shadow: 0 4px 15px rgba(35,135,230,0.3); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(35,135,230,0.4); }
+    .btn-primary { background: var(--primary-strong); color: white; }
+    .btn-primary:hover { transform: scale(1.03); box-shadow: 0 10px 30px rgba(35,135,230,0.3); }
     .btn-outline { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
-    .btn-outline:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
 
-    .hero { padding: 80px 0 60px; }
-    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: stretch; }
-    
-    .main-card {
-      background: rgba(15, 31, 52, 0.6);
+    /* Reveal-on-scroll container */
+    section {
+      opacity: 0;
+      transform: scale(0.95) translateY(40px);
+      transition: all 1.2s cubic-bezier(0.215, 0.61, 0.355, 1);
+      padding: 60px 0;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Content Cards */
+    .card {
+      background: rgba(15, 31, 52, 0.5);
       border: 1px solid var(--line);
-      padding: 50px;
-      border-radius: 32px;
-      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 40px;
+      height: fit-content; /* Zorgt dat vak niet groter is dan tekst */
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
-    
-    h1 { font-size: 3.2rem; line-height: 1.1; margin: 0 0 24px; letter-spacing: -0.05em; }
+
+    h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.05; margin: 0 0 20px; letter-spacing: -0.05em; }
     h1 span { color: var(--primary); display: block; }
-    .hero p { font-size: 1.1rem; color: var(--muted); margin-bottom: 32px; }
+    h2 { font-size: 2rem; letter-spacing: -0.03em; margin-bottom: 20px; }
 
-    .side-panel { display: grid; gap: 24px; }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--line);
-      padding: 32px;
-      border-radius: 24px;
-      transition: 0.4s;
-      height: 100%;
-    }
-    .glass-card h3 { margin: 0 0 16px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+    .problem-box { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
 
-    .roadmap { padding: 60px 0; }
-    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    
+    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .step-card {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255,255,255,0.02);
       border: 1px solid var(--line);
-      padding: 40px 32px;
+      padding: 30px;
       border-radius: 24px;
       text-align: center;
-      transition: 0.3s;
+      height: 100%; /* Maakt stappen gelijk qua hoogte in de grid */
     }
-    .step-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-    .step-num { width: 50px; height: 50px; background: var(--primary-strong); color: white; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 20px; font-weight: 800; }
 
-    .problem-section { padding: 60px 0; }
-    .problem-box {
-      background: rgba(15, 31, 52, 0.6);
-      border: 1px solid var(--line);
-      padding: 60px;
-      border-radius: 40px;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 60px;
+    .step-num { 
+      width: 44px; height: 44px; background: var(--primary-strong); color: white; 
+      border-radius: 50%; display: grid; place-items: center; margin: 0 auto 16px; font-weight: 800; 
     }
-    .problem-text h2 { font-size: 2.2rem; margin: 0 0 24px; letter-spacing: -0.03em; }
-    .problem-text p { color: var(--muted); font-size: 1.05rem; margin-bottom: 20px; line-height: 1.7; }
-    
-    .cta { padding: 80px 0; }
-    .cta-inner { 
-      background: linear-gradient(135deg, var(--primary-strong), var(--accent)); 
-      padding: 60px; 
-      border-radius: 40px; 
-      color: #07111f; 
-      text-align: center;
+
+    .badge {
+      display: inline-block; padding: 5px 12px; background: rgba(105,183,255,0.1); 
+      border: 1px solid var(--primary); border-radius: 99px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px;
     }
-    .cta-inner h2 { font-size: 2.5rem; margin-bottom: 16px; letter-spacing: -0.04em; }
-    .cta-inner p { font-size: 1.2rem; margin-bottom: 32px; font-weight: 500; max-width: 700px; margin-inline: auto; }
-    .cta .btn-primary { background: #07111f; color: white; }
 
-    footer { padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    .cta-inner {
+      background: linear-gradient(135deg, var(--primary-strong), var(--accent));
+      padding: 50px; border-radius: 36px; color: #07111f; text-align: center;
+    }
 
-    @media (max-width: 1000px) {
+    footer { padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--line); }
+
+    @media (max-width: 900px) {
       .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; }
-      h1 { font-size: 2.5rem; }
-      .problem-box { padding: 30px; gap: 30px; }
+      .nav-links { display: none; } /* Simpel voor nu: verberg menu op mobiel */
     }
   </style>
 </head>
@@ -162,142 +148,129 @@
     <div class="container nav">
       <a href="#" class="brand">
         <div class="brand-mark">CI</div>
-        Care Innovation
+        <span>Care Innovation</span>
       </a>
       <nav class="nav-links">
-        <a href="#probleem">Het Probleem</a>
+        <a href="#probleem">Probleem</a>
         <a href="#over-mij">Over Mij</a>
-        <a href="#aanpak">Onze Aanpak</a>
+        <a href="#aanpak">Aanpak</a>
         <a href="mailto:info@careinnovation.nl" class="btn btn-outline">Contact</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero container">
+  <main class="container">
+    <section class="hero visible">
       <div class="hero-grid">
-        <div class="main-card">
+        <div class="card">
           <h1>Innovatie gestart.<span>Project afgerond.</span></h1>
-          <p>Hoeveel innovaties staan er bij u inmiddels in de kast? Care Innovation helpt zorgorganisaties om technologie duurzaam te laten landen in de dagelijkse praktijk. Niet door nóg meer plannen of losse pilots, maar door implementatie, adoptie en borging structureel te organiseren.</p>
-          <div style="display: flex; gap: 16px;">
+          <p style="margin-bottom: 30px; color: var(--muted);">Hoeveel innovaties staan er bij u inmiddels in de kast? Care Innovation helpt zorgorganisaties om technologie duurzaam te laten landen in de dagelijkse praktijk. Niet door nóg meer plannen of losse pilots, maar door implementatie, adoptie en borging structureel te organiseren.</p>
+          <div style="display: flex; gap: 12px;">
             <a href="mailto:info@careinnovation.nl" class="btn btn-primary">Plan een kennismaking</a>
             <a href="#probleem" class="btn btn-outline">Lees meer</a>
           </div>
         </div>
-        <div class="side-panel">
-          <div class="glass-card">
-            <h3>Kernvragen</h3>
-            <ul style="margin:0; padding:0; list-style:none; display:grid; gap:12px; color: var(--muted);">
-              <li style="padding-bottom:12px; border-bottom:1px solid var(--line);">• Welke innovaties zijn vandaag aantoonbaar onderdeel van de praktijk?</li>
-              <li style="padding-bottom:12px; border-bottom:1px solid var(--line);">• Wie is nu verantwoordelijk voor het gebruik ervan?</li>
-              <li style="padding-bottom:12px; border-bottom:1px solid var(--line);">• Wat gebeurt er zes maanden na livegang?</li>
-              <li>• Welke innovatie is bij u daadwerkelijk blijven staan?</li>
-            </ul>
-          </div>
+        <div class="card" style="background: rgba(255,255,255,0.02);">
+          <h3 style="color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">Kernvragen</h3>
+          <ul style="padding:0; list-style:none; display:grid; gap:16px; font-size: 0.95rem; color: var(--muted);">
+            <li>• Welke innovaties zijn vandaag aantoonbaar onderdeel van de praktijk?</li>
+            <li>• Wie is nu verantwoordelijk voor het gebruik ervan?</li>
+            <li>• Wat gebeurt er zes maanden na livegang?</li>
+            <li>• Welke innovatie is bij u daadwerkelijk blijven staan?</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section id="probleem" class="problem-section container">
-      <div class="problem-box">
-        <div class="problem-text">
+    <section id="probleem">
+      <div class="problem-box card" style="background: rgba(15, 31, 52, 0.6); padding: 50px;">
+        <div>
           <h2>Het probleem zit zelden in de technologie</h2>
-          <p>Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties, zoals zorgrobotica, e-healthtoepassingen, digitale hulpmiddelen en ondersteunende applicaties. Deze innovaties worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren, de werkdruk te verlagen en zorgprofessionals beter te ondersteunen in hun dagelijkse werkzaamheden.</p>
-          <p>In de praktijk blijkt echter dat veel innovaties na een pilotfase of initiële implementatie niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond of raken volledig buiten gebruik. Hierdoor blijft een groot deel van de beoogde meerwaarde onbenut en ontstaan frustraties bij zowel zorgprofessionals als management.</p>
-          <p>Een belangrijke oorzaak hiervan is dat de aandacht bij innovatie vaak ligt op de selectie en aanschaf van oplossingen. De daadwerkelijke implementatie, adoptie door medewerkers en structurele borging in werkprocessen krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap, tijd en een integrale aanpak waarin techniek, organisatie en gedrag samenkomen.</p>
-          <p>Het gevolg is dat zorgorganisaties wel beschikken over innovatieve middelen, maar moeite hebben om deze duurzaam te laten landen in de dagelijkse praktijk.</p>
+          <p style="color: var(--muted); margin-bottom: 18px;">Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties, zoals zorgrobotica, e-healthtoepassingen, digitale hulpmiddelen en ondersteunende applicaties. Deze innovaties worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren, de werkdruk te verlagen en zorgprofessionals beter te ondersteunen in hun dagelijkse werkzaamheden.</p>
+          <p style="color: var(--muted); margin-bottom: 18px;">In de praktijk blijkt echter dat veel innovaties na een pilotfase of initiële implementatie niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond of raken volledig buiten gebruik. Hierdoor blijft een groot deel van de beoogde meerwaarde onbenut en ontstaan frustraties bij zowel zorgprofessionals als management.</p>
+          <p style="color: var(--muted); margin-bottom: 18px;">Een belangrijke oorzaak hiervan is dat de aandacht bij innovatie vaak ligt op de selectie en aanschaf van oplossingen. De daadwerkelijke implementatie, adoptie door medewerkers en structurele borging in werkprocessen krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap, tijd en een integrale aanpak waarin techniek, organisatie en gedrag samenkomen.</p>
+          <p style="color: var(--muted);">Het gevolg is dat zorgorganisaties wel beschikken over innovatieve middelen, maar moeite hebben om deze duurzaam te laten landen in de dagelijkse praktijk.</p>
         </div>
-        <div class="side-panel">
-          <div class="glass-card" style="background: rgba(255, 255, 255, 0.05);">
-            <h3>Waar het vaak schuurt</h3>
-            <ul style="margin:0; padding:0; list-style:none; display:grid; gap:15px;">
-              <li>• Focus op aanschaf, niet op blijvend gebruik.</li>
-              <li>• Onduidelijk eigenaarschap na de projectfase.</li>
-              <li>• Slechte aansluiting op primaire werkprocessen.</li>
-              <li>• Gebrek aan integrale aanpak (mens & organisatie).</li>
-            </ul>
-          </div>
+        <div class="card" style="background: rgba(255,255,255,0.03); border-color: var(--primary);">
+          <h3 style="font-size: 0.9rem; color: var(--primary);">WAAR HET VAAK SCHUURT</h3>
+          <ul style="padding:0; list-style:none; display:grid; gap:12px; font-size: 0.9rem;">
+            <li>• Focus op aanschaf, niet op gebruik.</li>
+            <li>• Onduidelijk eigenaarschap na projectfase.</li>
+            <li>• Slechte aansluiting op werkprocessen.</li>
+            <li>• Gebrek aan integrale aanpak.</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section id="over-mij" class="container" style="padding: 60px 0;">
-      <div class="problem-box" style="background: linear-gradient(145deg, rgba(35,135,230,0.05), rgba(15,31,52,0.6));">
-        <div class="side-panel" style="justify-content: center; text-align: center;">
-          <div class="brand-mark" style="width: 100px; height: 100px; font-size: 2rem; border-radius: 25px; margin: 0 auto; box-shadow: 0 0 40px rgba(35,135,230,0.4);">RL</div>
-          <div style="margin-top: 20px;">
-            <h3 style="color: var(--primary); margin: 0; font-size: 1.4rem;">Renco van Leeuwen</h3>
-            <p style="font-size: 0.9rem; opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">Innovatie & Advies</p>
-            <div style="margin-top: 15px; display: inline-block; padding: 6px 14px; background: rgba(105,183,255,0.1); border: 1px solid var(--primary); border-radius: 99px; font-size: 0.8rem; font-weight: 700;">
-              15+ JAAR ERVARING
-            </div>
-          </div>
+    <section id="over-mij">
+      <div class="problem-box card" style="background: linear-gradient(145deg, rgba(35,135,230,0.08), rgba(15,31,52,0.6));">
+        <div style="text-align: center;">
+          <div class="brand-mark" style="width: 80px; height: 80px; font-size: 1.5rem; margin: 0 auto 20px;">RL</div>
+          <h3 style="margin:0;">Renco van Leeuwen</h3>
+          <p style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 15px;">INNOVATIE & ADVIES</p>
+          <div class="badge">15+ JAAR ERVARING</div>
         </div>
-        <div class="problem-text">
-          <h2 style="font-size: 2.2rem; margin-bottom: 24px;">De drijvende kracht</h2>
-          <p>
-            Met ruim 15 jaar ervaring op het snijvlak van zorg en ICT heb ik de volledige transformatie van zorgdossiers op papier naar een volledig digitale zorgomgeving van dichtbij meegemaakt en vormgegeven. Mijn expertise strekt zich uit over de volle breedte van de techniek: van zorgdomotica en telefonie tot netwerken en complexe systeemintegraties.
-          </p>
-          <p>
-            Wat mij onderscheidt, is de combinatie van deze diepgaande praktijkkennis met mijn opleiding Technische Bedrijfskunde. Hierdoor ben ik in staat om techniek, zorginhoud en bedrijfsprocessen als geen ander te doorgronden en met elkaar te verbinden. Ik kijk verder dan de implementatie alleen; ik zorg ervoor dat innovatie een structureel onderdeel wordt van uw organisatie.
-          </p>
+        <div>
+          <h2>De drijvende kracht</h2>
+          <p style="color: var(--muted); margin-bottom: 15px;">Met ruim 15 jaar ervaring op het snijvlak van zorg en ICT heb ik de volledige transformatie van zorgdossiers op papier naar een volledig digitale zorgomgeving van dichtbij meegemaakt en vormgegeven. Mijn expertise strekt zich uit over de volle breedte van de techniek: van zorgdomotica en telefonie tot netwerken en complexe systeemintegraties.</p>
+          <p style="color: var(--muted);">Wat mij onderscheidt, is de combinatie van deze diepgaande praktijkkennis met mijn opleiding Technische Bedrijfskunde. Hierdoor ben ik in staat om techniek, zorginhoud en bedrijfsprocessen als geen ander te doorgronden en met elkaar te verbinden. Ik kijk verder dan de implementatie alleen; ik zorg ervoor dat innovatie een structureel onderdeel wordt van uw organisatie.</p>
         </div>
       </div>
     </section>
 
-    <section id="aanpak" class="roadmap container">
-      <div style="text-align: center; margin-bottom: 50px;">
-        <h2 style="font-size: 2.2rem; margin-bottom: 12px;">Een aanpak die het proces volgt</h2>
-        <p style="color: var(--muted);">Van de huidige situatie naar structurele borging.</p>
-      </div>
+    <section id="aanpak">
+      <h2 style="text-align: center; margin-bottom: 40px;">Een aanpak die het proces volgt</h2>
       <div class="roadmap-grid">
         <div class="step-card">
           <div class="step-num">01</div>
-          <h3>Analyse</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Inzicht in lopende innovaties, eigenaarschap, procesaansluiting en de mate waarin toepassingen daadwerkelijk worden gebruikt.</p>
+          <h3 style="font-size: 1.1rem;">Analyse</h3>
+          <p style="font-size: 0.85rem; color: var(--muted);">Inzicht in lopende innovaties, eigenaarschap, procesaansluiting en de mate waarin toepassingen daadwerkelijk worden gebruikt.</p>
         </div>
         <div class="step-card">
           <div class="step-num">02</div>
-          <h3>Implementatie</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Innovatie verbinden aan het primaire zorgproces, verantwoordelijkheden organiseren en gebruik in de praktijk ondersteunen.</p>
+          <h3 style="font-size: 1.1rem;">Implementatie</h3>
+          <p style="font-size: 0.85rem; color: var(--muted);">Innovatie verbinden aan het primaire zorgproces, verantwoordelijkheden organiseren en gebruik in de praktijk ondersteunen.</p>
         </div>
         <div class="step-card">
           <div class="step-num">03</div>
-          <h3>Borging</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Zorgen dat innovatie geen tijdelijk project blijft, maar onderdeel wordt van standaard werkwijzen, afspraken en eigenaarschap.</p>
+          <h3 style="font-size: 1.1rem;">Borging</h3>
+          <p style="font-size: 0.85rem; color: var(--muted);">Zorgen dat innovatie geen tijdelijk project blijft, maar onderdeel wordt van standaard werkwijzen, afspraken en eigenaarschap.</p>
         </div>
       </div>
     </section>
 
-    <section class="cta container">
+    <section>
       <div class="cta-inner">
-        <h2>Klaar om te kijken wat er echt blijft staan?</h2>
-        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
-        <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="padding: 16px 40px; font-size: 1rem;">Neem contact op</a>
+        <h2 style="margin:0 0 10px;">Klaar om te kijken wat er echt blijft staan?</h2>
+        <p style="margin-bottom: 30px; opacity: 0.9;">Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
+        <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="background: #07111f; color: white; padding: 14px 30px;">Neem contact op</a>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies | info@careinnovation.nl
+      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies
     </div>
   </footer>
 
   <script>
+    // Het Apple-stijl reveal script
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.style.opacity = "1";
-          entry.target.style.transform = "translateY(0)";
+          entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.1 });
+    }, observerOptions);
 
     document.querySelectorAll('section').forEach(section => {
-      section.style.opacity = "0";
-      section.style.transform = "translateY(20px)";
-      section.style.transition = "all 0.6s ease-out";
       observer.observe(section);
     });
   </script>
