@@ -34,7 +34,6 @@
       overflow-x: hidden;
     }
 
-    /* Strakke Grid Achtergrond */
     .grid-bg {
       position: fixed;
       inset: 0;
@@ -47,7 +46,6 @@
 
     .container { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; }
 
-    /* Header & Nav */
     header {
       position: sticky;
       top: 0;
@@ -65,7 +63,6 @@
     .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; transition: 0.3s; font-weight: 500; }
     .nav-links a:hover { color: var(--primary); }
 
-    /* Buttons */
     .btn {
       padding: 12px 24px;
       border-radius: 12px;
@@ -77,27 +74,28 @@
       align-items: center;
     }
     .btn-primary { background: var(--primary-strong); color: white; box-shadow: 0 4px 15px rgba(35,135,230,0.3); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(35,135,230,0.4); background: #2b94f5; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(35,135,230,0.4); }
     .btn-outline { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
     .btn-outline:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
 
-    /* Hero */
-    .hero { padding: 100px 0 60px; }
-    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
+    .hero { padding: 80px 0 60px; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: stretch; }
     
     .main-card {
       background: rgba(15, 31, 52, 0.6);
       border: 1px solid var(--line);
-      padding: 60px;
+      padding: 50px;
       border-radius: 32px;
       backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     
-    h1 { font-size: 3.5rem; line-height: 1.1; margin: 0 0 24px; letter-spacing: -0.05em; }
-    h1 span { color: var(--primary); }
-    .hero p { font-size: 1.15rem; color: var(--muted); margin-bottom: 32px; max-width: 600px; }
+    h1 { font-size: 3.2rem; line-height: 1.1; margin: 0 0 24px; letter-spacing: -0.05em; }
+    h1 span { color: var(--primary); display: block; }
+    .hero p { font-size: 1.1rem; color: var(--muted); margin-bottom: 32px; }
 
-    /* Info Panels */
     .side-panel { display: grid; gap: 24px; }
     .glass-card {
       background: rgba(255, 255, 255, 0.02);
@@ -105,55 +103,55 @@
       padding: 32px;
       border-radius: 24px;
       transition: 0.4s;
+      height: 100%;
     }
-    .glass-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.04); transform: translateY(-5px); }
-    .glass-card h3 { margin: 0 0 12px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .glass-card h3 { margin: 0 0 16px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
 
-    /* Roadmap Visual */
-    .roadmap { padding: 80px 0; }
-    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; position: relative; }
-    .roadmap-grid::before { content: ''; position: absolute; top: 40px; left: 15%; right: 15%; height: 2px; background: var(--line); z-index: 0; }
+    .roadmap { padding: 60px 0; }
+    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     
-    .step { text-align: center; position: relative; z-index: 1; padding: 0 20px; }
-    .step-num { width: 80px; height: 80px; background: var(--bg); border: 2px solid var(--primary); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 24px; font-size: 1.5rem; font-weight: 800; color: var(--primary); box-shadow: 0 0 30px rgba(105,183,255,0.2); transition: 0.5s; }
-    .step:hover .step-num { transform: scale(1.1); background: var(--primary); color: var(--bg); }
+    .step-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line);
+      padding: 40px 32px;
+      border-radius: 24px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .step-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+    .step-num { width: 50px; height: 50px; background: var(--primary-strong); color: white; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 20px; font-weight: 800; }
 
-    /* Problem Section */
+    .problem-section { padding: 60px 0; }
     .problem-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      background: linear-gradient(145deg, rgba(15,31,52,0.8), rgba(7,17,31,0.9));
+      background: rgba(15, 31, 52, 0.6);
+      border: 1px solid var(--line);
       padding: 60px;
       border-radius: 40px;
-      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 60px;
     }
-    .problem-text p { color: var(--muted); font-size: 1.05rem; margin-bottom: 20px; }
+    .problem-text h2 { font-size: 2.2rem; margin: 0 0 24px; letter-spacing: -0.03em; }
+    .problem-text p { color: var(--muted); font-size: 1.05rem; margin-bottom: 20px; line-height: 1.7; }
     
-    /* CTA */
-    .cta { padding: 100px 0; text-align: center; }
+    .cta { padding: 80px 0; }
     .cta-inner { 
-      background: linear-gradient(90deg, var(--primary-strong), var(--accent)); 
-      padding: 80px 40px; 
+      background: linear-gradient(135deg, var(--primary-strong), var(--accent)); 
+      padding: 60px; 
       border-radius: 40px; 
       color: #07111f; 
-      position: relative;
-      overflow: hidden;
+      text-align: center;
     }
-    .cta-inner h2 { font-size: 2.5rem; margin-bottom: 16px; letter-spacing: -0.03em; }
-    .cta-inner p { font-size: 1.2rem; margin-bottom: 32px; opacity: 0.9; font-weight: 500; }
+    .cta-inner h2 { font-size: 2.5rem; margin-bottom: 16px; letter-spacing: -0.04em; }
+    .cta-inner p { font-size: 1.2rem; margin-bottom: 32px; font-weight: 500; max-width: 700px; margin-inline: auto; }
     .cta .btn-primary { background: #07111f; color: white; }
 
-    /* Footer */
-    footer { padding: 60px 0; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
+    footer { padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; gap: 30px; }
-      .roadmap-grid::before { display: none; }
-      h1 { font-size: 2.8rem; }
-      .main-card { padding: 30px; }
-      .problem-box { padding: 30px; }
+    @media (max-width: 1000px) {
+      .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 2.5rem; }
+      .problem-box { padding: 30px; gap: 30px; }
     }
   </style>
 </head>
@@ -167,8 +165,9 @@
         Care Innovation
       </a>
       <nav class="nav-links">
-        <a href="#aanpak">Onze Aanpak</a>
         <a href="#probleem">Het Probleem</a>
+        <a href="#aanpak">Onze Aanpak</a>
+        <a href="#vragen">Kernvragen</a>
         <a href="mailto:info@careinnovation.nl" class="btn btn-outline">Contact</a>
       </nav>
     </div>
@@ -178,24 +177,44 @@
     <section class="hero container">
       <div class="hero-grid">
         <div class="main-card">
-          <h1>Innovatie is gestart.<br><span>Blijft het ook staan?</span></h1>
-          <p>Care Innovation helpt zorgorganisaties om technologie duurzaam te laten landen. Geen pilots voor de bühne, maar borging in het DNA van uw zorgproces.</p>
+          <h1>Innovatie gestart.<span>Project afgerond.</span></h1>
+          <p>Hoeveel innovaties staan er bij u inmiddels in de kast? Care Innovation helpt zorgorganisaties om technologie duurzaam te laten landen in de dagelijkse praktijk. Niet door nóg meer plannen of losse pilots, maar door implementatie, adoptie en borging structureel te organiseren.</p>
           <div style="display: flex; gap: 16px;">
             <a href="mailto:info@careinnovation.nl" class="btn btn-primary">Plan een kennismaking</a>
-            <a href="#aanpak" class="btn btn-outline">Ontdek onze methode</a>
+            <a href="#probleem" class="btn btn-outline">Lees meer</a>
           </div>
         </div>
         <div class="side-panel">
           <div class="glass-card">
-            <h3>De Realiteit</h3>
-            <p style="margin:0; font-size: 1.3rem; color: white;">"Innovatie zonder borging is slechts een tijdelijke ambitie."</p>
+            <h3>Kernvragen</h3>
+            <ul style="margin:0; padding:0; list-style:none; display:grid; gap:12px; color: var(--muted);">
+              <li style="padding-bottom:12px; border-bottom:1px solid var(--line);">• Welke innovaties zijn vandaag aantoonbaar onderdeel van de praktijk?</li>
+              <li style="padding-bottom:12px; border-bottom:1px solid var(--line);">• Wie is nu verantwoordelijk voor het gebruik ervan?</li>
+              <li style="padding-bottom:12px; border-bottom:1px solid var(--line);">• Wat gebeurt er zes maanden na livegang?</li>
+              <li>• Welke innovatie is bij u daadwerkelijk blijven staan?</li>
+            </ul>
           </div>
-          <div class="glass-card">
-            <h3>Focus op resultaat</h3>
-            <ul style="margin:16px 0 0; padding:0; list-style:none; color: var(--muted); display: grid; gap: 10px;">
-              <li>✓ 100% eigenaarschap na livegang</li>
-              <li>✓ Naadloze proces-integratie</li>
-              <li>✓ Meetbare adoptie-graad</li>
+        </div>
+      </div>
+    </section>
+
+    <section id="probleem" class="problem-section container">
+      <div class="problem-box">
+        <div class="problem-text">
+          <h2>Het probleem zit zelden in de technologie</h2>
+          <p>Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties, zoals zorgrobotica, e-healthtoepassingen, digitale hulpmiddelen en ondersteunende applicaties. Deze innovaties worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren, de werkdruk te verlagen en zorgprofessionals beter te ondersteunen in hun dagelijkse werkzaamheden.</p>
+          <p>In de praktijk blijkt echter dat veel innovaties na een pilotfase of initiële implementatie niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond of raken volledig buiten gebruik. Hierdoor blijft een groot deel van de beoogde meerwaarde onbenut en ontstaan frustraties bij zowel zorgprofessionals als management.</p>
+          <p>Een belangrijke oorzaak hiervan is dat de aandacht bij innovatie vaak ligt op de selectie en aanschaf van oplossingen. De daadwerkelijke implementatie, adoptie door medewerkers en structurele borging in werkprocessen krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap, tijd en een integrale aanpak waarin techniek, organisatie en gedrag samenkomen.</p>
+          <p>Het gevolg is dat zorgorganisaties wel beschikken over innovatieve middelen, maar moeite hebben om deze duurzaam te laten landen in de dagelijkse praktijk.</p>
+        </div>
+        <div class="side-panel">
+          <div class="glass-card" style="background: rgba(255, 255, 255, 0.05);">
+            <h3>Waar het vaak schuurt</h3>
+            <ul style="margin:0; padding:0; list-style:none; display:grid; gap:15px;">
+              <li>• Focus op aanschaf, niet op blijvend gebruik.</li>
+              <li>• Onduidelijk eigenaarschap na de projectfase.</li>
+              <li>• Slechte aansluiting op primaire werkprocessen.</li>
+              <li>• Gebrek aan integrale aanpak (mens & organisatie).</li>
             </ul>
           </div>
         </div>
@@ -203,68 +222,45 @@
     </section>
 
     <section id="aanpak" class="roadmap container">
-      <div style="text-align: center; margin-bottom: 60px;">
-        <h2 style="font-size: 2.5rem; letter-spacing: -0.04em;">Onze Aanpak</h2>
-        <p style="color: var(--muted);">Van de eerste analyse naar een resultaat dat blijft werken.</p>
+      <div style="text-align: center; margin-bottom: 50px;">
+        <h2 style="font-size: 2.2rem; margin-bottom: 12px;">Een aanpak die het proces volgt</h2>
+        <p style="color: var(--muted);">Van de huidige situatie naar structurele borging.</p>
       </div>
       <div class="roadmap-grid">
-        <div class="step">
+        <div class="step-card">
           <div class="step-num">01</div>
           <h3>Analyse</h3>
-          <p style="color: var(--muted);">Inzicht in lopende projecten en huidige pijnpunten.</p>
+          <p style="color: var(--muted); font-size: 0.95rem;">Inzicht in lopende innovaties, eigenaarschap, procesaansluiting en de mate waarin toepassingen daadwerkelijk worden gebruikt.</p>
         </div>
-        <div class="step">
+        <div class="step-card">
           <div class="step-num">02</div>
-          <h3>Adoptie</h3>
-          <p style="color: var(--muted);">Begeleiding van professionals in hun dagelijks werk.</p>
+          <h3>Implementatie</h3>
+          <p style="color: var(--muted); font-size: 0.95rem;">Innovatie verbinden aan het primaire zorgproces, verantwoordelijkheden organiseren en gebruik in de praktijk ondersteunen.</p>
         </div>
-        <div class="step">
+        <div class="step-card">
           <div class="step-num">03</div>
           <h3>Borging</h3>
-          <p style="color: var(--muted);">Vastleggen van eigenaarschap en structurele afspraken.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="probleem" class="container">
-      <div class="problem-box">
-        <div class="problem-text">
-          <h2 style="font-size: 2rem; margin-bottom: 24px;">Het probleem zit zelden in de techniek.</h2>
-          <p>Binnen de zorg wordt veel geïnvesteerd in e-health en robotica. Maar vaak verdwijnen deze middelen na de pilotfase in de kast.</p>
-          <p>De oorzaak is simpel: er wordt gekocht vanuit techniek, niet geïmplementeerd vanuit gedrag en proces.</p>
-        </div>
-        <div class="side-panel">
-          <div class="glass-card" style="background: rgba(255, 105, 105, 0.05); border-color: rgba(255, 105, 105, 0.2);">
-            <h3 style="color: #ff6969;">Waarom het vaak misgaat</h3>
-            <ul style="margin:12px 0 0; padding:0; list-style:none; display:grid; gap:8px; font-size: 0.95rem;">
-              <li>• Onduidelijk eigenaarschap</li>
-              <li>• Gebrek aan tijd voor adoptie</li>
-              <li>• Geen aansluiting op zorgproces</li>
-            </ul>
-          </div>
+          <p style="color: var(--muted); font-size: 0.95rem;">Zorgen dat innovatie geen tijdelijk project blijft, maar onderdeel wordt van standaard werkwijzen, afspraken en eigenaarschap.</p>
         </div>
       </div>
     </section>
 
     <section class="cta container">
       <div class="cta-inner">
-        <h2>Klaar voor innovatie die wél blijft staan?</h2>
-        <p>Laten we samen kijken naar de duurzame landing van uw technologie.</p>
-        <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="padding: 18px 40px; font-size: 1.1rem;">Neem contact op</a>
+        <h2>Klaar om te kijken wat er echt blijft staan?</h2>
+        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
+        <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="padding: 16px 40px; font-size: 1rem;">Neem contact op</a>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      <p>Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies</p>
-      <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">Gespecialiseerd in duurzame implementatie & adoptie binnen de zorgsector.</p>
+      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies
     </div>
   </footer>
 
   <script>
-    // Subtiele reveal animatie bij scrollen
-    const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -272,12 +268,12 @@
           entry.target.style.transform = "translateY(0)";
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('section').forEach(section => {
       section.style.opacity = "0";
-      section.style.transform = "translateY(30px)";
-      section.style.transition = "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+      section.style.transform = "translateY(20px)";
+      section.style.transition = "all 0.6s ease-out";
       observer.observe(section);
     });
   </script>
