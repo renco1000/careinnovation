@@ -14,7 +14,6 @@
       --primary: #69b7ff;
       --primary-strong: #2387e6;
       --accent: #49d3b4;
-      --status-green: #49d3b4;
       --max: 1160px;
     }
 
@@ -32,6 +31,7 @@
       line-height: 1.6;
     }
 
+    /* Canvas voor de bewegende deeltjes */
     #particle-canvas {
       position: fixed;
       inset: 0;
@@ -66,44 +66,18 @@
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 700; font-size: 1.2rem; }
     .brand-mark { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-strong), var(--accent)); border-radius: 12px; display: grid; place-items: center; }
 
-    /* Status Indicator Style */
+    /* Status Indicator Style - Lampje verwijderd */
     .status-indicator {
       display: flex;
       align-items: center;
-      gap: 8px;
       background: rgba(255,255,255,0.05);
-      padding: 6px 12px;
+      padding: 6px 16px;
       border-radius: 99px;
-      border: 1px solid rgba(73, 211, 180, 0.2);
+      border: 1px solid rgba(105, 183, 255, 0.1);
       font-size: 0.75rem;
       font-weight: 600;
       color: var(--muted);
       letter-spacing: 0.02em;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--status-green);
-      border-radius: 50%;
-      position: relative;
-      box-shadow: 0 0 10px var(--status-green);
-    }
-
-    .status-dot::after {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background-color: var(--status-green);
-      opacity: 0.4;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.4; }
-      70% { transform: scale(2.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 0; }
     }
 
     .nav-links { display: flex; gap: 30px; align-items: center; }
@@ -187,7 +161,7 @@
     @media (max-width: 1024px) {
       .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; }
       h1 { font-size: 2.8rem; }
-      .status-text { display: none; } /* Verberg tekst op kleine schermen, hou alleen bolletje */
+      .status-indicator { display: none; }
     }
   </style>
 </head>
@@ -203,14 +177,13 @@
           <span>Care Innovation</span>
         </a>
         <div class="status-indicator">
-          <div class="status-dot"></div>
-          <span class="status-text">Operationeel / Beschikbaar</span>
+          <span>Operationeel / Beschikbaar</span>
         </div>
       </div>
       <nav class="nav-links">
-        <a href="#probleem">Probleem</a>
+        <a href="#probleem">Het Probleem</a>
         <a href="#over-mij">Over Mij</a>
-        <a href="#aanpak">Aanpak</a>
+        <a href="#aanpak">Onze Aanpak</a>
         <a href="mailto:info@careinnovation.nl" class="btn btn-outline">Contact</a>
       </nav>
     </div>
@@ -246,7 +219,7 @@
             <h2>Het probleem zit zelden in de technologie</h2>
             <p style="color: var(--muted); margin-bottom: 20px;">Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties, zoals zorgrobotica, e-healthtoepassingen, digitale hulpmiddelen en ondersteunende applicaties. Deze innovaties worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren, de werkdruk te verlagen en zorgprofessionals beter te ondersteunen in hun dagelijkse werkzaamheden.</p>
             <p style="color: var(--muted); margin-bottom: 20px;">In de praktijk blijkt echter dat veel innovaties na een pilotfase of initiële implementatie niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond of raken volledig buiten gebruik. Hierdoor blijft een groot deel van de beoogde meerwaarde onbenut en ontstaan frustraties bij zowel zorgprofessionals als management.</p>
-            <p style="color: var(--muted); margin-bottom: 20px;">Een belangrijke oorzaak hiervan is dat de aandacht bij innovatie vaak ligt op de selectie en aanschaf van oplossingen. De daadwerkelijke implementatie, adoptie door medewerkers en structurele borging in werkprocessen krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap, tijd en een integrale aanpak waarin techniek, organisatie en gedrag samenkomen.</p>
+            <p style="color: var(--muted); margin-bottom: 20px;">Een belangrijke oorzaak hiervan is dat de attention bij innovatie vaak ligt op de selectie en aanschaf van oplossingen. De daadwerkelijke implementatie, adoptie door medewerkers en structurele borging in werkprocessen krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap, tijd en een integrale aanpak waarin techniek, organisatie en gedrag samenkomen.</p>
             <p style="color: var(--muted);">Het gevolg is dat zorgorganisaties wel beschikken over innovatieve middelen, maar moeite hebben om deze duurzaam te laten landen in de dagelijkse praktijk.</p>
           </div>
           <div class="card" style="background: rgba(255,255,255,0.03); height: fit-content;">
@@ -304,8 +277,7 @@
     <section>
       <div class="cta-inner">
         <h2>Klaar om te kijken wat er echt blijft staan?</h2>
-        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. <P>
-          <P>Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
+        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.</p>
         <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="background: #07111f; color: white; padding: 16px 40px;">Neem contact op</a>
       </div>
     </section>
@@ -313,11 +285,12 @@
 
   <footer>
     <div class="container">
-      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies | Info@careinnovation.nl 
+      Care Innovation &copy; 2026 | Van Leeuwen Innovatie & Advies
     </div>
   </footer>
 
   <script>
+    // Scroll Reveal Script
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -330,6 +303,7 @@
       observer.observe(section);
     });
 
+    // Particle Network Script
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
