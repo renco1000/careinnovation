@@ -18,12 +18,18 @@
       --primary-strong: #2387e6;
       --accent: #49d3b4;
       --glow: 0 0 0 1px rgba(105, 183, 255, 0.15), 0 24px 80px rgba(0, 0, 0, 0.35);
+      --glow-hover: 0 0 0 1px rgba(105, 183, 255, 0.3), 0 30px 90px rgba(0, 0, 0, 0.45);
       --radius: 22px;
       --max: 1160px;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     body {
       margin: 0;
@@ -34,6 +40,7 @@
         radial-gradient(circle at 85% 20%, rgba(73,211,180,0.12), transparent 20%),
         linear-gradient(180deg, #06101d 0%, #081524 42%, #07111f 100%);
       line-height: 1.6;
+      animation: fadeIn 0.8s ease-out;
     }
 
     .grid-bg {
@@ -78,7 +85,6 @@
       color: var(--text);
       font-weight: 700;
       letter-spacing: 0.02em;
-      min-width: 0;
     }
 
     .brand-mark {
@@ -92,21 +98,22 @@
       box-shadow: 0 14px 30px rgba(35,135,230,0.25);
       font-size: 0.95rem;
       flex: 0 0 auto;
+      transition: transform 0.3s ease;
     }
+
+    .brand:hover .brand-mark { transform: scale(1.05) rotate(2deg); }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      gap: 24px;
     }
 
     .nav-links a {
       color: var(--muted);
       text-decoration: none;
       font-size: 0.96rem;
-      white-space: nowrap;
+      transition: color 0.3s ease;
     }
 
     .nav-links a:hover { color: var(--text); }
@@ -115,19 +122,20 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 18px;
+      padding: 12px 24px;
       border-radius: 999px;
       border: 1px solid rgba(105,183,255,0.16);
       color: var(--text);
       text-decoration: none;
       background: rgba(105,183,255,0.1);
-      transition: 180ms ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       font-weight: 500;
     }
 
     .button:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
       background: rgba(105,183,255,0.16);
+      border-color: rgba(105,183,255,0.3);
     }
 
     .button.primary {
@@ -135,34 +143,41 @@
       border: 0;
       color: #06111f;
       font-weight: 700;
-      box-shadow: 0 18px 34px rgba(35,135,230,0.2);
+      box-shadow: 0 10px 20px rgba(35,135,230,0.2);
     }
 
-    .hero {
-      padding: 56px 0 26px;
+    .button.primary:hover {
+      box-shadow: 0 15px 30px rgba(35,135,230,0.35);
+      transform: translateY(-2px) scale(1.02);
     }
+
+    .hero { padding: 64px 0 48px; }
 
     .hero-wrap {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.78fr);
-      gap: 22px;
-      align-items: start;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
     }
 
-    .hero-card,
-    .panel,
-    .card {
+    .hero-card, .panel, .card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
       border: 1px solid var(--line);
       border-radius: 26px;
       background: linear-gradient(180deg, rgba(14, 28, 46, 0.88), rgba(8, 20, 34, 0.92));
       box-shadow: var(--glow);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .hero-card {
-      padding: 34px;
-      position: relative;
-      overflow: hidden;
+    .hero-card:hover, .panel:hover, .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(105,183,255,0.25);
+      box-shadow: var(--glow-hover);
     }
+
+    .hero-card { padding: 40px; position: relative; overflow: hidden; }
 
     .hero-card::after {
       content: "";
@@ -176,302 +191,159 @@
     }
 
     .eyebrow {
+      align-self: flex-start;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 12px;
+      padding: 8px 16px;
       border-radius: 999px;
       color: var(--primary);
       background: rgba(105,183,255,0.08);
       border: 1px solid rgba(105,183,255,0.16);
       font-size: 0.88rem;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2.6rem, 5.4vw, 4.9rem);
-      line-height: 0.98;
+      font-size: clamp(2.4rem, 4.5vw, 4rem);
+      line-height: 1.1;
       letter-spacing: -0.04em;
-      max-width: 12ch;
       text-wrap: balance;
     }
 
-    h1 span {
-      color: var(--primary);
-      display: block;
-    }
+    h1 span { color: var(--primary); display: block; }
 
-    .hero-sub {
-      margin: 18px 0 0;
-      max-width: 60ch;
-      color: var(--muted);
-      font-size: 1rem;
-    }
+    .hero-sub { margin: 24px 0; max-width: 540px; color: var(--muted); font-size: 1.05rem; }
 
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
 
     .metrics {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: auto;
     }
 
     .metric {
-      padding: 14px 14px 13px;
+      padding: 16px;
       border-radius: 16px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.05);
-      min-width: 0;
+      transition: background 0.3s ease;
     }
 
-    .metric strong {
-      display: block;
-      font-size: 1rem;
-      color: var(--text);
-      line-height: 1.2;
-    }
+    .metric:hover { background: rgba(255,255,255,0.06); }
 
-    .metric span {
-      display: block;
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.4;
-    }
+    .metric strong { display: block; font-size: 1rem; color: var(--text); margin-bottom: 4px; }
 
-    .hero-side {
-      display: grid;
-      gap: 16px;
-      align-content: start;
-    }
+    .metric span { display: block; color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
 
-    .panel {
-      padding: 22px;
-    }
+    .hero-side { display: grid; gap: 24px; }
+
+    .panel { padding: 32px; }
 
     .panel h3 {
-      margin: 0 0 10px;
-      font-size: 1rem;
-      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .panel p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .question-list {
-      margin: 14px 0 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 10px;
-    }
+    .question-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
 
     .question-list li {
-      padding: 13px 14px;
-      border-radius: 15px;
+      padding: 14px 18px;
+      border-radius: 16px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.06);
       color: #dce8f7;
-      line-height: 1.45;
+      font-size: 0.94rem;
+      transition: all 0.3s ease;
     }
 
-    main section {
-      padding: 24px 0;
+    .question-list li:hover {
+      background: rgba(255,255,255,0.06);
+      transform: translateX(4px);
     }
 
-    .section-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
-      align-items: end;
-      gap: 18px;
-      margin-bottom: 18px;
-    }
+    main section { padding: 48px 0; }
 
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(1.7rem, 2.2vw, 2.35rem);
-      letter-spacing: -0.03em;
-      text-wrap: balance;
-    }
+    .section-head { margin-bottom: 32px; }
 
-    .section-head p {
-      margin: 0;
-      max-width: 58ch;
-      color: var(--muted);
-    }
+    .section-head h2 { margin: 0 0 12px; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -0.03em; }
 
-    .problem {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.82fr);
-      gap: 20px;
-      align-items: start;
-    }
+    .section-head p { margin: 0; color: var(--muted); font-size: 1.1rem; }
 
-    .problem .panel.large {
-      padding: 28px;
-    }
+    .problem { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; align-items: stretch; }
 
-    .problem p {
-      color: var(--muted);
-      margin: 0 0 16px;
-    }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 
-    .problem p:last-child { margin-bottom: 0; }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      padding: 22px;
-      border-radius: 22px;
-    }
+    .card { padding: 32px; }
 
     .card .num {
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
-      background: rgba(105,183,255,0.1);
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 14px;
-      font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--primary-strong), var(--accent));
+      color: #06111f;
+      font-weight: 800;
+      margin-bottom: 20px;
     }
 
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 1.04rem;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.96rem;
-    }
-
-    .quote p {
-      margin: 0;
-      font-size: clamp(1.12rem, 1.7vw, 1.4rem);
-      line-height: 1.4;
-      color: var(--text);
-      max-width: 28ch;
-      text-wrap: balance;
-    }
+    .quote p { margin: 0 0 20px; font-size: 1.4rem; line-height: 1.4; font-weight: 500; color: var(--text); }
 
     .quote small {
       display: block;
-      margin-top: 10px;
       color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.45;
+      font-size: 0.95rem;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
     }
 
-    .cta {
-      margin: 18px 0 64px;
-    }
+    .cta { margin-top: 32px; margin-bottom: 80px; }
 
     .cta-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      padding: 28px 30px;
-      border-radius: 28px;
+      gap: 40px;
+      padding: 48px;
+      border-radius: 32px;
       border: 1px solid var(--line);
       background: linear-gradient(135deg, rgba(35,135,230,0.16), rgba(73,211,180,0.1));
       box-shadow: var(--glow);
+      transition: all 0.4s ease;
     }
 
-    .cta-box h2 {
-      margin: 0 0 8px;
-      font-size: clamp(1.5rem, 2vw, 2.1rem);
-      letter-spacing: -0.03em;
-      text-wrap: balance;
-    }
+    .cta-box:hover { box-shadow: 0 40px 100px rgba(0,0,0,0.5); border-color: rgba(105,183,255,0.4); }
 
-    .cta-box p {
-      margin: 0;
-      color: #d4e2f2;
-      max-width: 56ch;
-    }
+    .cta-box h2 { margin: 0 0 12px; font-size: 2.2rem; }
+
+    .cta-box p { margin: 0; color: #d4e2f2; font-size: 1.1rem; max-width: 600px; }
 
     footer {
-      padding: 0 0 30px;
+      padding: 40px 0;
+      border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
+      text-align: center;
     }
 
-    @media (max-width: 1100px) {
-      .hero-wrap,
-      .problem {
-        grid-template-columns: 1fr;
-      }
-
-      .section-head {
-        grid-template-columns: 1fr;
-      }
-
-      .quote p,
-      .hero-sub,
-      .cta-box p {
-        max-width: none;
-      }
+    @media (max-width: 1024px) {
+      .hero-wrap, .problem, .cards { grid-template-columns: 1fr; }
+      .cta-box { flex-direction: column; text-align: center; padding: 40px 24px; }
+      .cta-box p { margin: 0 auto; }
     }
 
-    @media (max-width: 860px) {
-      .cards,
-      .metrics {
-        grid-template-columns: 1fr;
-      }
-
-      .cta-box {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 14px 0;
-      }
-
-      .nav-links {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .hero {
-        padding-top: 36px;
-      }
-
-      .hero-card,
-      .panel,
-      .card,
-      .cta-box {
-        padding: 20px;
-      }
-
-      h1 {
-        max-width: none;
-        font-size: clamp(2.1rem, 11vw, 3.4rem);
-      }
+    @media (max-width: 640px) {
+      .nav { flex-direction: column; padding: 20px 0; gap: 15px; }
+      .nav-links { gap: 12px; font-size: 0.85rem; }
+      .metrics { grid-template-columns: 1fr; }
+      .hero-card { padding: 24px; }
     }
   </style>
 </head>
@@ -499,7 +371,7 @@
         <div class="hero-card">
           <div class="eyebrow">Zorg × innovatie × implementatie</div>
           <h1>
-            Innovatie gestart.<span>Project afgerond.</span>Hoeveel innovaties staan er bij u inmiddels in de kast?
+            Innovatie gestart.<span>Project afgerond.</span>Hoeveel innovaties staan er bij u in de kast?
           </h1>
           <p class="hero-sub">
             Care Innovation helpt zorgorganisaties om technologie duurzaam te laten landen in de dagelijkse praktijk. Niet door nóg meer plannen of losse pilots, maar door implementatie, adoptie en borging structureel te organiseren.
@@ -547,35 +419,24 @@
     <section id="probleem">
       <div class="container">
         <div class="section-head">
-          <div>
-            <h2>Het probleem zit zelden in de technologie</h2>
-          </div>
-          <p></p>
+          <h2>Het probleem zit zelden in de technologie</h2>
+          <p>Waarom pilots vaak stranden en de meerwaarde onbenut blijft.</p>
         </div>
 
         <div class="problem">
-          <div class="panel large">
-            <p>
-              Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties, zoals zorgrobotica, e-healthtoepassingen, digitale hulpmiddelen en ondersteunende applicaties. Deze innovaties worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren, de werkdruk te verlagen en zorgprofessionals beter te ondersteunen in hun dagelijkse werkzaamheden.
-            </p>
-            <p>
-              In de praktijk blijkt echter dat veel innovaties na een pilotfase of initiële implementatie niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond of raken volledig buiten gebruik. Hierdoor blijft een groot deel van de beoogde meerwaarde onbenut en ontstaan frustraties bij zowel zorgprofessionals als management.
-            </p>
-            <p>
-              Een belangrijke oorzaak hiervan is dat de aandacht bij innovatie vaak ligt op de selectie en aanschaf van oplossingen. De daadwerkelijke implementatie, adoptie door medewerkers en structurele borging in werkprocessen krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap, tijd en een integrale aanpak waarin techniek, organisatie en gedrag samenkomen.
-            </p>
-            <p>
-              Het gevolg is dat zorgorganisaties wel beschikken over innovatieve middelen, maar moeite hebben om deze duurzaam te laten landen in de dagelijkse praktijk.
-            </p>
+          <div class="panel">
+            <p>Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties. Deze worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren en de werkdruk te verlagen.</p>
+            <p>In de praktijk blijkt echter dat veel innovaties na een pilotfase niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond, waardoor beoogde meerwaarde onbenut blijft.</p>
+            <p>De oorzaak? De focus ligt vaak op aanschaf, terwijl de daadwerkelijke implementatie en borging in werkprocessen veel minder aandacht krijgen.</p>
           </div>
 
           <div class="panel">
             <h3>Waar het vaak schuurt</h3>
             <ul class="question-list">
-              <li>De focus ligt op aanschaf, niet op blijvend gebruik.</li>
-              <li>Eigenaarschap is tijdens het project geregeld, maar daarna niet meer duidelijk.</li>
-              <li>Technologie sluit onvoldoende aan op werkprocessen.</li>
-              <li>De organisatie meet zelden of innovatie echt is blijven werken.</li>
+              <li>Focus op aanschaf, niet op gebruik.</li>
+              <li>Eigenaarschap vervalt na het project.</li>
+              <li>Slechte aansluiting op werkprocessen.</li>
+              <li>Geen meting van langetermijneffect.</li>
             </ul>
           </div>
         </div>
@@ -585,27 +446,25 @@
     <section id="aanpak">
       <div class="container">
         <div class="section-head">
-          <div>
-            <h2>Een aanpak die het proces volgt</h2>
-          </div>
-          <p></p>
+          <h2>Een aanpak die het proces volgt</h2>
+          <p>Van eerste analyse naar een structureel geborgde werkwijze.</p>
         </div>
 
         <div class="cards">
           <article class="card">
             <div class="num">01</div>
-            <h3>Analyse van de huidige situatie</h3>
-            <p>Inzicht in lopende innovaties, eigenaarschap, procesaansluiting en de mate waarin toepassingen daadwerkelijk worden gebruikt.</p>
+            <h3>Analyse</h3>
+            <p>Inzicht in lopende innovaties, eigenaarschap en de mate waarin toepassingen daadwerkelijk worden gebruikt.</p>
           </article>
           <article class="card">
             <div class="num">02</div>
-            <h3>Implementatie en adoptie</h3>
-            <p>Innovatie verbinden aan het primaire zorgproces, verantwoordelijkheden organiseren en gebruik in de praktijk ondersteunen.</p>
+            <h3>Adoptie</h3>
+            <p>Innovatie verbinden aan het primaire proces en verantwoordelijkheden organiseren in de praktijk.</p>
           </article>
           <article class="card">
             <div class="num">03</div>
-            <h3>Structurele borging</h3>
-            <p>Zorgen dat innovatie geen tijdelijk project blijft, maar onderdeel wordt van standaard werkwijzen, afspraken en eigenaarschap.</p>
+            <h3>Borging</h3>
+            <p>Zorgen dat innovatie geen tijdelijk project blijft, maar onderdeel wordt van de standaard werkwijze.</p>
           </article>
         </div>
       </div>
@@ -616,9 +475,7 @@
         <div class="cta-box">
           <div>
             <h2>Klaar om te kijken wat er bij u écht blijft staan?</h2>
-            <p>
-              Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg, techniek en praktijk.
-            </p>
+            <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht. Van daaruit ontstaat een aanpak die past bij uw praktijk.</p>
           </div>
           <a class="button primary" href="mailto:info@careinnovation.nl">Neem contact op</a>
         </div>
@@ -628,7 +485,7 @@
 
   <footer>
     <div class="container">
-      Care Innovation · Van Leeuwen Innovatie & Advies
+      Care Innovation &copy; 2026 · Van Leeuwen Innovatie & Advies
     </div>
   </footer>
 </body>
