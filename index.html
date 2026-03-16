@@ -22,12 +22,12 @@
   <meta property="og:title" content="Zorginnovatie die wél landt | Renco van Leeuwen" />
   <meta property="og:description" content="Focus op duurzame implementatie en structurele borging van technologie in zorgorganisaties." />
   <meta property="og:url" content="https://www.careinnovation.nl" />
-  <meta property="og:image" content="https://www.careinnovation.nl/assets/og-image.jpg" />
+  <meta property="og:image" content="https://www.careinnovation.nl/image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg" />
 
   <style>
     :root {
       --bg: #07111f;
-      --panel: rgba(15, 31, 52, 0.8);
+      --panel: rgba(15, 31, 52, 0.75); /* Iets transparanter voor diepte */
       --line: rgba(131, 191, 255, 0.15);
       --text: #eef5ff;
       --muted: #a8b7cc;
@@ -44,10 +44,13 @@
       margin: 0;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: var(--text);
+      /* Achtergrond met overlay voor leesbaarheid */
       background: 
-        radial-gradient(circle at 20% 20%, rgba(35,135,230,0.15), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(73,211,180,0.1), transparent 40%),
-        var(--bg);
+        linear-gradient(rgba(7, 17, 31, 0.85), rgba(7, 17, 31, 0.85)), 
+        url('image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       line-height: 1.6;
     }
 
@@ -75,7 +78,7 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(15px);
-      background: rgba(7, 17, 31, 0.8);
+      background: rgba(7, 17, 31, 0.7);
       border-bottom: 1px solid var(--line);
     }
 
@@ -132,7 +135,7 @@
     .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
     
     .card {
-      background: rgba(15, 31, 52, 0.6);
+      background: var(--panel);
       border: 1px solid var(--line);
       padding: 50px;
       border-radius: 32px;
@@ -245,16 +248,15 @@
         <div class="problem-box">
           <div>
             <h2>Het probleem zit zelden in de technologie</h2>
-            <p style="color: var(--muted); margin-bottom: 20px;">Binnen zorgorganisaties is de afgelopen jaren veel geïnvesteerd in technologische en sociale innovaties. Deze innovaties worden geïntroduceerd met het doel de kwaliteit van zorg te verbeteren en de werkdruk te verlagen.</p>
-            <p style="color: var(--muted); margin-bottom: 20px;">In de praktijk blijkt echter dat veel innovaties na een pilotfase niet duurzaam worden gebruikt. Toepassingen verdwijnen naar de achtergrond of raken volledig buiten gebruik.</p>
-            <p style="color: var(--muted); margin-bottom: 20px;">Een belangrijke oorzaak hiervan is dat de aandacht vaak ligt op de selectie en aanschaf. De daadwerkelijke implementatie en adoptie krijgen veel minder aandacht. Daarbij ontbreekt het regelmatig aan duidelijk eigenaarschap en een integrale aanpak.</p>
+            <p style="color: var(--muted); margin-bottom: 20px;">Veel investeringen in zorgrobotica en e-health blijven onbenut. Innovaties worden vaak gestart als pilot, maar verdwijnen naar de achtergrond zodra het project officieel is afgerond.</p>
+            <p style="color: var(--muted); margin-bottom: 20px;">De oorzaak? Te weinig aandacht voor de daadwerkelijke implementatie in het zorgproces en de adoptie door medewerkers. Zonder structurele borging en duidelijk eigenaarschap landt een innovatie nooit écht.</p>
           </div>
           <div class="card" style="background: rgba(255,255,255,0.03); height: fit-content;">
             <h3 style="color: var(--primary); font-size: 0.9rem; margin-bottom: 16px;">WAAR HET VAAK SCHUURT</h3>
             <ul style="padding:0; list-style:none; display:grid; gap:12px; font-size: 0.95rem;">
               <li>• Focus op aanschaf, niet op gebruik</li>
               <li>• Onduidelijk eigenaarschap</li>
-              <li>• Slechte aansluiting op processen</li>
+              <li>• Slechte procesaansluiting</li>
               <li>• Gebrek aan integrale aanpak</li>
             </ul>
           </div>
@@ -278,19 +280,19 @@
             </svg>
             <h3 style="margin:0; font-size: 1.5rem;">Renco van Leeuwen</h3>
             <p style="font-size: 0.9rem; opacity: 0.6; letter-spacing: 0.1em; margin-bottom: 20px;">INNOVATIE & ADVIES</p>
-            <div class="badge">15+ JAAR ERVARING</div>
+            <div class="badge">HOOFD ICT & BEDRIJFSKUNDIGE</div>
           </div>
           <div>
             <h2>De drijvende kracht</h2>
-            <p style="color: var(--muted); margin-bottom: 20px;">Met ruim 15 jaar ervaring op het snijvlak van zorg en ICT ben ik in staat om techniek, zorginhoud en bedrijfsprocessen te verbinden. Als hoofd ICT bij Amarijn en student Technische Bedrijfskunde kijk ik verder dan alleen de techniek.</p>
-            <p style="color: var(--muted);">Ik zorg ervoor dat innovatie een structureel onderdeel wordt van uw organisatie door diepe praktijkkennis te combineren met bedrijfskundige inzichten.</p>
+            <p style="color: var(--muted); margin-bottom: 20px;">Met ruim 15 jaar ervaring als hoofd ICT bij Amarijn en mijn achtergrond in Technische Bedrijfskunde verbind ik techniek, zorginhoud en bedrijfsprocessen.</p>
+            <p style="color: var(--muted);">Ik kijk verder dan de implementatie alleen; ik zorg ervoor dat innovatie een structureel onderdeel wordt van uw organisatie door diepe praktijkkennis te combineren met strategisch inzicht.</p>
           </div>
         </div>
       </div>
     </section>
 
     <section id="aanpak">
-      <h2 style="text-align: center; margin-bottom: 50px;">Een aanpak die het proces volgt</h2>
+      <h2 style="text-align: center; margin-bottom: 50px;">Onze Aanpak</h2>
       <div class="roadmap-grid">
         <div class="step-card">
           <div class="step-num">01</div>
@@ -300,20 +302,20 @@
         <div class="step-card">
           <div class="step-num">02</div>
           <h3>Implementatie</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Innovatie verbinden aan het primaire zorgproces en verantwoordelijkheden organiseren.</p>
+          <p style="color: var(--muted); font-size: 0.95rem;">Innovatie verbinden aan het primaire zorgproces en adoptie ondersteunen.</p>
         </div>
         <div class="step-card">
           <div class="step-num">03</div>
           <h3>Borging</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Zorgen dat innovatie onderdeel wordt van standaard werkwijzen en eigenaarschap.</p>
+          <p style="color: var(--muted); font-size: 0.95rem;">Zorgen dat innovatie onderdeel wordt van de standaard werkwijze en afspraken.</p>
         </div>
       </div>
     </section>
 
     <section>
       <div class="cta-inner">
-        <h2>Klaar om te kijken wat er echt blijft staan?</h2>
-        <p>Een eerste gesprek begint met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg en praktijk.</p>
+        <h2>Klaar voor innovatie die blijft staan?</h2>
+        <p>Een eerste gesprek begint met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg en techniek.</p>
         <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="background: #07111f; color: white; padding: 16px 40px;">Neem contact op</a>
       </div>
     </section>
