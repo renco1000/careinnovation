@@ -13,21 +13,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Zorginnovatie & Implementatie Advies | Renco van Leeuwen</title>
-  <meta name="description" content="Duurzame implementatie, adoptie en borging van technologie in de zorg. Voorkom ongebruikte innovaties door focus op zorgprocessen en eigenaarschap." />
-  <meta name="keywords" content="zorginnovatie, zorgtechnologie, implementatie zorg, adoptie, Renco van Leeuwen, technische bedrijfskunde, Amarijn, Zeeland" />
+  <meta name="description" content="Hulp bij de duurzame implementatie, adoptie en borging van technologie in de zorg. Voorkom ongebruikte innovaties door focus op zorgprocessen." />
   <meta name="author" content="Renco van Leeuwen" />
   <meta name="robots" content="index, follow" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Zorginnovatie die wél landt | Renco van Leeuwen" />
-  <meta property="og:description" content="Focus op duurzame implementatie en structurele borging van technologie in zorgorganisaties." />
+  <meta property="og:title" content="Innovatie zonder borging is tijdelijke ambitie." />
+  <meta property="og:description" content="Wat blijft er bij uw zorginstelling écht staan?" />
   <meta property="og:url" content="https://www.careinnovation.nl" />
   <meta property="og:image" content="https://www.careinnovation.nl/image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg" />
 
   <style>
     :root {
       --bg: #07111f;
-      --panel: rgba(15, 31, 52, 0.75); /* Iets transparanter voor diepte */
+      --panel: rgba(15, 31, 52, 0.75);
       --line: rgba(131, 191, 255, 0.15);
       --text: #eef5ff;
       --muted: #a8b7cc;
@@ -44,7 +43,7 @@
       margin: 0;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: var(--text);
-      /* Achtergrond met overlay voor leesbaarheid */
+      /* Achtergrond met donkere overlay voor leesbaarheid */
       background: 
         linear-gradient(rgba(7, 17, 31, 0.85), rgba(7, 17, 31, 0.85)), 
         url('image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg');
@@ -61,16 +60,6 @@
       pointer-events: none;
     }
 
-    .grid-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(circle at center, black, transparent 85%);
-      opacity: 0.15;
-    }
-
     .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
 
     header {
@@ -78,36 +67,19 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(15px);
-      background: rgba(7, 17, 31, 0.7);
+      background: rgba(7, 17, 31, 0.8);
       border-bottom: 1px solid var(--line);
     }
 
     .nav { display: flex; align-items: center; justify-content: space-between; height: 85px; }
+    .brand { text-decoration: none; color: white; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; }
     
-    .brand-box { display: flex; align-items: center; gap: 15px; }
-    .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: white; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; }
-    
-    .logo-svg { width: 45px; height: 45px; filter: drop-shadow(0 0 8px rgba(105, 183, 255, 0.4)); }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.05);
-      padding: 6px 16px;
-      border-radius: 99px;
-      border: 1px solid rgba(105, 183, 255, 0.1);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.02em;
-    }
-
     .nav-links { display: flex; gap: 30px; align-items: center; }
     .nav-links a { text-decoration: none; color: var(--muted); transition: 0.3s; font-weight: 500; }
     .nav-links a:hover { color: var(--primary); }
 
     .btn {
-      padding: 12px 26px;
+      padding: 14px 28px;
       border-radius: 12px;
       text-decoration: none;
       font-weight: 600;
@@ -115,15 +87,14 @@
       display: inline-flex;
       align-items: center;
     }
-    .btn-primary { background: var(--primary-strong); color: white; box-shadow: 0 4px 15px rgba(35,135,230,0.3); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(35,135,230,0.4); }
+    .btn-primary { background: var(--primary-strong); color: white; }
     .btn-outline { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,0.03); }
 
     section {
       opacity: 0;
       transform: translateY(30px);
       transition: all 0.8s ease-out;
-      padding: 80px 0;
+      padding: 100px 0;
     }
 
     section.reveal {
@@ -131,47 +102,30 @@
       transform: translateY(0);
     }
 
-    .hero { padding-top: 100px; }
-    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; }
+    .hero { text-align: center; padding: 150px 0 100px; }
+    h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin: 0 0 24px; letter-spacing: -0.05em; }
+    h1 span { color: var(--primary); display: block; }
+    
+    .question-box {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: #ffffff;
+      font-weight: 700;
+      margin: 40px auto;
+      max-width: 800px;
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
     
     .card {
       background: var(--panel);
       border: 1px solid var(--line);
       padding: 50px;
       border-radius: 32px;
-      height: 100%;
       backdrop-filter: blur(5px);
     }
 
-    h1 { font-size: 3.5rem; line-height: 1.1; margin: 0 0 24px; letter-spacing: -0.05em; }
-    h1 span { color: var(--primary); display: block; }
-    h2 { font-size: 2.5rem; margin-bottom: 24px; letter-spacing: -0.04em; }
-
-    .problem-box {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 50px;
-      align-items: start;
-    }
-
-    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .step-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--line);
-      padding: 40px 30px;
-      border-radius: 24px;
-      text-align: center;
-    }
-
-    .step-num { 
-      width: 50px; height: 50px; background: var(--primary-strong); color: white; 
-      border-radius: 50%; display: grid; place-items: center; margin: 0 auto 20px; font-weight: 800; 
-    }
-
-    .badge {
-      display: inline-block; padding: 6px 14px; background: rgba(105,183,255,0.1); 
-      border: 1px solid var(--primary); border-radius: 99px; font-size: 0.8rem; font-weight: 700; margin-bottom: 16px;
-    }
+    h2 { font-size: 2.5rem; margin-bottom: 24px; }
+    h3 { color: var(--primary); margin-bottom: 15px; }
 
     .cta-inner {
       background: linear-gradient(135deg, var(--primary-strong), var(--accent));
@@ -181,39 +135,18 @@
     footer { padding: 50px 0; text-align: center; color: var(--muted); border-top: 1px solid var(--line); }
 
     @media (max-width: 1024px) {
-      .hero-grid, .problem-box, .roadmap-grid { grid-template-columns: 1fr; }
       h1 { font-size: 2.8rem; }
-      .status-indicator { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="grid-bg"></div>
   <canvas id="particle-canvas"></canvas>
 
   <header>
     <div class="container nav">
-      <div class="brand-box">
-        <a href="#" class="brand">
-          <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50 10L15 25V50C15 70 35 85 50 90C65 85 85 70 85 50V25L50 10Z" stroke="url(#grad)" stroke-width="6" stroke-linejoin="round"/>
-            <path d="M10 50H30L38 35L52 65L60 50H75M75 50L82 43M75 50L82 57M75 50H90" stroke="#49d3b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="grad" x1="15" y1="10" x2="85" y2="90" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#49d3b4"/>
-                <stop offset="1" stop-color="#2387e6"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <span>Care Innovation</span>
-        </a>
-        <div class="status-indicator">
-          <span>Operationeel / Beschikbaar</span>
-        </div>
-      </div>
+      <a href="#" class="brand">CARE INNOVATION</a>
       <nav class="nav-links">
         <a href="#probleem">Het Probleem</a>
-        <a href="#over-mij">Over Mij</a>
         <a href="#aanpak">Onze Aanpak</a>
         <a href="mailto:info@careinnovation.nl" class="btn btn-outline">Contact</a>
       </nav>
@@ -222,101 +155,59 @@
 
   <main class="container">
     <section class="hero reveal">
-      <div class="hero-grid">
-        <div class="card">
-          <h1>Zorginnovatie gestart.<span>Project duurzaam afgerond.</span></h1>
-          <p style="font-size: 1.15rem; color: var(--muted); margin-bottom: 32px;">Hoeveel innovaties staan er bij u inmiddels in de kast? Care Innovation helpt zorgorganisaties om technologie duurzaam te laten landen in de dagelijkse praktijk. Niet door nóg meer plannen of losse pilots, maar door implementatie, adoptie en borging structureel te organiseren.</p>
-          <div style="display: flex; gap: 16px;">
-            <a href="mailto:info@careinnovation.nl" class="btn btn-primary">Plan een kennismaking</a>
-            <a href="#probleem" class="btn btn-outline">Lees meer</a>
-          </div>
-        </div>
-        <div class="card" style="background: rgba(255,255,255,0.03);">
-          <h3 style="color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem; margin-bottom: 20px;">Kernvragen</h3>
-          <ul style="padding:0; list-style:none; display:grid; gap:20px; color: var(--muted); font-size: 1.05rem;">
-            <li>• Welke innovaties zijn vandaag aantoonbaar onderdeel van de praktijk?</li>
-            <li>• Wie is nu verantwoordelijk voor het gebruik ervan?</li>
-            <li>• Wat gebeurt er zes maanden na livegang?</li>
-            <li>• Welke innovatie is bij u daadwerkelijk blijven staan?</li>
-          </ul>
-        </div>
+      <h1>Innovatie zonder borging <span>is tijdelijke ambitie.</span></h1>
+      
+      <p class="question-box">Wat blijft er bij uw zorginstelling écht staan?</p>
+      
+      <div style="display: flex; gap: 16px; justify-content: center; margin-top: 40px;">
+        <a href="mailto:info@careinnovation.nl" class="btn btn-primary">Plan een kennismaking</a>
+        <a href="#probleem" class="btn btn-outline">Lees meer</a>
       </div>
     </section>
 
     <section id="probleem">
       <div class="card">
-        <div class="problem-box">
+        <h2>Het probleem zit zelden in de technologie</h2>
+        <div class="grid">
           <div>
-            <h2>Het probleem zit zelden in de technologie</h2>
-            <p style="color: var(--muted); margin-bottom: 20px;">Veel investeringen in zorgrobotica en e-health blijven onbenut. Innovaties worden vaak gestart als pilot, maar verdwijnen naar de achtergrond zodra het project officieel is afgerond.</p>
-            <p style="color: var(--muted); margin-bottom: 20px;">De oorzaak? Te weinig aandacht voor de daadwerkelijke implementatie in het zorgproces en de adoptie door medewerkers. Zonder structurele borging en duidelijk eigenaarschap landt een innovatie nooit écht.</p>
+            <p style="color: var(--muted);">Binnen zorgorganisaties is veel geïnvesteerd in technologische en sociale innovaties. In de praktijk blijkt echter dat veel innovaties na een pilotfase niet duurzaam worden gebruikt.</p>
+            <p style="color: var(--muted);">Een belangrijke oorzaak hiervan is dat de aandacht vaak ligt op de selectie en aanschaf, terwijl de daadwerkelijke implementatie en adoptie veel minder aandacht krijgen.</p>
           </div>
-          <div class="card" style="background: rgba(255,255,255,0.03); height: fit-content;">
-            <h3 style="color: var(--primary); font-size: 0.9rem; margin-bottom: 16px;">WAAR HET VAAK SCHUURT</h3>
+          <div class="card" style="background: rgba(255,255,255,0.03); padding: 30px;">
+            <h3 style="font-size: 0.9rem;">WAAR HET VAAK SCHUURT</h3>
             <ul style="padding:0; list-style:none; display:grid; gap:12px; font-size: 0.95rem;">
               <li>• Focus op aanschaf, niet op gebruik</li>
               <li>• Onduidelijk eigenaarschap</li>
-              <li>• Slechte procesaansluiting</li>
-              <li>• Gebrek aan integrale aanpak</li>
+              <li>• Slechte aansluiting op werkprocessen</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="over-mij">
-      <div class="card" style="background: linear-gradient(145deg, rgba(35,135,230,0.1), rgba(15,31,52,0.6));">
-        <div class="problem-box">
-          <div style="text-align: center;">
-            <svg style="width: 80px; height: 80px; margin-bottom: 20px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 10L15 25V50C15 70 35 85 50 90C65 85 85 70 85 50V25L50 10Z" stroke="url(#grad2)" stroke-width="6" stroke-linejoin="round"/>
-              <path d="M10 50H30L38 35L52 65L60 50H75M75 50L82 43M75 50L82 57M75 50H90" stroke="#49d3b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-              <defs>
-                <linearGradient id="grad2" x1="15" y1="10" x2="85" y2="90" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#49d3b4"/>
-                  <stop offset="1" stop-color="#2387e6"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            <h3 style="margin:0; font-size: 1.5rem;">Renco van Leeuwen</h3>
-            <p style="font-size: 0.9rem; opacity: 0.6; letter-spacing: 0.1em; margin-bottom: 20px;">INNOVATIE & ADVIES</p>
-            <div class="badge">HOOFD ICT & BEDRIJFSKUNDIGE</div>
-          </div>
-          <div>
-            <h2>De drijvende kracht</h2>
-            <p style="color: var(--muted); margin-bottom: 20px;">Met ruim 15 jaar ervaring als hoofd ICT bij Amarijn en mijn achtergrond in Technische Bedrijfskunde verbind ik techniek, zorginhoud en bedrijfsprocessen.</p>
-            <p style="color: var(--muted);">Ik kijk verder dan de implementatie alleen; ik zorg ervoor dat innovatie een structureel onderdeel wordt van uw organisatie door diepe praktijkkennis te combineren met strategisch inzicht.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="aanpak">
-      <h2 style="text-align: center; margin-bottom: 50px;">Onze Aanpak</h2>
-      <div class="roadmap-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <h3>Analyse</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Inzicht in lopende innovaties, eigenaarschap en de mate van werkelijk gebruik.</p>
+      <h2 style="text-align: center;">Een aanpak die het proces volgt</h2>
+      <div class="grid">
+        <div class="card" style="text-align: center;">
+          <h3>01. Analyse</h3>
+          <p style="color: var(--muted);">Inzicht in lopende innovaties, eigenaarschap en de mate van werkelijk gebruik.</p>
         </div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <h3>Implementatie</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Innovatie verbinden aan het primaire zorgproces en adoptie ondersteunen.</p>
+        <div class="card" style="text-align: center;">
+          <h3>02. Implementatie</h3>
+          <p style="color: var(--muted);">Innovatie verbinden aan het primaire zorgproces en adoptie ondersteunen.</p>
         </div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <h3>Borging</h3>
-          <p style="color: var(--muted); font-size: 0.95rem;">Zorgen dat innovatie onderdeel wordt van de standaard werkwijze en afspraken.</p>
+        <div class="card" style="text-align: center;">
+          <h3>03. Borging</h3>
+          <p style="color: var(--muted);">Zorgen dat innovatie onderdeel wordt van de standaard werkwijzen en eigenaarschap.</p>
         </div>
       </div>
     </section>
 
     <section>
       <div class="cta-inner">
-        <h2>Klaar voor innovatie die blijft staan?</h2>
-        <p>Een eerste gesprek begint met inzicht in de huidige situatie. Van daaruit ontstaat een aanpak die past bij zorg en techniek.</p>
-        <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="background: #07111f; color: white; padding: 16px 40px;">Neem contact op</a>
+        <h2>Klaar om te kijken wat er echt blijft staan?</h2>
+        <p>Een eerste gesprek begint niet met oplossingen, maar met inzicht in de huidige situatie.</p>
+        <a href="mailto:info@careinnovation.nl" class="btn" style="background: #07111f; color: white; padding: 16px 40px; margin-top: 20px;">Neem contact op</a>
       </div>
     </section>
   </main>
@@ -330,15 +221,11 @@
   <script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('reveal');
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('section').forEach(section => {
-      observer.observe(section);
-    });
+    document.querySelectorAll('section').forEach(section => observer.observe(section));
 
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
@@ -376,7 +263,7 @@
     function init() {
       particles = [];
       const count = (canvas.width * canvas.height) / 15000;
-      for (let i = 0; i < count; i++) { particles.push(new Particle()); }
+      for (let i = 0; i < count; i++) particles.push(new Particle());
     }
 
     function animate() {
