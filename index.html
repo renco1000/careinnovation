@@ -12,9 +12,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zorginnovatie die blijft werken | Care Innovation</title>
-  <meta name="description" content="Veel zorginnovaties worden ingevoerd maar niet gebruikt. Van Leeuwen Innovatie & Advies zorgt dat technologie daadwerkelijk landt op de werkvloer." />
+  <meta name="description" content="Veel zorginnovaties worden ingevoerd maar niet gebruikt. Care Innovation zorgt dat technologie daadwerkelijk landt op de werkvloer." />
   <meta name="author" content="Renco van Leeuwen" />
-
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Innovatie zonder borging is tijdelijke ambitie." />
   <meta property="og:description" content="Wat blijft er bij uw zorginstelling écht staan?" />
@@ -22,289 +21,357 @@
   <meta property="og:image" content="https://www.careinnovation.nl/image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg" />
 
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
     :root {
       --bg: #07111f;
-      --panel: rgba(15,31,52,.7);
-      --line: rgba(131,191,255,.12);
-      --text: #eef5ff;
-      --muted: #8fa3bc;
-      --primary: #69b7ff;
-      --primary-strong: #2387e6;
+      --line: rgba(255,255,255,.1);
+      --text: #fff;
+      --muted: rgba(255,255,255,.6);
+      --primary: #1B5E8A;
       --accent: #49d3b4;
-      --max: 960px;
+      --max: 1120px;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; background: var(--bg); }
 
     body {
       font-family: Inter, system-ui, -apple-system, sans-serif;
       color: var(--text);
-      background:
-        linear-gradient(rgba(7,17,31,.9), rgba(7,17,31,.9)),
-        url('image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      line-height: 1.7;
+      background: var(--bg);
+      line-height: 1.6;
     }
 
-    #particle-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .container {
-      width: min(var(--max), calc(100% - 48px));
-      margin: 0 auto;
-    }
-
-    /* NAV */
+    /* ── HEADER ── */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(16px);
-      background: rgba(7,17,31,.82);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 0 40px;
+      height: 72px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      height: 68px;
+      justify-content: space-between;
+      background: rgba(7,17,31,0);
+      transition: background .4s;
+    }
+    header.scrolled {
+      background: rgba(7,17,31,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
     }
 
     .brand {
       font-weight: 800;
-      font-size: 1.05rem;
-      letter-spacing: .04em;
+      font-size: 1rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
       text-decoration: none;
       color: #fff;
-      text-transform: uppercase;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 32px;
+    .nav-cta {
+      display: inline-flex;
       align-items: center;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .9rem;
-      font-weight: 500;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--primary); }
-
-    .btn {
-      display: inline-block;
-      padding: 11px 24px;
-      border-radius: 8px;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 6px;
+      background: var(--primary);
+      color: #fff;
+      font-size: .88rem;
       font-weight: 600;
-      font-size: .9rem;
       text-decoration: none;
-      transition: .2s;
+      transition: background .2s, transform .15s;
     }
-    .btn-primary { background: var(--primary-strong); color: #fff; }
-    .btn-primary:hover { background: #1a78d4; }
+    .nav-cta:hover { background: #2470a8; transform: translateY(-1px); }
+    .nav-cta svg { transition: transform .2s; }
+    .nav-cta:hover svg { transform: translateX(3px); }
 
-    /* SECTIONS */
-    section {
-      padding: 96px 0;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .7s ease-out, transform .7s ease-out;
-    }
-    section.reveal { opacity: 1; transform: translateY(0); }
-
-    /* HERO */
+    /* ── HERO ── */
     .hero {
-      padding: 140px 0 100px;
-      text-align: center;
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 100px;
+      overflow: hidden;
     }
 
-    h1 {
-      font-size: clamp(2.2rem, 5vw, 3.6rem);
-      line-height: 1.1;
-      letter-spacing: -.04em;
-      margin-bottom: 8px;
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .35;
     }
-    h1 em {
-      color: var(--primary);
+
+    /* fallback als video niet laadt: zorg-achtergrond kleur + subtiel patroon */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(7,17,31,.3) 0%,
+        rgba(7,17,31,.55) 60%,
+        rgba(7,17,31,.9) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 80px));
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+      font-weight: 800;
+      max-width: 720px;
+    }
+
+    .hero h1 em {
+      color: #69b7ff;
       font-style: normal;
       display: block;
     }
 
     .hero-sub {
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      margin-top: 20px;
+      font-size: clamp(1rem, 2vw, 1.2rem);
       color: var(--muted);
-      margin: 28px auto 0;
-      max-width: 560px;
+      max-width: 480px;
     }
 
-    .hero-cta {
-      margin-top: 48px;
+    .hero-buttons {
+      margin-top: 40px;
       display: flex;
-      gap: 12px;
-      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .btn-ghost {
-      display: inline-block;
-      padding: 11px 24px;
-      border-radius: 8px;
-      font-weight: 500;
-      font-size: .9rem;
+    /* ── HOVER KNOPPEN (ZZC-stijl) ── */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: .95rem;
       text-decoration: none;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      transition: .2s;
+      transition: all .25s;
+      cursor: pointer;
+      border: none;
     }
-    .btn-ghost:hover { color: var(--text); border-color: rgba(131,191,255,.3); }
 
-    /* SECTIONS */
-    .section-eyebrow {
+    .btn-pill-solid {
+      background: #fff;
+      color: var(--bg);
+    }
+    .btn-pill-solid:hover {
+      background: #69b7ff;
+      color: #fff;
+    }
+
+    .btn-pill-outline {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,.4);
+      color: #fff;
+    }
+    .btn-pill-outline:hover {
+      background: rgba(255,255,255,.1);
+      border-color: #fff;
+    }
+
+    .btn-pill svg {
+      flex-shrink: 0;
+      transition: transform .2s;
+    }
+    .btn-pill:hover svg { transform: translateX(4px); }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 100px 0;
+      width: min(var(--max), calc(100% - 80px));
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .75s ease-out, transform .75s ease-out;
+    }
+    .section.reveal { opacity: 1; transform: translateY(0); }
+
+    .section-label {
       font-size: .75rem;
-      letter-spacing: .12em;
+      letter-spacing: .14em;
       text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .section h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      letter-spacing: -.035em;
+      line-height: 1.15;
+      font-weight: 700;
+      max-width: 640px;
+      margin-bottom: 24px;
+    }
+
+    .section p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    .section p + p { margin-top: 14px; }
+
+    /* ── PROBLEEM GRID ── */
+    .probleem-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .probleem-item {
+      background: rgba(15,31,52,.8);
+      padding: 40px 36px;
+      backdrop-filter: blur(4px);
+      transition: background .2s;
+    }
+    .probleem-item:hover { background: rgba(27,94,138,.25); }
+
+    .probleem-num {
+      font-size: .75rem;
+      letter-spacing: .1em;
       color: var(--accent);
       margin-bottom: 16px;
     }
 
-    h2 {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      letter-spacing: -.03em;
-      line-height: 1.2;
-      margin-bottom: 20px;
-    }
-
-    .lead {
-      color: var(--muted);
+    .probleem-item h3 {
       font-size: 1rem;
-      max-width: 600px;
-      margin-bottom: 48px;
-    }
-
-    /* CARDS */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 36px 32px;
-      backdrop-filter: blur(4px);
-    }
-
-    .card-num {
-      font-size: .75rem;
-      letter-spacing: .1em;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
-
-    .card h3 {
-      font-size: 1.05rem;
-      color: var(--text);
+      font-weight: 600;
       margin-bottom: 10px;
+      color: #fff;
     }
 
-    .card p {
+    .probleem-item p {
+      font-size: .88rem;
       color: var(--muted);
-      font-size: .9rem;
+      max-width: none;
       line-height: 1.7;
     }
 
-    .card-price {
-      margin-top: 20px;
+    /* ── DIENSTEN ── */
+    .diensten-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .dienst-card {
+      background: rgba(15,31,52,.7);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 40px 36px;
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .25s, background .25s, transform .2s;
+      cursor: default;
+    }
+
+    .dienst-card:hover {
+      border-color: rgba(105,183,255,.35);
+      background: rgba(27,94,138,.2);
+      transform: translateY(-3px);
+    }
+
+    .dienst-tag {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .dienst-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .dienst-card p {
+      font-size: .9rem;
+      color: var(--muted);
+      max-width: none;
+      flex: 1;
+    }
+
+    .dienst-prijs {
       padding-top: 16px;
       border-top: 1px solid var(--line);
-      font-size: .9rem;
-      color: var(--accent);
+      font-size: .88rem;
+      color: #69b7ff;
       font-weight: 600;
-    }
-
-    /* QUOTE */
-    .quote-block {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-left: 3px solid var(--primary);
-      border-radius: 0 16px 16px 0;
-      padding: 32px 36px;
-      backdrop-filter: blur(4px);
-      font-size: clamp(1rem, 2vw, 1.15rem);
-      color: var(--muted);
-      font-style: italic;
-      line-height: 1.8;
-      margin-top: 48px;
-    }
-
-    /* OVER */
-    .over-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: start;
-    }
-
-    @media (max-width: 640px) {
-      .over-grid { grid-template-columns: 1fr; }
-      .nav-links a:not(.btn) { display: none; }
-    }
-
-    .check-list {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .check-list li {
       display: flex;
-      gap: 10px;
-      color: var(--muted);
-      font-size: .9rem;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .check-list li::before {
-      content: '↳';
-      color: var(--accent);
-      flex-shrink: 0;
+    .dienst-arrow {
+      opacity: 0;
+      transition: opacity .2s, transform .2s;
     }
+    .dienst-card:hover .dienst-arrow { opacity: 1; transform: translateX(4px); }
 
-    /* CTA */
-    .cta-block {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 64px 48px;
+    /* ── CTA SECTIE ── */
+    .cta-section {
+      padding: 100px 0;
       text-align: center;
-      backdrop-filter: blur(4px);
+      border-top: 1px solid var(--line);
     }
 
-    .cta-block h2 { margin-bottom: 12px; }
-    .cta-block p { color: var(--muted); margin-bottom: 32px; font-size: 1rem; }
+    .cta-inner {
+      width: min(var(--max), calc(100% - 80px));
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .75s ease-out, transform .75s ease-out;
+    }
+    .cta-inner.reveal { opacity: 1; transform: translateY(0); }
 
-    /* FOOTER */
+    .cta-inner h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      letter-spacing: -.035em;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .cta-inner p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 40px;
+    }
+
+    /* ── FOOTER ── */
     footer {
-      padding: 40px 0;
+      padding: 36px 40px;
       border-top: 1px solid var(--line);
       color: var(--muted);
       font-size: .82rem;
-    }
-
-    .footer-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -312,177 +379,177 @@
       gap: 12px;
     }
 
-    footer a {
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .2s;
+    footer a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: #fff; }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      .hero-content { width: calc(100% - 40px); }
+      .section { width: calc(100% - 40px); padding: 72px 0; }
+      .probleem-grid { grid-template-columns: 1fr; }
+      .diensten-grid { grid-template-columns: 1fr; }
+      .cta-inner { width: calc(100% - 40px); }
+      footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
     }
-    footer a:hover { color: var(--primary); }
   </style>
 </head>
 
 <body>
 
-  <canvas id="particle-canvas"></canvas>
-
-  <header>
-    <div class="container nav">
-      <a href="#" class="brand">Care Innovation</a>
-      <nav class="nav-links">
-        <a href="#probleem">Het probleem</a>
-        <a href="#diensten">Diensten</a>
-        <a href="mailto:info@careinnovation.nl" class="btn btn-primary">Plan een kennismaking</a>
-      </nav>
-    </div>
+  <header id="site-header">
+    <a href="#" class="brand">Care Innovation</a>
+    <a href="mailto:info@careinnovation.nl" class="nav-cta">
+      Plan een kennismaking
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </header>
 
-  <main class="container">
+  <!-- HERO met video -->
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg">
+      <source src="image/191684-891315375.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
 
-    <section class="hero reveal">
-      <h1>Innovatie zonder borging <em>is tijdelijke ambitie.</em></h1>
+    <div class="hero-content">
+      <h1>
+        Innovatie zonder borging
+        <em>is tijdelijke ambitie.</em>
+      </h1>
       <p class="hero-sub">Wat blijft er bij uw zorginstelling écht staan?</p>
-      <div class="hero-cta">
-        <a href="mailto:info@careinnovation.nl" class="btn btn-primary">Plan een kennismaking</a>
-        <a href="#probleem" class="btn-ghost">Meer lezen</a>
-      </div>
-    </section>
-
-    <section id="probleem">
-      <div class="section-eyebrow">Het probleem</div>
-      <h2>Veel innovaties worden ingevoerd.<br>Weinig worden écht gebruikt.</h2>
-      <p class="lead"></p>
-
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-num">01</div>
-          <h3>Na de go-live stopt de aandacht</h3>
-          <p>De focus ligt op aanschaf en invoering. Wat er daarna gebeurt — of mensen de tool ook écht gebruiken — blijft onbewaakt.</p>
-        </div>
-        <div class="card">
-          <div class="card-num">02</div>
-          <h3>Niemand is eindverantwoordelijk</h3>
-          <p>Het is van iedereen een beetje, dus van niemand echt. Zonder duidelijke verantwoordelijkheid is duurzaam gebruik een toevalstreffer.</p>
-        </div>
-        <div class="card">
-          <div class="card-num">03</div>
-          <h3>Medewerkers worden niet meegenomen</h3>
-          <p>Technologie veranderen is gedrag veranderen. Wie dat overslaat, mag niet raar opkijken als de tool niet wordt gebruikt.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="diensten">
-      <div class="section-eyebrow">De aanpak</div>
-      <h2>Tot het daadwerkelijk werkt.</h2>
-      <p class="lead">Geen rapport dat in een la verdwijnt. Hands-on aanwezig op de werkvloer, van analyse tot aantoonbaar gebruik. Het risico wordt gedeeld: u betaalt voor resultaat, niet voor uren.</p>
-
-      <div class="card-grid">
-        <div class="card">
-          <div class="card-num">Quick Scan</div>
-          <h3>Twee uur. Helder beeld.</h3>
-          <p>Twee uur op locatie. De juiste vragen, een helder beeld. Binnen vijf werkdagen een schriftelijke samenvatting. Geen verplichting voor een vervolg.</p>
-          <div class="card-price">€ 206 excl. BTW</div>
-        </div>
-        <div class="card">
-          <div class="card-num">Implementatietraject</div>
-          <h3>Van analyse tot aantoonbaar gebruik.</h3>
-          <p>Een volledig begeleid traject: wie is verantwoordelijk, hoe nemen we mensen mee, hoe houden we het levend. Inclusief periodieke check na afronding.</p>
-          <div class="card-price">Op maat &nbsp;·&nbsp; betaalt u voor resultaat</div>
-        </div>
-        <div class="card">
-          <div class="card-num">Sessie of workshop</div>
-          <h3>Kennis voor uw team.</h3>
-          <p>Een gerichte bijeenkomst voor uw management of innovatieteam over wat werkt bij het invoeren van nieuwe technologie in de zorg.</p>
-          <div class="card-price">Vaste prijs</div>
-        </div>
-      </div>
-
-      <div class="quote-block">
-        "Zorginnovatie die niet wordt gebruikt, is kapitaalvernietiging. Care Innovation zorgt dat het wél wordt gebruikt."
-      </div>
-    </section>
-
-
-
-    <section>
-      <div class="cta-block">
-        <h2>Herkenbaar?</h2>
-        <p>Een goed gesprek begint met de juiste vragen. Plan een kennismaking en ontdek wat er bij uw organisatie écht speelt.</p>
-        <a href="mailto:info@careinnovation.nl" class="btn btn-primary" style="padding: 14px 36px; font-size: 1rem;">
+      <div class="hero-buttons">
+        <a href="mailto:info@careinnovation.nl" class="btn-pill btn-pill-solid">
           Plan een kennismaking
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#probleem" class="btn-pill btn-pill-outline">
+          Meer lezen
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
+  <!-- PROBLEEM -->
+  <div class="section" id="probleem">
+    <div class="section-label">Het probleem</div>
+    <h2>Veel innovaties worden ingevoerd. Weinig worden écht gebruikt.</h2>
+    <p>De investering is gedaan, de tool gaat live — en daarna? Zonder dat iemand er echt verantwoordelijk voor is, zakt het gebruik langzaam weg. Geen technisch probleem. Een organisatieprobleem.</p>
+
+    <div class="probleem-grid">
+      <div class="probleem-item">
+        <div class="probleem-num">01</div>
+        <h3>Na de go-live stopt de aandacht</h3>
+        <p>De focus ligt op aanschaf en invoering. Of mensen de tool daarna ook écht gebruiken, blijft onbewaakt.</p>
+      </div>
+      <div class="probleem-item">
+        <div class="probleem-num">02</div>
+        <h3>Niemand is eindverantwoordelijk</h3>
+        <p>Het is van iedereen een beetje, dus van niemand echt. Zonder duidelijke verantwoordelijkheid is duurzaam gebruik een toevalstreffer.</p>
+      </div>
+      <div class="probleem-item">
+        <div class="probleem-num">03</div>
+        <h3>Medewerkers worden niet meegenomen</h3>
+        <p>Technologie veranderen is gedrag veranderen. Wie dat overslaat, mag niet raar opkijken als de tool niet wordt gebruikt.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIENSTEN -->
+  <div class="section" id="diensten">
+    <div class="section-label">De aanpak</div>
+    <h2>Tot het daadwerkelijk werkt.</h2>
+    <p>Hands-on aanwezig, van analyse tot aantoonbaar gebruik op de werkvloer. Het risico wordt gedeeld: u betaalt voor resultaat.</p>
+
+    <div class="diensten-grid">
+      <div class="dienst-card">
+        <div class="dienst-tag">Instapproduct</div>
+        <h3>Quick Scan</h3>
+        <p>Twee uur op locatie. De juiste vragen, een helder beeld. Schriftelijke samenvatting binnen vijf werkdagen. Geen verplichting voor een vervolg.</p>
+        <div class="dienst-prijs">
+          € 206 excl. BTW
+          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="dienst-card">
+        <div class="dienst-tag">Kerndienst</div>
+        <h3>Implementatietraject</h3>
+        <p>Volledig begeleid van probleemanalyse tot geborgd gebruik op de werkvloer. Inclusief eigenaarschapsstructuur en periodieke check na afronding.</p>
+        <div class="dienst-prijs">
+          Op maat · betaalt u voor resultaat
+          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="dienst-card">
+        <div class="dienst-tag">Kennisdeling</div>
+        <h3>Sessie of workshop</h3>
+        <p>Voor uw management of innovatieteam. Praktisch, gericht op wat werkt bij het invoeren van nieuwe technologie in de zorg.</p>
+        <div class="dienst-prijs">
+          Vaste prijs
+          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="dienst-card">
+        <div class="dienst-tag">Nazorg</div>
+        <h3>Periodieke check</h3>
+        <p>Kwartaalbezoek na afronding van een traject. Zodat het gebruik geborgd blijft en signalen vroeg worden opgepakt.</p>
+        <div class="dienst-prijs">
+          Per kwartaal
+          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-inner">
+      <h2>Herkenbaar?</h2>
+      <p>Een goed gesprek begint met de juiste vragen.</p>
+      <a href="mailto:info@careinnovation.nl" class="btn-pill btn-pill-solid" style="font-size:1rem; padding:16px 36px;">
+        Plan een kennismaking
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
 
   <footer>
-    <div class="container footer-inner">
-      <span>Care Innovation &copy; 2026 &nbsp;&middot;&nbsp; Van Leeuwen Innovatie &amp; Advies</span>
-      <div style="display:flex; gap: 24px;">
-        <a href="mailto:info@careinnovation.nl">info@careinnovation.nl</a>
-        <a href="https://www.linkedin.com/in/renco-van-leeuwen-423b1353/" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
+    <span>Care Innovation &copy; 2026 &nbsp;&middot;&nbsp; Van Leeuwen Innovatie &amp; Advies</span>
+    <div class="footer-links">
+      <a href="mailto:info@careinnovation.nl">info@careinnovation.nl</a>
+      <a href="https://www.linkedin.com/in/renco-van-leeuwen-423b1353/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </footer>
 
   <script>
-    const observer = new IntersectionObserver(e => {
-      e.forEach(x => x.isIntersecting && x.target.classList.add('reveal'));
-    }, { threshold: .1 });
-    document.querySelectorAll('section').forEach(s => observer.observe(s));
+    // Header scroll effect
+    const hdr = document.getElementById('site-header');
+    addEventListener('scroll', () => {
+      hdr.classList.toggle('scrolled', scrollY > 60);
+    });
 
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => e.isIntersecting && e.target.classList.add('reveal'));
+    }, { threshold: .08 });
+    document.querySelectorAll('.section, .cta-inner').forEach(el => observer.observe(el));
 
-    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
-    addEventListener('resize', resize); resize();
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - .5) * .35;
-        this.vy = (Math.random() - .5) * .35;
-        this.r = Math.random() * 1.2 + .6;
-      }
-      update() {
-        this.x += this.vx; this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(105,183,255,.3)';
-        ctx.fill();
-      }
-    }
-
-    function init() {
-      particles = [];
-      const n = Math.min(80, Math.floor(canvas.width * canvas.height / 18000));
-      for (let i = 0; i < n; i++) particles.push(new Particle());
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, i) => {
-        p.update(); p.draw();
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = p.x - particles[j].x, dy = p.y - particles[j].y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 130) {
-            ctx.strokeStyle = `rgba(105,183,255,${.1 * (1 - d / 130)})`;
-            ctx.lineWidth = .6;
-            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-          }
+    // Smooth scroll voor anker-links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
-      requestAnimationFrame(animate);
-    }
-    init(); animate();
+    });
   </script>
 
 </body>
