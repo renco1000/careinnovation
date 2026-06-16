@@ -88,6 +88,21 @@
       opacity: .85;
     }
 
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .bedrijfsnaam {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      white-space: nowrap;
+    }
+
     .nav-cta {
       display: inline-flex;
       align-items: center;
@@ -609,10 +624,13 @@
       <a href="#" class="brand">Care Innovation</a>
       <span class="proto-badge">Prototype 0.7</span>
     </div>
-    <a href="mailto:info@careinnovation.nl" class="nav-cta">
-      Plan een kennismaking
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <div class="header-right">
+      <span class="bedrijfsnaam">Van Leeuwen Innovatie &amp; Advies</span>
+      <a href="mailto:info@careinnovation.nl" class="nav-cta">
+        Plan een kennismaking
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
   </header>
 
   <!-- 1. HERO -->
