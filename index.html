@@ -41,7 +41,6 @@
       line-height: 1.6;
     }
 
-    /* ── HEADER ── */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -86,7 +85,6 @@
     .nav-cta svg { transition: transform .2s; }
     .nav-cta:hover svg { transform: translateX(3px); }
 
-    /* ── HERO ── */
     .hero {
       position: relative;
       height: 100vh;
@@ -105,7 +103,6 @@
       opacity: .35;
     }
 
-    /* fallback als video niet laadt: zorg-achtergrond kleur + subtiel patroon */
     .hero-overlay {
       position: absolute;
       inset: 0;
@@ -152,7 +149,6 @@
       flex-wrap: wrap;
     }
 
-    /* ── HOVER KNOPPEN (ZZC-stijl) ── */
     .btn-pill {
       display: inline-flex;
       align-items: center;
@@ -167,14 +163,8 @@
       border: none;
     }
 
-    .btn-pill-solid {
-      background: #fff;
-      color: var(--bg);
-    }
-    .btn-pill-solid:hover {
-      background: #69b7ff;
-      color: #fff;
-    }
+    .btn-pill-solid { background: #fff; color: var(--bg); }
+    .btn-pill-solid:hover { background: #69b7ff; color: #fff; }
 
     .btn-pill-outline {
       background: transparent;
@@ -186,13 +176,9 @@
       border-color: #fff;
     }
 
-    .btn-pill svg {
-      flex-shrink: 0;
-      transition: transform .2s;
-    }
+    .btn-pill svg { flex-shrink: 0; transition: transform .2s; }
     .btn-pill:hover svg { transform: translateX(4px); }
 
-    /* ── SECTIONS ── */
     .section {
       padding: 100px 0;
       width: min(var(--max), calc(100% - 80px));
@@ -229,7 +215,7 @@
 
     .section p + p { margin-top: 14px; }
 
-    /* ── PROBLEEM GRID ── */
+    /* PROBLEEM */
     .probleem-grid {
       margin-top: 56px;
       display: grid;
@@ -270,74 +256,148 @@
       line-height: 1.7;
     }
 
-    /* ── DIENSTEN ── */
-    .diensten-grid {
+    /* WAAROM */
+    .waarom-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .waarom-item {
+      background: rgba(15,31,52,.8);
+      padding: 40px 36px;
+      backdrop-filter: blur(4px);
+      transition: background .2s;
+    }
+    .waarom-item:hover { background: rgba(27,94,138,.25); }
+
+    .waarom-item h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .waarom-item p {
+      font-size: .88rem;
+      color: var(--muted);
+      max-width: none;
+      line-height: 1.7;
+    }
+
+    /* PDCA */
+    .pdca-grid {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .pdca-item {
+      background: rgba(15,31,52,.8);
+      padding: 40px 32px;
+      backdrop-filter: blur(4px);
+      transition: background .25s;
+    }
+    .pdca-item:hover { background: rgba(27,94,138,.28); }
+
+    .pdca-fase {
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .pdca-label {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.25);
+      margin-bottom: 20px;
+    }
+
+    .pdca-item h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+      letter-spacing: -.02em;
+    }
+
+    .pdca-item p {
+      font-size: .88rem;
+      color: var(--muted);
+      max-width: none;
+      line-height: 1.7;
+    }
+
+    /* TARIEVEN */
+    .tarieven-grid {
       margin-top: 56px;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
 
-    .dienst-card {
+    .tarief-card {
       background: rgba(15,31,52,.7);
       border: 1px solid var(--line);
       border-radius: 20px;
-      padding: 40px 36px;
-      backdrop-filter: blur(4px);
+      padding: 36px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
+      gap: 10px;
       transition: border-color .25s, background .25s, transform .2s;
-      cursor: default;
     }
 
-    .dienst-card:hover {
+    .tarief-card:hover {
       border-color: rgba(105,183,255,.35);
       background: rgba(27,94,138,.2);
       transform: translateY(-3px);
     }
 
-    .dienst-tag {
+    .tarief-tag {
       font-size: .72rem;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--accent);
     }
 
-    .dienst-card h3 {
-      font-size: 1.15rem;
+    .tarief-card h3 {
+      font-size: 1.1rem;
       font-weight: 600;
       color: #fff;
       line-height: 1.3;
     }
 
-    .dienst-card p {
-      font-size: .9rem;
+    .tarief-card p {
+      font-size: .88rem;
       color: var(--muted);
       max-width: none;
       flex: 1;
+      line-height: 1.7;
     }
 
-    .dienst-prijs {
-      padding-top: 16px;
+    .tarief-prijs {
+      padding-top: 14px;
       border-top: 1px solid var(--line);
       font-size: .88rem;
       color: #69b7ff;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
 
-    .dienst-arrow {
-      opacity: 0;
-      transition: opacity .2s, transform .2s;
-    }
-    .dienst-card:hover .dienst-arrow { opacity: 1; transform: translateX(4px); }
-
-    /* ── CTA SECTIE ── */
+    /* CTA */
     .cta-section {
       padding: 100px 0;
       text-align: center;
@@ -366,7 +426,6 @@
       margin-bottom: 40px;
     }
 
-    /* ── FOOTER ── */
     footer {
       padding: 36px 40px;
       border-top: 1px solid var(--line);
@@ -381,16 +440,20 @@
 
     footer a { color: var(--muted); text-decoration: none; transition: color .2s; }
     footer a:hover { color: #fff; }
-
     .footer-links { display: flex; gap: 24px; }
 
-    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .pdca-grid { grid-template-columns: repeat(2, 1fr); }
+      .waarom-grid { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 768px) {
       header { padding: 0 20px; }
       .hero-content { width: calc(100% - 40px); }
       .section { width: calc(100% - 40px); padding: 72px 0; }
       .probleem-grid { grid-template-columns: 1fr; }
-      .diensten-grid { grid-template-columns: 1fr; }
+      .pdca-grid { grid-template-columns: 1fr; }
+      .tarieven-grid { grid-template-columns: 1fr; }
       .cta-inner { width: calc(100% - 40px); }
       footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
     }
@@ -407,13 +470,12 @@
     </a>
   </header>
 
-  <!-- HERO met video -->
+  <!-- 1. HERO -->
   <section class="hero">
     <video class="hero-video" autoplay muted loop playsinline poster="image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg">
       <source src="image/191684-891315375.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
-
     <div class="hero-content">
       <h1>
         Innovatie zonder borging
@@ -433,7 +495,7 @@
     </div>
   </section>
 
-  <!-- PROBLEEM -->
+  <!-- 2. HET PROBLEEM -->
   <div class="section" id="probleem">
     <div class="section-label">Het probleem</div>
     <h2>Veel innovaties worden ingevoerd. Weinig worden écht gebruikt.</h2>
@@ -458,56 +520,100 @@
     </div>
   </div>
 
-  <!-- DIENSTEN -->
-  <div class="section" id="diensten">
-    <div class="section-label">De aanpak</div>
-    <h2>Tot het daadwerkelijk werkt.</h2>
-    <p>Hands-on aanwezig, van analyse tot aantoonbaar gebruik op de werkvloer. Het risico wordt gedeeld: u betaalt voor resultaat.</p>
+  <!-- 3. WAAROM CARE INNOVATION -->
+  <div class="section" id="waarom">
+    <div class="section-label">Waarom Care Innovation</div>
+    <h2>Niet adviseren en vertrekken. Begeleiden tot het werkt.</h2>
+    <p>De aanpak stopt niet bij het advies, maar bij aantoonbaar gebruik op de werkvloer. Hands-on aanwezig, van de eerste verkenning tot het moment dat de innovatie structureel is ingebed in de organisatie.</p>
 
-    <div class="diensten-grid">
-      <div class="dienst-card">
-        <div class="dienst-tag">Instapproduct</div>
-        <h3>Quick Scan</h3>
-        <p>Twee uur op locatie. De juiste vragen, een helder beeld. Schriftelijke samenvatting binnen vijf werkdagen. Geen verplichting voor een vervolg.</p>
-        <div class="dienst-prijs">
-          € 206 excl. BTW
-          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+    <div class="waarom-grid">
+      <div class="waarom-item">
+        <h3>Aanwezig tot het geborgd is</h3>
+        <p>Niet alleen bij de start, maar betrokken totdat de innovatie structureel is ingebed in de werkwijze van uw medewerkers.</p>
       </div>
-
-      <div class="dienst-card">
-        <div class="dienst-tag">Kerndienst</div>
-        <h3>Implementatietraject</h3>
-        <p>Volledig begeleid van probleemanalyse tot geborgd gebruik op de werkvloer. Inclusief eigenaarschapsstructuur en periodieke check na afronding.</p>
-        <div class="dienst-prijs">
-          Op maat · betaalt u voor resultaat
-          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+      <div class="waarom-item">
+        <h3>Het risico wordt gedeeld</h3>
+        <p>U betaalt voor resultaat. Geen declaraties voor rapporten die in de la belanden.</p>
       </div>
-
-      <div class="dienst-card">
-        <div class="dienst-tag">Kennisdeling</div>
-        <h3>Sessie of workshop</h3>
-        <p>Voor uw management of innovatieteam. Praktisch, gericht op wat werkt bij het invoeren van nieuwe technologie in de zorg.</p>
-        <div class="dienst-prijs">
-          Vaste prijs
-          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-      </div>
-
-      <div class="dienst-card">
-        <div class="dienst-tag">Nazorg</div>
-        <h3>Periodieke check</h3>
-        <p>Kwartaalbezoek na afronding van een traject. Zodat het gebruik geborgd blijft en signalen vroeg worden opgepakt.</p>
-        <div class="dienst-prijs">
-          Per kwartaal
-          <svg class="dienst-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="#69b7ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+      <div class="waarom-item">
+        <h3>Vanuit de praktijk van de zorg</h3>
+        <p>De aanpak is ontwikkeld vanuit directe ervaring in zorginstellingen. Geen generiek kader, maar een methode die werkt op de zorgvloer.</p>
       </div>
     </div>
   </div>
 
-  <!-- CTA -->
+  <!-- 4. PRAKTIJKGERICHTE METHODE -->
+  <div class="section" id="methode">
+    <div class="section-label">Praktijkgerichte Methode</div>
+    <h2>Een vaste aanpak. Elke keer opnieuw.</h2>
+    <p>De Praktijkgerichte Methode is gebaseerd op de PDCA-cyclus en vertaald naar de dagelijkse praktijk van zorginstellingen. Vier fasen, van eerste verkenning tot structureel geborgd gebruik.</p>
+
+    <div class="pdca-grid">
+      <div class="pdca-item">
+        <div class="pdca-fase">Plan</div>
+        <div class="pdca-label">Fase 1</div>
+        <h3>Scan</h3>
+        <p>Twee uur op locatie. Inzicht in de huidige situatie, de knelpunten en wat er nodig is om de innovatie te laten landen. Geen aannames, maar de juiste vragen aan de juiste mensen.</p>
+      </div>
+      <div class="pdca-item">
+        <div class="pdca-fase">Do</div>
+        <div class="pdca-label">Fase 2</div>
+        <h3>Implementeren</h3>
+        <p>Hands-on begeleiding op de werkvloer. Medewerkers worden meegenomen, eigenaarschap wordt belegd en de technologie wordt ingepast in de dagelijkse werkwijze.</p>
+      </div>
+      <div class="pdca-item">
+        <div class="pdca-fase">Check</div>
+        <div class="pdca-label">Fase 3</div>
+        <h3>Verankeren</h3>
+        <p>Het gebruik wordt geborgd in processen, rollen en afspraken. Niet afhankelijk van één enthousiasteling, maar structureel ingebed in de organisatie.</p>
+      </div>
+      <div class="pdca-item">
+        <div class="pdca-fase">Act</div>
+        <div class="pdca-label">Fase 4</div>
+        <h3>Verbeteren</h3>
+        <p>Periodieke check na afronding. Signalen worden vroeg opgepakt en bijgestuurd waar nodig. Zo blijft de innovatie actueel en het gebruik op peil.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. TARIEVEN -->
+  <div class="section" id="tarieven">
+    <div class="section-label">Wat kost het</div>
+    <h2>Transparant en op resultaat.</h2>
+    <p>Afhankelijk van de vraag en de fase wordt een passend aanbod gedaan. Altijd vooraf helder, nooit een verrassing achteraf.</p>
+
+    <div class="tarieven-grid">
+      <div class="tarief-card">
+        <div class="tarief-tag">Instapproduct · Fase 1</div>
+        <h3>Quick Scan</h3>
+        <p>Twee uur op locatie. De juiste vragen, een helder beeld. Schriftelijke samenvatting binnen vijf werkdagen. Geen verplichting voor een vervolg.</p>
+        <div class="tarief-prijs">€ 206 excl. BTW</div>
+      </div>
+
+      <div class="tarief-card">
+        <div class="tarief-tag">Fase 2 t/m 4</div>
+        <h3>Implementatietraject</h3>
+        <p>Volledig begeleid van probleemanalyse tot geborgd gebruik op de werkvloer. Inclusief eigenaarschapsstructuur en periodieke check na afronding.</p>
+        <div class="tarief-prijs">Op maat · betaalt u voor resultaat</div>
+      </div>
+
+      <div class="tarief-card">
+        <div class="tarief-tag">Kennisdeling</div>
+        <h3>Sessie of workshop</h3>
+        <p>Voor uw management of innovatieteam. Praktisch, gericht op wat werkt bij het invoeren van nieuwe technologie in de zorg.</p>
+        <div class="tarief-prijs">Vaste prijs</div>
+      </div>
+
+      <div class="tarief-card">
+        <div class="tarief-tag">Nazorg · Fase 4</div>
+        <h3>Periodieke check</h3>
+        <p>Kwartaalbezoek na afronding van een traject. Zodat het gebruik geborgd blijft en signalen vroeg worden opgepakt.</p>
+        <div class="tarief-prijs">Per kwartaal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. CTA -->
   <div class="cta-section">
     <div class="cta-inner">
       <h2>Herkenbaar?</h2>
@@ -528,19 +634,16 @@
   </footer>
 
   <script>
-    // Header scroll effect
     const hdr = document.getElementById('site-header');
     addEventListener('scroll', () => {
       hdr.classList.toggle('scrolled', scrollY > 60);
     });
 
-    // Scroll reveal
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => e.isIntersecting && e.target.classList.add('reveal'));
     }, { threshold: .08 });
     document.querySelectorAll('.section, .cta-inner').forEach(el => observer.observe(el));
 
-    // Smooth scroll voor anker-links
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
         const target = document.querySelector(a.getAttribute('href'));
