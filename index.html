@@ -1,829 +1,2559 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JNCG77B2R0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-JNCG77B2R0');
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="vitals">
+  <title>Barcelona 2026 — Reis- &amp; Conferentieoverzicht | HPE Discover</title>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zorginnovatie die blijft werken | Care Innovation</title>
-  <meta name="description" content="Veel zorginnovaties worden ingevoerd maar niet gebruikt. Care Innovation zorgt dat technologie daadwerkelijk landt op de werkvloer." />
-  <meta name="author" content="Renco van Leeuwen" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Innovatie zonder borging is tijdelijke ambitie." />
-  <meta property="og:description" content="Wat blijft er bij uw zorginstelling écht staan?" />
-  <meta property="og:url" content="https://www.careinnovation.nl" />
-  <meta property="og:image" content="https://www.careinnovation.nl/image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@300..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
     :root {
-      --bg: #07111f;
-      --line: rgba(255,255,255,.1);
-      --text: #fff;
-      --muted: rgba(255,255,255,.6);
-      --primary: #1B5E8A;
-      --accent: #49d3b4;
-      --blue: #69b7ff;
-      --max: 1120px;
+      color-scheme: light;
+
+      /* Page and surfaces (Vitals) */
+      --background: #ffffff;
+      --surface-container-low: #f1f7f8;
+      --surface-container: #e3f1f3;
+      --surface-container-high: #d5e9ec;
+
+      /* Text */
+      --on-surface: #1b2b33;
+      --on-surface-variant: #46585f;
+
+      /* Rules */
+      --outline: #7b9198;
+      --outline-variant: #d5e3e5;
+
+      /* Accents */
+      --primary: #0f7c8a;
+      --primary-hover: #0a5f6a;
+      --on-primary: #ffffff;
+      --primary-container: #e3f1f3;
+      --on-primary-container: #0a5560;
+      --secondary: #1d5e3a;
+      --tertiary: #2e7d4f;
+      --error: #b3261e;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f7c8a;
+      --data-2: #2e7d4f;
+      --data-3: #b86e00;
+      --data-4: #5c5fb0;
+      --data-context: #b8c7ca;
+
+      /* Fonts */
+      --font-headline: 'Figtree', sans-serif;
+      --font-body: 'Atkinson Hyperlegible', sans-serif;
+      --font-label: 'Figtree', sans-serif;
+
+      /* Shape */
+      --rounded: 0.625rem;
+      --rounded-lg: 0.875rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --top-bar: 6px solid var(--primary);
+      --status-bar-width: 4px;
+      --card-border: 1px solid var(--outline-variant);
+      --card-lift: 0 1px 2px rgb(27 43 51 / 0.05), 0 6px 16px rgb(27 43 51 / 0.05);
+      --map-grid-line: rgb(15 124 138 / 0.08);
+      --map-grid-major: rgb(15 124 138 / 0.16);
+      --chip-ok-bg: color-mix(in srgb, var(--tertiary) 14%, var(--background));
+      --chip-warn-bg: color-mix(in srgb, var(--data-3) 14%, var(--background));
+      --chip-alert-bg: color-mix(in srgb, var(--error) 10%, var(--background));
+      --chip-indigo-bg: color-mix(in srgb, var(--data-4) 12%, var(--background));
+      --range-band-bg: color-mix(in srgb, var(--tertiary) 12%, var(--background));
+
+      /* Shared semantic tokens */
+      --positive: #2e7d4f;
+      --warning: #b86e00;
+      --focus: #0f7c8a;
+
+      /* Type scale (Dashboard) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
     }
 
-    body {
-      font-family: Inter, system-ui, -apple-system, sans-serif;
-      color: var(--text);
-      background: var(--bg);
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page {
+      border-top: var(--top-bar);
+      min-height: 100vh;
     }
 
-    /* ── HEADER ── */
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      padding: 0 40px;
-      height: 72px;
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+    }
+    p { margin: 0; }
+
+    .kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--on-primary-container);
+    }
+
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      line-height: 1.08;
+      color: var(--on-surface);
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      line-height: 1.15;
+    }
+
+    .card-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    .lede {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+      margin-top: var(--space-sm);
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Header / Hero band */
+    .hero-band {
+      background: var(--background);
+      border-bottom: var(--card-border);
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-lg) var(--space-lg) var(--space-md);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Reassurance chips */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      background: var(--chip-ok-bg);
+      color: var(--secondary);
+      white-space: nowrap;
+    }
+    .chip[data-status="info"] {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .chip[data-status="warn"] {
+      background: var(--chip-warn-bg);
+      color: var(--on-surface);
+    }
+    .chip[data-status="alert"] {
+      background: var(--chip-alert-bg);
+      color: var(--error);
+    }
+    .chip[data-status="indigo"] {
+      background: var(--chip-indigo-bg);
+      color: var(--data-4);
+    }
+
+    /* KPI row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    /* Status cards (Vitals #1 treatment) */
+    .status-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: grid;
+      gap: var(--space-xs);
+      align-content: start;
+    }
+    .status-card[data-status="ok"] { border-left-color: var(--tertiary); }
+    .status-card[data-status="warn"] { border-left-color: var(--data-3); }
+    .status-card[data-status="alert"] { border-left-color: var(--error); }
+    .status-card[data-status="indigo"] { border-left-color: var(--data-4); }
+
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(7,17,31,0);
-      transition: background .4s;
+      gap: var(--space-sm);
     }
-    header.scrolled {
-      background: rgba(7,17,31,.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand {
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.35rem, 1.15rem + 0.7vw, 1.65rem);
       font-weight: 800;
-      font-size: 1rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: #fff;
+      letter-spacing: -0.015em;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
     }
-
-    .proto-badge {
-      font-size: .68rem;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(73,211,180,.35);
-      border-radius: 4px;
-      padding: 3px 8px;
-      opacity: .85;
+    .kpi-caption {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
     }
+    .kpi-caption.ok { color: var(--secondary); font-weight: 700; }
 
-    .header-right {
+    /* Tab Navigation */
+    .tab-bar-wrap {
+      border-top: var(--card-border);
+      margin-top: var(--space-sm);
+      padding-top: var(--space-xs);
+    }
+    .tab-list {
       display: flex;
-      align-items: center;
-      gap: 20px;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
-
-    .bedrijfsnaam {
-      font-size: .75rem;
+    .tab-btn {
+      appearance: none;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
       font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.4);
-      white-space: nowrap;
-    }
-
-    .nav-cta {
+      color: var(--on-surface-variant);
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 22px;
-      border-radius: 6px;
-      background: var(--primary);
-      color: #fff;
-      font-size: .88rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background .2s, transform .15s;
+      gap: var(--space-sm);
+      border-radius: var(--rounded) var(--rounded) 0 0;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-short) var(--ease-in-out);
     }
-    .nav-cta:hover { background: #2470a8; transform: translateY(-1px); }
-    .nav-cta svg { transition: transform .2s; }
-    .nav-cta:hover svg { transform: translateX(3px); }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      height: 100vh;
-      min-height: 600px;
-      display: flex;
-      align-items: flex-end;
-      padding-bottom: 100px;
-      overflow: hidden;
+    .tab-btn:hover {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+    }
+    .tab-btn[aria-selected="true"] {
+      color: var(--on-primary-container);
+      border-bottom-color: var(--primary);
+      background: var(--surface-container-low);
     }
 
-    .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: .35;
+    .tab-panel {
+      display: none;
+      gap: var(--space-lg);
+      animation: panelFadeIn var(--dur-short) var(--ease-out);
+    }
+    .tab-panel.active {
+      display: grid;
     }
 
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(7,17,31,.3) 0%,
-        rgba(7,17,31,.55) 60%,
-        rgba(7,17,31,.9) 100%
-      );
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      width: min(var(--max), calc(100% - 80px));
-      margin: 0 auto;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
-      line-height: 1.08;
-      letter-spacing: -.04em;
-      font-weight: 800;
-      max-width: 720px;
-      overflow: hidden;
-    }
-
-    .hero-line {
-      display: block;
-      opacity: 0;
-      transform: translateY(32px);
-      animation: fadeUp .8s forwards;
-    }
-    .hero-line:nth-child(2) { animation-delay: .18s; }
-
-    .hero h1 em {
-      color: var(--blue);
-      font-style: normal;
-    }
-
-    @keyframes fadeUp {
+    @keyframes panelFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .hero-sub {
-      margin-top: 20px;
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--muted);
-      max-width: 480px;
-      opacity: 0;
-      animation: fadeUp .8s .36s forwards;
+    /* Generic white cards & grids */
+    .panel-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: grid;
+      gap: var(--space-md);
+      align-content: start;
+    }
+    .panel-card.soft {
+      background: var(--surface-container-low);
+      box-shadow: none;
     }
 
-    .hero-buttons {
-      margin-top: 40px;
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp .8s .5s forwards;
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .asymmetric-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
     }
 
-    /* scroll indicator */
-    .scroll-hint {
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0;
-      animation: fadeUp .8s .8s forwards;
+    /* Callouts */
+    .callout {
+      background: var(--primary-container);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      color: var(--on-primary-container);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .callout[data-status="ok"] {
+      background: var(--range-band-bg);
+      border-left-color: var(--tertiary);
+      color: var(--secondary);
+    }
+    .callout[data-status="warn"] {
+      background: var(--chip-warn-bg);
+      border-left-color: var(--data-3);
+      color: var(--on-surface);
     }
 
-    .scroll-hint span {
-      font-size: .68rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.35);
-    }
-
-    .scroll-chevron {
-      width: 20px;
-      height: 20px;
-      animation: bounce 1.8s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); opacity: .4; }
-      50% { transform: translateY(5px); opacity: 1; }
-    }
-
-    /* ── KNOPPEN ── */
-    .btn-pill {
+    /* Buttons & Filters */
+    .btn {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      border-radius: var(--rounded);
+      border: 1px solid transparent;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 28px;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: .95rem;
-      text-decoration: none;
-      transition: all .25s;
-      cursor: pointer;
-      border: none;
+      justify-content: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
     }
-
-    .btn-pill-solid { background: #fff; color: var(--bg); }
-    .btn-pill-solid:hover { background: var(--blue); color: #fff; }
-
-    .btn-pill-outline {
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,.4);
-      color: #fff;
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
     }
-    .btn-pill-outline:hover {
-      background: rgba(255,255,255,.1);
-      border-color: #fff;
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: var(--background);
+      color: var(--on-primary-container);
+      border-color: var(--primary);
     }
-
-    .btn-pill svg { flex-shrink: 0; transition: transform .2s; }
-    .btn-pill:hover svg { transform: translateX(4px); }
-
-    /* ── SECTIONS ── */
-    .section {
-      padding: 100px 0;
-      width: min(var(--max), calc(100% - 80px));
-      margin: 0 auto;
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .75s ease-out, transform .75s ease-out;
+    .btn-secondary:hover { background: var(--surface-container-low); }
+    .btn-ghost {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
     }
-    .section.reveal { opacity: 1; transform: translateY(0); }
-
-    .section-label {
-      font-size: .75rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 18px;
+    .btn-ghost:hover { background: var(--surface-container); }
+    .btn-ghost[aria-pressed="true"],
+    .btn-secondary[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
     }
-
-    .section h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      letter-spacing: -.035em;
-      line-height: 1.15;
-      font-weight: 700;
-      max-width: 640px;
-      margin-bottom: 24px;
+    .btn-danger-outline {
+      background: var(--background);
+      color: var(--error);
+      border-color: var(--error);
     }
+    .btn-danger-outline:hover { background: var(--chip-alert-bg); }
 
-    .section p {
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 560px;
-      line-height: 1.8;
-    }
-
-    .section p + p { margin-top: 14px; }
-
-    /* ── PROBLEEM ── */
-    .probleem-grid {
-      margin-top: 56px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--line);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .probleem-item {
-      background: rgba(15,31,52,.8);
-      padding: 44px 36px;
-      backdrop-filter: blur(4px);
-      transition: background .25s;
-      position: relative;
-    }
-
-    .probleem-item::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px;
-      height: 0;
-      background: var(--accent);
-      border-radius: 0 2px 2px 0;
-      transition: height .35s ease;
-    }
-
-    .probleem-item:hover::before { height: 100%; }
-    .probleem-item:hover { background: rgba(27,94,138,.2); }
-
-    .probleem-num {
-      font-size: .72rem;
-      letter-spacing: .14em;
-      color: var(--accent);
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
-
-    .probleem-item h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      color: #fff;
-      line-height: 1.35;
-    }
-
-    .probleem-item p {
-      font-size: .9rem;
-      color: var(--muted);
-      max-width: none;
-      line-height: 1.75;
-    }
-
-    /* ── WAAROM ── */
-    .waarom-grid {
-      margin-top: 56px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--line);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .waarom-item {
-      background: rgba(15,31,52,.8);
-      padding: 44px 36px;
-      backdrop-filter: blur(4px);
-      transition: background .25s;
-      position: relative;
-    }
-
-    .waarom-item::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px;
-      height: 0;
-      background: var(--blue);
-      border-radius: 0 2px 2px 0;
-      transition: height .35s ease;
-    }
-
-    .waarom-item:hover::before { height: 100%; }
-    .waarom-item:hover { background: rgba(27,94,138,.2); }
-
-    .waarom-item h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-      color: #fff;
-      line-height: 1.35;
-    }
-
-    .waarom-item p {
-      font-size: .9rem;
-      color: var(--muted);
-      max-width: none;
-      line-height: 1.75;
-    }
-
-    /* ── PDCA ── */
-    .pdca-grid {
-      margin-top: 56px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      background: var(--line);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .pdca-item {
-      background: rgba(15,31,52,.8);
-      padding: 44px 32px;
-      backdrop-filter: blur(4px);
-      transition: background .25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* progress bar onderaan oplaadt bij hover */
-    .pdca-item::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      height: 3px;
-      width: 0;
-      background: linear-gradient(to right, var(--accent), var(--blue));
-      transition: width .4s ease;
-    }
-
-    .pdca-item:hover::after { width: 100%; }
-    .pdca-item:hover { background: rgba(27,94,138,.22); }
-
-    .pdca-fase {
-      font-size: .72rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 4px;
-      font-weight: 600;
-    }
-
-    .pdca-label {
-      font-size: .72rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.22);
-      margin-bottom: 22px;
-    }
-
-    .pdca-item h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 14px;
-      letter-spacing: -.025em;
-    }
-
-    .pdca-item p {
-      font-size: .9rem;
-      color: var(--muted);
-      max-width: none;
-      line-height: 1.75;
-    }
-
-    /* ── TARIEVEN ── */
-    .tarieven-grid {
-      margin-top: 56px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-
-    .tarief-card {
-      background: rgba(15,31,52,.7);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 40px 36px;
+    .btn-row {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: border-color .3s, background .3s, transform .2s, box-shadow .3s;
-      position: relative;
-      overflow: hidden;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
     }
 
-    .tarief-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      padding: 1px;
-      background: linear-gradient(135deg, var(--accent), var(--blue), transparent 60%);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity .3s;
+    /* Visual Journey Strip (5-day Gantt / Overview bar) */
+    .journey-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-sm);
     }
-
-    .tarief-card:hover::before { opacity: 1; }
-
-    .tarief-card:hover {
-      background: rgba(27,94,138,.18);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,.3);
+    .day-pill {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 4px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
     }
-
-    .tarief-tag {
-      font-size: .72rem;
-      letter-spacing: .1em;
+    .day-pill:hover {
+      background: var(--surface-container);
+      transform: translateY(-2px);
+    }
+    .day-pill[data-type="stad"] { border-top-color: var(--tertiary); }
+    .day-pill[data-type="conferentie"] { border-top-color: var(--primary); }
+    .day-pill[data-type="terug"] { border-top-color: var(--data-4); }
+    .day-pill .day-date {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
       text-transform: uppercase;
-      color: var(--accent);
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
     }
-
-    .tarief-card h3 {
-      font-size: 1.15rem;
+    .day-pill .day-heading {
+      font-family: var(--font-headline);
       font-weight: 700;
-      color: #fff;
-      line-height: 1.3;
-    }
-
-    .tarief-card p {
-      font-size: .9rem;
-      color: var(--muted);
-      max-width: none;
-      flex: 1;
-      line-height: 1.75;
-    }
-
-    .tarief-prijs {
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-      font-size: .9rem;
-      color: var(--blue);
-      font-weight: 600;
-    }
-
-    /* ── CTA ── */
-    .cta-section {
-      padding: 100px 0;
-      text-align: center;
-      border-top: 1px solid var(--line);
-    }
-
-    .cta-inner {
-      width: min(var(--max), calc(100% - 80px));
-      margin: 0 auto;
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .75s ease-out, transform .75s ease-out;
-    }
-    .cta-inner.reveal { opacity: 1; transform: translateY(0); }
-
-    .cta-inner h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      letter-spacing: -.035em;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .cta-inner p {
-      color: var(--muted);
       font-size: 1rem;
-      margin-bottom: 40px;
+      color: var(--on-surface);
+    }
+    .day-pill .day-meta {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
     }
 
-    /* ── FOOTER ── */
-    footer {
-      padding: 36px 40px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: .82rem;
+    /* Data definitions / Key-value lists */
+    .kv-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin: 0;
+    }
+    .kv-row {
       display: flex;
       justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .kv-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .kv-key {
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+    .kv-val {
+      font-weight: 700;
+      color: var(--on-surface);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Step list */
+    .step-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .step-item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: var(--space-sm);
+      align-items: start;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-full);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Schedule timeline */
+    .day-section {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .day-header {
+      display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: 2px solid var(--outline-variant);
+    }
+    .timeline-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .timeline-item {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: start;
+    }
+    .timeline-item[data-cat="reis"] { border-left-color: var(--data-4); }
+    .timeline-item[data-cat="stad"] { border-left-color: var(--tertiary); }
+    .timeline-item[data-cat="diner"] { border-left-color: var(--data-3); }
+    .timeline-item[data-cat="conferentie"] { border-left-color: var(--primary); }
+
+    .time-col {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: var(--on-primary-container);
+      font-variant-numeric: tabular-nums;
+    }
+    .timeline-body {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .timeline-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--on-surface);
+    }
+    .timeline-desc {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+    }
+    .timeline-loc {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-xs);
     }
 
-    footer a { color: var(--muted); text-decoration: none; transition: color .2s; }
-    footer a:hover { color: #fff; }
-    .footer-links { display: flex; gap: 24px; }
+    /* Explore cards */
+    .explore-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--tertiary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+      align-content: space-between;
+      box-shadow: var(--card-lift);
+    }
+    .explore-card[data-day="maandag"] { border-left-color: var(--data-4); }
+    .explore-card[data-day="dinsdag"] { border-left-color: var(--tertiary); }
+    .explore-card[data-cat="conferentie"] { border-left-color: var(--primary); }
 
-    /* ── RESPONSIVE ── */
+    .explore-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .explore-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Map container (Leaflet schematic - Pattern 8) */
+    .map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    #barcelona-map {
+      width: 100%;
+      height: 520px;
+      min-height: 460px;
+      border-radius: var(--rounded-lg);
+      border: var(--card-border);
+      background-color: var(--surface-container-low);
+      background-image:
+        linear-gradient(var(--map-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--map-grid-line) 1px, transparent 1px),
+        linear-gradient(var(--map-grid-major) 1px, transparent 1px),
+        linear-gradient(90deg, var(--map-grid-major) 1px, transparent 1px);
+      background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px;
+      z-index: 1;
+    }
+    .leaflet-container {
+      font-family: var(--font-body);
+    }
+    .map-sidebar {
+      display: grid;
+      gap: var(--space-sm);
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: var(--space-xs);
+    }
+    .poi-item {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+      color: inherit;
+      display: grid;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .poi-item:hover, .poi-item.selected {
+      background: var(--surface-container-low);
+    }
+    .poi-item[data-cat="reis"] { border-left-color: var(--data-4); }
+    .poi-item[data-cat="conferentie"] { border-left-color: var(--primary); }
+    .poi-item[data-cat="stad"] { border-left-color: var(--tertiary); }
+    .poi-item[data-cat="diner"] { border-left-color: var(--data-3); }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: var(--rounded-full);
+      margin-right: var(--space-xs);
+      vertical-align: middle;
+    }
+    .legend-dot.reis { background: var(--data-4); }
+    .legend-dot.conf { background: var(--primary); }
+    .legend-dot.stad { background: var(--tertiary); }
+    .legend-dot.diner { background: var(--data-3); }
+
+    /* Checklist & Progress */
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: var(--range-band-bg);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+      border: 1px solid var(--outline-variant);
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--tertiary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+
+    .check-group {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .check-item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: start;
+      padding: var(--space-md);
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .check-item.done {
+      background: var(--surface-container-low);
+    }
+    .check-item.done .check-title {
+      text-decoration: line-through;
+      color: var(--on-surface-variant);
+    }
+    .check-box {
+      width: 24px;
+      height: 24px;
+      margin-top: 2px;
+      accent-color: var(--tertiary);
+      cursor: pointer;
+    }
+    .check-label {
+      display: grid;
+      gap: var(--space-xs);
+      cursor: pointer;
+    }
+    .check-title {
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .check-note {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Form inputs */
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+    .field {
+      display: grid;
+      gap: var(--space-xs);
+      flex: 1 1 220px;
+    }
+    .field.compact {
+      flex: 0 1 200px;
+    }
+    .field label {
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .input, .select {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--on-surface);
+      background: var(--background);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      width: 100%;
+    }
+    .select {
+      padding-right: var(--space-xl);
+    }
+    .input:focus, .select:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+    }
+
+    /* Badge Pickup Spotlight */
+    .badge-spotlight {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: center;
+    }
+    .req-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .req-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    /* Footer / Sources */
+    .page-footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg) var(--space-xl);
+      color: var(--on-surface-variant);
+      font-size: 0.85rem;
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 900px) {
-      .pdca-grid { grid-template-columns: repeat(2, 1fr); }
-      .waarom-grid { grid-template-columns: 1fr; }
+      .asymmetric-grid,
+      .map-layout,
+      .badge-spotlight {
+        grid-template-columns: 1fr;
+      }
+      .journey-strip {
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      }
     }
 
-    @media (max-width: 768px) {
-      header { padding: 0 20px; }
-      .hero-content { width: calc(100% - 40px); }
-      .section { width: calc(100% - 40px); padding: 72px 0; }
-      .probleem-grid { grid-template-columns: 1fr; }
-      .pdca-grid { grid-template-columns: 1fr; }
-      .tarieven-grid { grid-template-columns: 1fr; }
-      .cta-inner { width: calc(100% - 40px); }
-      footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .hero-inner {
+        padding: var(--space-md);
+      }
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: var(--space-xs);
+      }
+      .check-item {
+        grid-template-columns: 24px minmax(0, 1fr);
+      }
+      .check-item .chip {
+        grid-column: 2;
+        justify-self: start;
+      }
+      #barcelona-map {
+        height: 400px;
+        min-height: 400px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-line, .hero-sub, .hero-buttons { animation: none; opacity: 1; transform: none; }
-      .scroll-chevron { animation: none; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
-
 <body>
+  <div class="page">
+    <header class="hero-band">
+      <div class="hero-inner">
+        <div class="hero-top">
+          <div>
+            <p class="kicker">Reis- &amp; Conferentiedossier · Renco van Leeuwen</p>
+            <h1 class="title">Barcelona &amp; HPE Discover 2026</h1>
+            <p class="lede">
+              Compleet overzicht van de reis vanuit Kamperland naar Barcelona, de twee verkenningsdagen op maandag en dinsdag,
+              de conferentiedagen bij Fira Barcelona Gran Via en een interactieve checklist voor vertrek en badge-ophaling.
+            </p>
+          </div>
+          <div class="hero-badges">
+            <span class="chip" data-status="info">
+              <i data-lucide="calendar" width="14" height="14" aria-hidden="true"></i>
+              30 nov – 4 dec 2026
+            </span>
+            <span class="chip">
+              <i data-lucide="shield-check" width="14" height="14" aria-hidden="true"></i>
+              Partner hosted via Wentzo B.V.
+            </span>
+          </div>
+        </div>
 
-  <header id="site-header">
-    <div class="header-left">
-      <a href="#" class="brand">Care Innovation</a>
-      <span class="proto-badge">Prototype 0.8</span>
-    </div>
-    <div class="header-right">
-      <span class="bedrijfsnaam">Van Leeuwen Innovatie &amp; Advies</span>
-      <a href="mailto:info@careinnovation.nl" class="nav-cta">
-        Plan een kennismaking
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-  </header>
+        <!-- KPI Summary Cards -->
+        <section class="kpi-grid" aria-label="Kerngegevens reis en conferentie">
+          <article class="status-card" data-status="info">
+            <div class="kpi-label">
+              <span>Vluchten &amp; Parkeren</span>
+              <i data-lucide="plane" width="16" height="16" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-value">SN 3697 / SN 3698</div>
+            <div class="kpi-caption">Zaventem P2 Lock Parking · Ref. ZAVW21597022</div>
+          </article>
 
-  <!-- 1. HERO -->
-  <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline poster="image/conny-schneider-xuTJZ7uD7PI-unsplash.jpg">
-      <source src="image/191684-891315375.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1>
-        <span class="hero-line">Innovatie zonder borging</span>
-        <span class="hero-line"><em>is tijdelijke ambitie.</em></span>
-      </h1>
-      <p class="hero-sub">Wat blijft er bij uw zorginstelling écht staan?</p>
-      <div class="hero-buttons">
-        <a href="mailto:info@careinnovation.nl" class="btn-pill btn-pill-solid">
-          Plan een kennismaking
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="#probleem" class="btn-pill btn-pill-outline">
-          Meer lezen
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+          <article class="status-card" data-status="ok">
+            <div class="kpi-label">
+              <span>Verblijf (4 nachten)</span>
+              <i data-lucide="building-2" width="16" height="16" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-value">INNSiDE Apolo</div>
+            <div class="kpi-caption">Av. del Paralelo 57 · Metro Paral·lel (L3)</div>
+          </article>
+
+          <article class="status-card" data-status="warn">
+            <div class="kpi-label">
+              <span>Conferentie &amp; Badge</span>
+              <i data-lucide="badge-check" width="16" height="16" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-value">2–3 dec · Hall 8</div>
+            <div class="kpi-caption">Badge bij voorkeur di 1 dec (13:00–18:00)</div>
+          </article>
+
+          <article class="status-card" data-status="ok" id="kpi-checklist-card">
+            <div class="kpi-label">
+              <span>Checklist &amp; Acties</span>
+              <i data-lucide="check-square" width="16" height="16" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-value" id="kpi-check-count">0 / 12</div>
+            <div class="kpi-caption ok" id="kpi-check-caption">Nog te controleren voor vertrek</div>
+          </article>
+        </section>
+
+        <!-- Clickable Tabs -->
+        <nav class="tab-bar-wrap" aria-label="Hoofdonderdelen overzicht">
+          <ul class="tab-list" role="tablist">
+            <li role="presentation">
+              <button type="button" class="tab-btn" role="tab" id="tab-btn-overzicht" aria-controls="tab-overzicht" aria-selected="true" onclick="switchTab('overzicht')">
+                <i data-lucide="layout-dashboard" width="17" height="17" aria-hidden="true"></i>
+                Visueel Overzicht &amp; Reis
+              </button>
+            </li>
+            <li role="presentation">
+              <button type="button" class="tab-btn" role="tab" id="tab-btn-schema" aria-controls="tab-schema" aria-selected="false" onclick="switchTab('schema')">
+                <i data-lucide="calendar-days" width="17" height="17" aria-hidden="true"></i>
+                Dagschema
+              </button>
+            </li>
+            <li role="presentation">
+              <button type="button" class="tab-btn" role="tab" id="tab-btn-verkennen" aria-controls="tab-verkennen" aria-selected="false" onclick="switchTab('verkennen')">
+                <i data-lucide="compass" width="17" height="17" aria-hidden="true"></i>
+                Stad Verkennen (Ma &amp; Di)
+              </button>
+            </li>
+            <li role="presentation">
+              <button type="button" class="tab-btn" role="tab" id="tab-btn-kaart" aria-controls="tab-kaart" aria-selected="false" onclick="switchTab('kaart')">
+                <i data-lucide="map-pin" width="17" height="17" aria-hidden="true"></i>
+                Overzichtskaart
+              </button>
+            </li>
+            <li role="presentation">
+              <button type="button" class="tab-btn" role="tab" id="tab-btn-checklist" aria-controls="tab-checklist" aria-selected="false" onclick="switchTab('checklist')">
+                <i data-lucide="list-checks" width="17" height="17" aria-hidden="true"></i>
+                Checklist &amp; Badge
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
-    </div>
+    </header>
 
-    <div class="scroll-hint">
-      <span>Scroll</span>
-      <svg class="scroll-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 8l5 5 5-5" stroke="rgba(255,255,255,.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </section>
+    <main class="page-grid">
+      <!-- TAB 1: VISUEEL OVERZICHT & REIS -->
+      <section id="tab-overzicht" class="tab-panel active" role="tabpanel" aria-labelledby="tab-btn-overzicht">
+        <article class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+            <div>
+              <p class="kicker">5-daagse tijdlijn</p>
+              <h2 class="section-title">De reis in één oogopslag</h2>
+            </div>
+            <span class="chip" data-status="info">Klik op een dag voor het detailschema</span>
+          </div>
+          <div class="journey-strip">
+            <button type="button" class="day-pill" data-type="stad" onclick="openScheduleDay('maandag')">
+              <span class="day-date">Ma 30 nov</span>
+              <span class="day-heading">Heenreis &amp; Aankomst</span>
+              <span class="day-meta">04:45 Kamperland · SN 3697 · Eerste stadswandeling</span>
+            </button>
+            <button type="button" class="day-pill" data-type="stad" onclick="openScheduleDay('dinsdag')">
+              <span class="day-date">Di 1 dec</span>
+              <span class="day-heading">Barcelona &amp; Badge</span>
+              <span class="day-meta">Volle dag stad verkennen · Badge 13:00–18:00 Hall 8</span>
+            </button>
+            <button type="button" class="day-pill" data-type="conferentie" onclick="openScheduleDay('woensdag')">
+              <span class="day-date">Wo 2 dec</span>
+              <span class="day-heading">HPE Discover Dag 1</span>
+              <span class="day-meta">Keynote &amp; sessies · Avond: Velissima Country Dinner</span>
+            </button>
+            <button type="button" class="day-pill" data-type="conferentie" onclick="openScheduleDay('donderdag')">
+              <span class="day-date">Do 3 dec</span>
+              <span class="day-heading">HPE Discover Dag 2</span>
+              <span class="day-meta">Showcase &amp; breakouts · Avond: HPE Fiesta</span>
+            </button>
+            <button type="button" class="day-pill" data-type="terug" onclick="openScheduleDay('vrijdag')">
+              <span class="day-date">Vr 4 dec</span>
+              <span class="day-heading">Terugreis</span>
+              <span class="day-meta">SN 3698 · Lock Parking uitrijden vóór 15:30 (€ 141)</span>
+            </button>
+          </div>
+        </article>
 
-  <!-- 2. HET PROBLEEM -->
-  <div class="section" id="probleem">
-    <div class="section-label">Het probleem</div>
-    <h2>Veel innovaties worden ingevoerd. Weinig worden écht gebruikt.</h2>
-    <p>De investering is gedaan, de tool gaat live — en daarna? Zonder dat iemand er echt verantwoordelijk voor is, zakt het gebruik langzaam weg. Geen technisch probleem. Een organisatieprobleem.</p>
+        <div class="asymmetric-grid">
+          <!-- Parking card -->
+          <article class="status-card" data-status="info" style="padding:var(--space-lg); gap:var(--space-md);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:var(--space-sm);">
+              <div>
+                <p class="kicker">Brussels Airport · 1930 Zaventem</p>
+                <h3 class="card-title">Interparking Lock Parking (P2)</h3>
+              </div>
+              <span class="chip" data-status="info">Betalen bij vertrek</span>
+            </div>
 
-    <div class="probleem-grid">
-      <div class="probleem-item">
-        <div class="probleem-num">01</div>
-        <h3>Na de go-live stopt de aandacht</h3>
-        <p>De focus ligt op aanschaf en invoering. Of mensen de tool daarna ook écht gebruiken, blijft onbewaakt. De eerste weken na livegang zijn cruciaal — en worden het vaakst overgeslagen.</p>
-      </div>
-      <div class="probleem-item">
-        <div class="probleem-num">02</div>
-        <h3>Niemand is eindverantwoordelijk</h3>
-        <p>Het is van iedereen een beetje, dus van niemand echt. Zonder duidelijke verantwoordelijkheid is duurzaam gebruik een toevalstreffer. Enthousiasme bij de start is geen borging.</p>
-      </div>
-      <div class="probleem-item">
-        <div class="probleem-num">03</div>
-        <h3>Medewerkers worden niet meegenomen</h3>
-        <p>Technologie veranderen is gedrag veranderen. Wie dat overslaat, mag niet raar opkijken als de tool niet wordt gebruikt. Een training op de eerste dag is niet genoeg.</p>
-      </div>
-    </div>
+            <dl class="kv-list">
+              <div class="kv-row">
+                <dt class="kv-key">Referentie</dt>
+                <dd class="kv-val">ZAVW21597022</dd>
+              </div>
+              <div class="kv-row">
+                <dt class="kv-key">Nummerplaat</dt>
+                <dd class="kv-val">N629FG (Renco Leeuwen)</dd>
+              </div>
+              <div class="kv-row">
+                <dt class="kv-key">Start reservatie</dt>
+                <dd class="kv-val">30-11-2026 om 07:00</dd>
+              </div>
+              <div class="kv-row">
+                <dt class="kv-key">Einde reservatie</dt>
+                <dd class="kv-val">04-12-2026 om 15:30</dd>
+              </div>
+              <div class="kv-row">
+                <dt class="kv-key">Totaalprijs</dt>
+                <dd class="kv-val">€ 141,00 (betaalautomaat of Pcard)</dd>
+              </div>
+            </dl>
+
+            <div class="callout">
+              <strong>Toegangsinstructie ter plaatse</strong>
+              <ol class="step-list" style="margin-top:var(--space-xs);">
+                <li class="step-item">
+                  <span class="step-num">1</span>
+                  <span>Volg borden naar <strong>P2</strong> en neem bij de ingang de <strong>uiterst rechtse rijstrook (“Parking Lock”)</strong>.</span>
+                </li>
+                <li class="step-item">
+                  <span class="step-num">2</span>
+                  <span>Neem een ticket aan de slagboom (of scan uw Pcard / gebruik geactiveerde nummerplaatherkenning).</span>
+                </li>
+                <li class="step-item">
+                  <span class="step-num">3</span>
+                  <span>Rijd <strong>één niveau omhoog</strong> — de ingang van Lock Parking ligt aan uw <strong>rechterkant</strong>. Voer daar het ticket opnieuw in (of scan Pcard).</span>
+                </li>
+              </ol>
+              <p style="font-size:0.85rem; margin-top:var(--space-xs);">
+                EV-opladen beschikbaar (alleen stroomverbruik gefactureerd). Wijzigen/annuleren kan tot 12 uur vooraf via interparking.be.
+              </p>
+            </div>
+          </article>
+
+          <!-- Flight & Airport Transfer card -->
+          <div style="display:grid; gap:var(--space-lg); align-content:start;">
+            <article class="status-card" data-status="ok" style="padding:var(--space-lg); gap:var(--space-md);">
+              <div>
+                <p class="kicker">Luchthaven &amp; Openbaar Vervoer</p>
+                <h3 class="card-title">Vluchten &amp; Transfer naar Hotel</h3>
+              </div>
+              <dl class="kv-list">
+                <div class="kv-row">
+                  <dt class="kv-key">Vertrek Kamperland</dt>
+                  <dd class="kv-val">Ma 30 nov · 04:45</dd>
+                </div>
+                <div class="kv-row">
+                  <dt class="kv-key">Heenvlucht</dt>
+                  <dd class="kv-val">SN 3697 (Brussel → Barcelona)</dd>
+                </div>
+                <div class="kv-row">
+                  <dt class="kv-key">Terugvlucht</dt>
+                  <dd class="kv-val">SN 3698 (Barcelona → Brussel)</dd>
+                </div>
+              </dl>
+              <div class="callout" data-status="ok">
+                <strong>Route El Prat → INNSiDE Apolo</strong>
+                <ol class="step-list" style="margin-top:var(--space-xs);">
+                  <li class="step-item">
+                    <span class="step-num">1</span>
+                    <span>Neem op Barcelona-El Prat de <strong>Aerobús A1</strong> (Terminal 1) of <strong>A2</strong> (Terminal 2).</span>
+                  </li>
+                  <li class="step-item">
+                    <span class="step-num">2</span>
+                    <span>Stap uit bij <strong>Plaça d’Espanya</strong>.</span>
+                  </li>
+                  <li class="step-item">
+                    <span class="step-num">3</span>
+                    <span>Neem <strong>metro L3 (groene lijn)</strong> richting <strong>Trinitat Nova</strong> en stap uit bij <strong>Paral·lel</strong> — het hotel ligt praktisch om de hoek.</span>
+                  </li>
+                </ol>
+              </div>
+            </article>
+
+            <article class="status-card" data-status="info" style="padding:var(--space-lg); gap:var(--space-sm);">
+              <p class="kicker">Accommodatie</p>
+              <h3 class="card-title">INNSiDE by Meliá Barcelona Apolo</h3>
+              <p><strong>Avenida del Paralelo 57, 08004 Barcelona, Spanje</strong></p>
+              <p class="kpi-caption">
+                Hotelaccommodatie is geregeld en bekostigd door Wentzo B.V. voor u en de groep.
+                Direct nabij metrostation Paral·lel (lijnen L2 &amp; L3) en de wijk Poble-sec.
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Contacts & Wentzo Group -->
+        <article class="panel-card">
+          <div>
+            <p class="kicker">Organisatie &amp; Collega’s</p>
+            <h2 class="section-title">Contactpersonen &amp; Reizigersgroep</h2>
+          </div>
+          <div class="card-grid">
+            <div class="status-card" data-status="info">
+              <span class="kpi-label">Wentzo · Organisatie</span>
+              <strong class="card-title">Cordina Mourits</strong>
+              <p class="kpi-caption">Marketingmedewerker · Wentzo B.V.</p>
+              <p>E-mail: <strong>cordina.mourits@wentzo.com</strong><br>Tel: <strong class="tabular">+31 577 460008</strong></p>
+            </div>
+            <div class="status-card" data-status="info">
+              <span class="kpi-label">HPE Networking · Contact</span>
+              <strong class="card-title">Lisanne Krimpenfort</strong>
+              <p class="kpi-caption">Territory Manager (health)care (ma–do)</p>
+              <p>E-mail: <strong>lisanne.krimpenfort@hpe.com</strong><br>Mobiel: <strong class="tabular">+31 6 293 269 54</strong></p>
+            </div>
+            <div class="status-card" data-status="ok">
+              <span class="kpi-label">Wentzo Groep &amp; WhatsApp</span>
+              <strong class="card-title">Aanwezige collega’s</strong>
+              <p>Bert, Steven, Jaap, Edwin, Etienne van Heel en Mathieu.</p>
+              <p class="kpi-caption">Eind november wordt iedereen toegevoegd aan een WhatsAppgroep voor praktische tijden en de Wentzo privé tour.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- TAB 2: DAGSCHEMA -->
+      <section id="tab-schema" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-schema">
+        <article class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:var(--space-md);">
+            <div>
+              <p class="kicker">Chronologische planning</p>
+              <h2 class="section-title">Dagschema: 30 november – 4 december 2026</h2>
+              <p class="lede">Filter op een specifieke dag om direct de vluchtgegevens, aanbevolen verkenningsblokken, badge-ophaling en conferentiehoogtepunten te zien.</p>
+            </div>
+            <div class="btn-row" role="group" aria-label="Filter dagschema">
+              <button type="button" class="btn btn-ghost schedule-filter" data-day="alle" aria-pressed="true" onclick="filterSchedule('alle')">Alle dagen</button>
+              <button type="button" class="btn btn-ghost schedule-filter" data-day="maandag" aria-pressed="false" onclick="filterSchedule('maandag')">Ma 30 nov</button>
+              <button type="button" class="btn btn-ghost schedule-filter" data-day="dinsdag" aria-pressed="false" onclick="filterSchedule('dinsdag')">Di 1 dec</button>
+              <button type="button" class="btn btn-ghost schedule-filter" data-day="woensdag" aria-pressed="false" onclick="filterSchedule('woensdag')">Wo 2 dec</button>
+              <button type="button" class="btn btn-ghost schedule-filter" data-day="donderdag" aria-pressed="false" onclick="filterSchedule('donderdag')">Do 3 dec</button>
+              <button type="button" class="btn btn-ghost schedule-filter" data-day="vrijdag" aria-pressed="false" onclick="filterSchedule('vrijdag')">Vr 4 dec</button>
+            </div>
+          </div>
+        </article>
+
+        <div id="schedule-container" style="display:grid; gap:var(--space-lg);"></div>
+      </section>
+
+      <!-- TAB 3: STAD VERKENNEN (MA & DI) -->
+      <section id="tab-verkennen" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-verkennen">
+        <article class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:var(--space-md);">
+            <div>
+              <p class="kicker">Vrije tijd vóór de conferentie</p>
+              <h2 class="section-title">Barcelona verkennen op maandag &amp; dinsdag</h2>
+              <p class="lede">
+                Omdat u een dag eerder vliegt, heeft u maandagmiddag (na aankomst) én de gehele dinsdag om Barcelona op eigen tempo te ontdekken.
+                Selecteer de activiteiten die u aanspreken om uw persoonlijke route samen te stellen.
+              </p>
+            </div>
+            <div class="chip" data-status="ok" id="explore-plan-chip">0 activiteiten geselecteerd in uw route</div>
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; gap:var(--space-md); align-items:center; justify-content:space-between; padding-top:var(--space-sm); border-top:1px solid var(--outline-variant);">
+            <div class="btn-row" role="group" aria-label="Filter op dag">
+              <button type="button" class="btn btn-ghost explore-day-filter" data-day="alle" aria-pressed="true" onclick="filterExplore('alle', currentExploreCat)">Maandag &amp; Dinsdag</button>
+              <button type="button" class="btn btn-ghost explore-day-filter" data-day="maandag" aria-pressed="false" onclick="filterExplore('maandag', currentExploreCat)">Maandag 30 nov (na vlucht)</button>
+              <button type="button" class="btn btn-ghost explore-day-filter" data-day="dinsdag" aria-pressed="false" onclick="filterExplore('dinsdag', currentExploreCat)">Dinsdag 1 dec (gehele dag)</button>
+            </div>
+            <div class="btn-row" role="group" aria-label="Filter op thema">
+              <button type="button" class="btn btn-ghost explore-cat-filter" data-cat="alle" aria-pressed="true" onclick="filterExplore(currentExploreDay, 'alle')">Alle thema’s</button>
+              <button type="button" class="btn btn-ghost explore-cat-filter" data-cat="cultuur" aria-pressed="false" onclick="filterExplore(currentExploreDay, 'cultuur')">Cultuur &amp; Gaudí</button>
+              <button type="button" class="btn btn-ghost explore-cat-filter" data-cat="wandeling" aria-pressed="false" onclick="filterExplore(currentExploreDay, 'wandeling')">Uitzicht &amp; Wijken</button>
+              <button type="button" class="btn btn-ghost explore-cat-filter" data-cat="culinair" aria-pressed="false" onclick="filterExplore(currentExploreDay, 'culinair')">Eten &amp; Sfeer</button>
+            </div>
+          </div>
+        </article>
+
+        <div class="callout" data-status="info">
+          <strong>Slimme planningstip voor dinsdagmiddag (13:00–18:00 CET)</strong>
+          <span>
+            HPE raadt nadrukkelijk aan om uw conferentiebadge al op <strong>dinsdag 1 december tussen 13:00 en 18:00</strong> op te halen bij
+            <strong>Fira Barcelona Gran Via (North Entrance, Hall 8, Lobby)</strong>. Combineer dit eenvoudig met een bezoek aan Plaça d’Espanya en Montjuïc:
+            vanaf Plaça d’Espanya bent u in circa 10 minuten met de FGC/metro bij halte Europa | Fira.
+          </span>
+        </div>
+
+        <div id="explore-grid" class="card-grid"></div>
+
+        <!-- Personal Selected Route Summary -->
+        <article class="panel-card soft" id="personal-route-box">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+            <div>
+              <p class="kicker">Opgeslagen voorkeur</p>
+              <h3 class="card-title">Mijn geselecteerde Barcelona-planning</h3>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="switchTab('kaart')">
+              <i data-lucide="map" width="16" height="16" aria-hidden="true"></i>
+              Bekijk locaties op kaart
+            </button>
+          </div>
+          <div id="personal-route-list"></div>
+        </article>
+      </section>
+
+      <!-- TAB 4: OVERZICHTSKAART -->
+      <section id="tab-kaart" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-kaart">
+        <article class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:var(--space-md);">
+            <div>
+              <p class="kicker">Interactieve coördinatenkaart</p>
+              <h2 class="section-title">Overzichtskaart Barcelona — Hotel, Fira &amp; Bezienswaardigheden</h2>
+              <p class="lede">
+                Schematische vectorkaart op basis van werkelijke GPS-coördinaten, onderlinge afstanden (cirkels op 1 km en 3 km rondom het hotel)
+                en de belangrijkste OV-verbindingen. Klik op een marker of kies een locatie in de lijst.
+              </p>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-secondary" id="btn-zoom-center" aria-pressed="true" onclick="setMapView('centrum')">Centrum &amp; Fira</button>
+              <button type="button" class="btn btn-ghost" id="btn-zoom-airport" aria-pressed="false" onclick="setMapView('luchthaven')">Incl. Luchthaven BCN</button>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+            <div class="btn-row" role="group" aria-label="Filter locatietype op kaart">
+              <button type="button" class="btn btn-ghost map-cat-btn" data-cat="alle" aria-pressed="true" onclick="filterMapCategory('alle')">Alle locaties</button>
+              <button type="button" class="btn btn-ghost map-cat-btn" data-cat="reis" aria-pressed="false" onclick="filterMapCategory('reis')">Reis &amp; Hotel</button>
+              <button type="button" class="btn btn-ghost map-cat-btn" data-cat="conferentie" aria-pressed="false" onclick="filterMapCategory('conferentie')">Conferentie &amp; Diner</button>
+              <button type="button" class="btn btn-ghost map-cat-btn" data-cat="stad" aria-pressed="false" onclick="filterMapCategory('stad')">Stad verkennen</button>
+            </div>
+            <div class="map-legend">
+              <span><span class="legend-dot reis"></span>Reis &amp; Hotel</span>
+              <span><span class="legend-dot conf"></span>Conferentie</span>
+              <span><span class="legend-dot diner"></span>Diner (Velissima)</span>
+              <span><span class="legend-dot stad"></span>Bezienswaardigheid</span>
+            </div>
+          </div>
+
+          <div class="map-layout">
+            <div id="barcelona-map" aria-label="Schematische kaart van Barcelona met hotel, conferentielocatie en bezienswaardigheden"></div>
+            <aside class="map-sidebar" id="map-poi-list" aria-label="Belangrijke locaties in Barcelona"></aside>
+          </div>
+        </article>
+      </section>
+
+      <!-- TAB 5: CHECKLIST & BADGE -->
+      <section id="tab-checklist" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-checklist">
+        <!-- Badge Pickup Spotlight -->
+        <article class="badge-spotlight">
+          <div style="display:grid; gap:var(--space-sm);">
+            <p class="kicker">Verplichte eerste stap ter plaatse</p>
+            <h2 class="section-title">Badge ophalen — Fira Barcelona Gran Via</h2>
+            <p>
+              Meld u bij aankomst op de conferentielocatie bij <strong>North Entrance, Hall 8, Lobby</strong>.
+              Met uw persoonlijke QR-code krijgt u toegang tot het terrein en verloopt de check-in versneld.
+            </p>
+            <div class="req-grid" style="margin-top:var(--space-xs);">
+              <div class="req-box">
+                <span class="kicker">Benodigd #1</span>
+                <strong>Persoonlijke QR-code</strong>
+                <span class="kpi-caption">Uit de e-mail “Know Before You Go” (19 nov)</span>
+              </div>
+              <div class="req-box">
+                <span class="kicker">Benodigd #2</span>
+                <strong>Foto-ID (overheid)</strong>
+                <span class="kpi-caption">Paspoort of Europese ID-kaart verplicht</span>
+              </div>
+              <div class="req-box">
+                <span class="kicker">Benodigd #3</span>
+                <strong>HPE Discover App</strong>
+                <span class="kpi-caption">Voor agenda, plattegronden &amp; updates</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card soft">
+            <p class="kicker">Openingstijden registratiebalie (CET)</p>
+            <dl class="kv-list">
+              <div class="kv-row">
+                <dt class="kv-key">Di 1 december <span class="chip" data-status="ok" style="margin-left:var(--space-xs);">Aanbevolen</span></dt>
+                <dd class="kv-val">13:00 – 18:00</dd>
+              </div>
+              <div class="kv-row">
+                <dt class="kv-key">Wo 2 december</dt>
+                <dd class="kv-val">07:30 – 18:30</dd>
+              </div>
+              <div class="kv-row">
+                <dt class="kv-key">Do 3 december</dt>
+                <dd class="kv-val">08:00 – 18:30</dd>
+              </div>
+            </dl>
+            <p class="kpi-caption">Locatie: Fira Barcelona Gran Via · North Entrance, Hall 8, Lobby</p>
+          </div>
+        </article>
+
+        <!-- Progress Bar & Controls -->
+        <article class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-md);">
+            <div>
+              <p class="kicker">Voortgang voorbereiding &amp; conferentie</p>
+              <h2 class="section-title" id="checklist-progress-title">0 van 12 taken afgerond (0%)</h2>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-secondary" onclick="exportChecklistTxt()">
+                <i data-lucide="download" width="16" height="16" aria-hidden="true"></i>
+                Exporteer overzicht (.txt)
+              </button>
+              <button type="button" class="btn btn-danger-outline" id="btn-reset-checklist" onclick="handleResetChecklist(this)">
+                <i data-lucide="rotate-ccw" width="16" height="16" aria-hidden="true"></i>
+                Standaard herstellen
+              </button>
+            </div>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="checklist-progressbar">
+            <div class="progress-fill" id="checklist-progress-fill"></div>
+          </div>
+          <p id="checklist-feedback" class="kpi-caption" aria-live="polite"></p>
+        </article>
+
+        <!-- Checklist Categories -->
+        <div id="checklist-groups-container" style="display:grid; gap:var(--space-lg);"></div>
+
+        <!-- Add custom item -->
+        <article class="panel-card">
+          <div>
+            <p class="kicker">Persoonlijke aanvulling</p>
+            <h3 class="card-title">Eigen checklist-item toevoegen</h3>
+          </div>
+          <form class="form-row" onsubmit="addCustomChecklistItem(event)">
+            <div class="field">
+              <label for="new-item-title">Omschrijving van de taak of meeneem-item</label>
+              <input type="text" id="new-item-title" class="input" placeholder="Bijv. Powerbank en EU-stekker in handbagage">
+            </div>
+            <div class="field compact">
+              <label for="new-item-cat">Categorie</label>
+              <select id="new-item-cat" class="select">
+                <option value="vertrek">Voor vertrek &amp; Reis</option>
+                <option value="badge">Badge &amp; App</option>
+                <option value="conferentie">Conferentiedagen</option>
+                <option value="terugreis">Terugreis</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i data-lucide="plus" width="16" height="16" aria-hidden="true"></i>
+              Item toevoegen
+            </button>
+          </form>
+        </article>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <p>
+        Samengesteld op basis van reis- en conferentiedocumentatie: bevestiging Interparking Brussels Airport (ZAVW21597022), reisnotitie Barcelona (vluchten SN 3697/3698 &amp; hotel INNSiDE by Meliá Barcelona Apolo), uitnodiging Wentzo B.V., HPE Discover Barcelona 2026 Know-Before-You-Go en correspondentie met HPE Nederland.
+      </p>
+    </footer>
   </div>
 
-  <!-- 3. WAAROM CARE INNOVATION -->
-  <div class="section" id="waarom">
-    <div class="section-label">Waarom Care Innovation</div>
-    <h2>Niet adviseren en vertrekken. Begeleiden tot het werkt.</h2>
-    <p>De aanpak stopt niet bij het advies, maar bij aantoonbaar gebruik op de werkvloer. Hands-on aanwezig, van de eerste verkenning tot het moment dat de innovatie structureel is ingebed in de organisatie.</p>
-
-    <div class="waarom-grid">
-      <div class="waarom-item">
-        <h3>Aanwezig tot het geborgd is</h3>
-        <p>Niet alleen bij de start, maar betrokken totdat de innovatie structureel is ingebed in de werkwijze van uw medewerkers. Pas dan is het werk klaar.</p>
-      </div>
-      <div class="waarom-item">
-        <h3>Het risico wordt gedeeld</h3>
-        <p>U betaalt voor resultaat. Geen declaraties voor rapporten die in de la belanden. De aanpak is erop gericht dat het gebruik aantoonbaar en duurzaam is.</p>
-      </div>
-      <div class="waarom-item">
-        <h3>Vanuit de praktijk van de zorg</h3>
-        <p>De aanpak is ontwikkeld vanuit directe ervaring in zorginstellingen. Geen generiek kader, maar een methode die werkt op de zorgvloer.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. PRAKTIJKGERICHTE METHODE -->
-  <div class="section" id="methode">
-    <div class="section-label">Praktijkgerichte Methode</div>
-    <h2>Een vaste aanpak. Elke keer opnieuw.</h2>
-    <p>De Praktijkgerichte Methode is gebaseerd op de PDCA-cyclus en vertaald naar de dagelijkse praktijk van zorginstellingen. Vier fasen, van eerste verkenning tot structureel geborgd gebruik.</p>
-
-    <div class="pdca-grid">
-      <div class="pdca-item">
-        <div class="pdca-fase">Plan</div>
-        <div class="pdca-label">Fase 1</div>
-        <h3>Scan</h3>
-        <p>Twee uur op locatie. Inzicht in de huidige situatie, de knelpunten en wat er nodig is om de innovatie te laten landen. Geen aannames, maar de juiste vragen aan de juiste mensen.</p>
-      </div>
-      <div class="pdca-item">
-        <div class="pdca-fase">Do</div>
-        <div class="pdca-label">Fase 2</div>
-        <h3>Implementeren</h3>
-        <p>Hands-on begeleiding op de werkvloer. Medewerkers worden meegenomen, eigenaarschap wordt belegd en de technologie wordt ingepast in de dagelijkse werkwijze.</p>
-      </div>
-      <div class="pdca-item">
-        <div class="pdca-fase">Check</div>
-        <div class="pdca-label">Fase 3</div>
-        <h3>Verankeren</h3>
-        <p>Het gebruik wordt geborgd in processen, rollen en afspraken. Niet afhankelijk van één enthousiasteling, maar structureel ingebed in de organisatie.</p>
-      </div>
-      <div class="pdca-item">
-        <div class="pdca-fase">Act</div>
-        <div class="pdca-label">Fase 4</div>
-        <h3>Verbeteren</h3>
-        <p>Periodieke check na afronding. Signalen worden vroeg opgepakt en bijgestuurd waar nodig. Zo blijft de innovatie actueel en het gebruik op peil.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. TARIEVEN -->
-  <div class="section" id="tarieven">
-    <div class="section-label">Wat kost het</div>
-    <h2>Transparant en op resultaat.</h2>
-    <p>Afhankelijk van de vraag en de fase wordt een passend aanbod gedaan. Altijd vooraf helder, nooit een verrassing achteraf.</p>
-
-    <div class="tarieven-grid">
-      <div class="tarief-card">
-        <div class="tarief-tag">Instapproduct · Fase 1</div>
-        <h3>Quick Scan</h3>
-        <p>Twee uur op locatie. De juiste vragen, een helder beeld. Schriftelijke samenvatting binnen vijf werkdagen. Geen verplichting voor een vervolg.</p>
-        <div class="tarief-prijs">€ 206 excl. BTW</div>
-      </div>
-
-      <div class="tarief-card">
-        <div class="tarief-tag">Fase 2 t/m 4</div>
-        <h3>Implementatietraject</h3>
-        <p>Volledig begeleid van probleemanalyse tot geborgd gebruik op de werkvloer. Inclusief eigenaarschapsstructuur en periodieke check na afronding.</p>
-        <div class="tarief-prijs">Op maat · betaalt u voor resultaat</div>
-      </div>
-
-      <div class="tarief-card">
-        <div class="tarief-tag">Kennisdeling</div>
-        <h3>Sessie of workshop</h3>
-        <p>Voor uw management of innovatieteam. Praktisch, gericht op wat werkt bij het invoeren van nieuwe technologie in de zorg.</p>
-        <div class="tarief-prijs">Vaste prijs</div>
-      </div>
-
-      <div class="tarief-card">
-        <div class="tarief-tag">Nazorg · Fase 4</div>
-        <h3>Periodieke check</h3>
-        <p>Kwartaalbezoek na afronding van een traject. Zodat het gebruik geborgd blijft en signalen vroeg worden opgepakt.</p>
-        <div class="tarief-prijs">Per kwartaal</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. CTA -->
-  <div class="cta-section">
-    <div class="cta-inner">
-      <h2>Herkenbaar?</h2>
-      <p>Een goed gesprek begint met de juiste vragen.</p>
-      <a href="mailto:info@careinnovation.nl" class="btn-pill btn-pill-solid" style="font-size:1rem; padding:16px 36px;">
-        Plan een kennismaking
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-  </div>
-
-  <footer>
-    <span>Care Innovation &copy; 2026 &nbsp;&middot;&nbsp; Van Leeuwen Innovatie &amp; Advies</span>
-    <div class="footer-links">
-      <a href="mailto:info@careinnovation.nl">info@careinnovation.nl</a>
-      <a href="https://www.linkedin.com/in/renco-van-leeuwen-423b1353/" target="_blank" rel="noopener">LinkedIn</a>
-    </div>
-  </footer>
+  <api-shim></api-shim>
 
   <script>
-    const hdr = document.getElementById('site-header');
-    addEventListener('scroll', () => {
-      hdr.classList.toggle('scrolled', scrollY > 60);
-    });
+    // =========================================================================
+    // 1. DATA SOURCES (Grounded in source material)
+    // =========================================================================
+    const SCHEDULE_DATA = [
+      {
+        dayKey: `maandag`,
+        dayLabel: `Maandag 30 november 2026`,
+        subtitle: `Vertrek Kamperland, vlucht SN 3697 & eerste verkenning Barcelona`,
+        badge: `Reisdag & aankomst`,
+        items: [
+          {
+            time: `04:45`,
+            title: `Vertrek vanuit Kamperland`,
+            desc: `Vroeg vertrek per auto richting Brussels Airport (1930 Zaventem). Zorg dat paspoort/ID-kaart, parkeerbevestiging en telefoon met QR-code paraat liggen.`,
+            loc: `Kamperland → Brussels Airport`,
+            cat: `reis`
+          },
+          {
+            time: `07:00`,
+            title: `Start parkeerreservatie Lock Parking (P2)`,
+            desc: `Volg borden P2 en neem uiterst rechtse rijstrook "Parking Lock". Ticket nemen of Pcard scannen, één niveau omhoog en rechts opnieuw ticket/Pcard scannen. Referentie: ZAVW21597022, nummerplaat N629FG.`,
+            loc: `Brussels Airport P2 Lock Parking`,
+            cat: `reis`
+          },
+          {
+            time: `Ochtend`,
+            title: `Heenvlucht Brussels Airlines SN 3697`,
+            desc: `Vlucht naar Barcelona-El Prat Airport. Na aankomst rechtstreeks door naar de Aerobús-halte buiten de terminal.`,
+            loc: `BRU → Barcelona-El Prat (BCN)`,
+            cat: `reis`
+          },
+          {
+            time: `Middag`,
+            title: `Transfer Aerobús + Metro L3 naar hotel`,
+            desc: `Neem Aerobús A1 (Terminal 1) of A2 (Terminal 2) tot Plaça d'Espanya. Stap over op metro L3 (groene lijn) richting Trinitat Nova en stap uit bij Paral·lel.`,
+            loc: `BCN → Plaça d'Espanya → Paral·lel`,
+            cat: `reis`
+          },
+          {
+            time: `14:30 – 18:00`,
+            title: `Check-in & Barcelona verkennen (middagblok)`,
+            desc: `Inchecken bij INNSiDE by Meliá Barcelona Apolo. Daarna ontspannen opstarten met de Montjuïc-kabelbaan/uitzichtpunten of een wandeling via La Boqueria en het Barri Gòtic.`,
+            loc: `Av. del Paralelo 57 / Montjuïc of Centrum`,
+            cat: `stad`
+          },
+          {
+            time: `19:30`,
+            title: `Avondeten in Poble-sec (Carrer de Blai)`,
+            desc: `Tapas en pintxos om de hoek van het hotel in de gezellige wijk Poble-sec — ideaal na een vroege start vanaf 04:45.`,
+            loc: `Carrer de Blai (5 min lopen vanaf hotel)`,
+            cat: `diner`
+          }
+        ]
+      },
+      {
+        dayKey: `dinsdag`,
+        dayLabel: `Dinsdag 1 december 2026`,
+        subtitle: `Gehele dag Barcelona verkennen + conferentiebadge ophalen`,
+        badge: `Stadsdag & badge`,
+        items: [
+          {
+            time: `09:00 – 12:30`,
+            title: `Ochtendroute: Eixample, Passeig de Gràcia & Sagrada Família`,
+            desc: `Vanaf Paral·lel met metro L3/L2 naar de modernistische highlights van Gaudí: Casa Batlló, La Pedrera en de Sagrada Família (tijdslot vooraf aanbevolen).`,
+            loc: `Eixample / Sagrada Família`,
+            cat: `stad`
+          },
+          {
+            time: `12:30 – 13:45`,
+            title: `Lunch in El Born of Mercat de Sant Antoni`,
+            desc: `Ontspannen lunchpauze in de historische wijk El Born (nabij Santa Maria del Mar) of terug richting Sant Antoni.`,
+            loc: `El Born / Sant Antoni`,
+            cat: `stad`
+          },
+          {
+            time: `14:30 – 16:30`,
+            title: `Conferentiebadge ophalen bij Fira Barcelona Gran Via`,
+            desc: `Aanbevolen tijdslot (balie open 13:00–18:00 CET). Ga naar North Entrance, Hall 8, Lobby met uw persoonlijke QR-code én geldig overheids-ID met foto. Bespaart wachttijd op woensdagochtend.`,
+            loc: `Fira Barcelona Gran Via · North Entrance, Hall 8`,
+            cat: `conferentie`
+          },
+          {
+            time: `16:30 – 18:30`,
+            title: `Plaça d'Espanya, MNAC-terras & zonsondergang`,
+            desc: `Goed te combineren op de terugweg van Fira Gran Via naar het hotel: uitzicht vanaf de trappen van het Palau Nacional over Plaça d'Espanya.`,
+            loc: `Plaça d'Espanya / Montjuïc`,
+            cat: `stad`
+          },
+          {
+            time: `Avond`,
+            title: `Laatste check WhatsAppgroep Wentzo & programma-app`,
+            desc: `Controleer in de Wentzo-WhatsAppgroep de afgesproken verzameltijd voor woensdagochtend en bekijk uw sessies in de HPE Discover mobiele app.`,
+            loc: `INNSiDE by Meliá Barcelona Apolo`,
+            cat: `conferentie`
+          }
+        ]
+      },
+      {
+        dayKey: `woensdag`,
+        dayLabel: `Woensdag 2 december 2026`,
+        subtitle: `HPE Discover Barcelona Dag 1 & HPE NL Country Dinner`,
+        badge: `Conferentiedag 1`,
+        items: [
+          {
+            time: `07:30 – 18:30`,
+            title: `Registratiebalie geopend (indien badge nog niet opgehaald)`,
+            desc: `North Entrance, Hall 8, Lobby. Vergeet bij verlate afhaling QR-code en paspoort/ID niet.`,
+            loc: `Fira Barcelona Gran Via · Hall 8`,
+            cat: `conferentie`
+          },
+          {
+            time: `Ochtend`,
+            title: `Mainstage Keynote & Luminary Sessions`,
+            desc: `Opening van HPE Discover Barcelona 2026 met focus op Networking, Cloud, AI en self-driving networks.`,
+            loc: `Fira Barcelona Gran Via`,
+            cat: `conferentie`
+          },
+          {
+            time: `Overdag`,
+            title: `Networking Program, Breakouts & HPE Discover Showcase`,
+            desc: `Volg geselecteerde kennissessies (As a Service, Edge & IoT, Network Access Control, Wireless) en bezoek de beursvloer met 100+ interactieve demo's en experts.`,
+            loc: `Fira Barcelona Gran Via · Showcase`,
+            cat: `conferentie`
+          },
+          {
+            time: `Nader te bepalen`,
+            title: `Wentzo privé tour & meet & greet (tijdstip via WhatsApp)`,
+            desc: `Exclusieve tour samen met HPE waar persoonlijke netwerkvraagstukken voorgelegd kunnen worden (mogelijk op woensdag of donderdag; kan overlappen met een gekozen sessie).`,
+            loc: `Fira Barcelona Gran Via`,
+            cat: `conferentie`
+          },
+          {
+            time: `Avond`,
+            title: `HPE NL Country Dinner — Restaurant Velissima`,
+            desc: `Nederlands HPE-diner aan het water in Barceloneta. Ook gelegenheid om bij te praten met Lisanne Krimpenfort en de Wentzo-groep.`,
+            loc: `Restaurant Velissima · Pg. de Joan de Borbó 103, 08039`,
+            cat: `diner`
+          }
+        ]
+      },
+      {
+        dayKey: `donderdag`,
+        dayLabel: `Donderdag 3 december 2026`,
+        subtitle: `HPE Discover Barcelona Dag 2 & HPE Fiesta`,
+        badge: `Conferentiedag 2`,
+        items: [
+          {
+            time: `08:00 – 18:30`,
+            title: `Conferentiedag 2: In-depth Breakouts & Demo's`,
+            desc: `Verdiepingssessies (Beginner t/m Advanced) uit de Content Catalog en gesprekken met subject matter experts in de Showcase.`,
+            loc: `Fira Barcelona Gran Via`,
+            cat: `conferentie`
+          },
+          {
+            time: `Avond`,
+            title: `HPE Fiesta`,
+            desc: `Feestelijke afsluiting van HPE Discover Barcelona met eten, entertainment en netwerken met collega's en vakgenoten (locatie TBC — check app/WhatsApp).`,
+            loc: `Locatie TBC (Barcelona)`,
+            cat: `diner`
+          }
+        ]
+      },
+      {
+        dayKey: `vrijdag`,
+        dayLabel: `Vrijdag 4 december 2026`,
+        subtitle: `Terugreis naar Brussels Airport & Kamperland`,
+        badge: `Terugreis`,
+        items: [
+          {
+            time: `Ochtend`,
+            title: `Uitchecken hotel & transfer naar luchthaven`,
+            desc: `Vanaf Paral·lel met metro L3 naar Plaça d'Espanya en daar overstappen op de Aerobús A1 (T1) of A2 (T2) richting El Prat.`,
+            loc: `INNSiDE Apolo → Barcelona-El Prat`,
+            cat: `reis`
+          },
+          {
+            time: `Overdag`,
+            title: `Terugvlucht Brussels Airlines SN 3698`,
+            desc: `Vlucht van Barcelona-El Prat terug naar Brussels Airport (Zaventem).`,
+            loc: `BCN → BRU`,
+            cat: `reis`
+          },
+          {
+            time: `Vóór 15:30`,
+            title: `Lock Parking afrekenen & uitrijden`,
+            desc: `Betaal het parkeerticket (€ 141,00) vóór vertrek aan de betaalautomaten (tenzij gekoppeld aan Pcard) en rijd vóór 15:30 uur uit P2 Lock Parking richting Kamperland.`,
+            loc: `Brussels Airport P2 Lock Parking → Kamperland`,
+            cat: `reis`
+          }
+        ]
+      }
+    ];
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => e.isIntersecting && e.target.classList.add('reveal'));
-    }, { threshold: .08 });
-    document.querySelectorAll('.section, .cta-inner').forEach(el => observer.observe(el));
+    const EXPLORE_SUGGESTIONS = [
+      {
+        id: `exp-montjuic`,
+        day: `maandag`,
+        dayLabel: `Maandag 30 nov · Middag`,
+        cat: `wandeling`,
+        catLabel: `Uitzicht & Wandelen`,
+        title: `Montjuïc & Kasteel / Mirador de Miramar`,
+        duration: `1,5 – 2,5 uur`,
+        distance: `Direct achter het hotel`,
+        desc: `Vanaf metrostation Paral·lel pakt u zo de kabelspoorweg (Funicular de Montjuïc) de groene heuvel op. Prachtig panorama over de haven en stad zonder ver te hoeven reizen na de vroege ochtendvlucht.`,
+        tip: `Ook te voet bereikbaar via de tuinen van Miramar.`
+      },
+      {
+        id: `exp-gotisch`,
+        day: `maandag`,
+        dayLabel: `Maandag 30 nov · Namiddag`,
+        cat: `cultuur`,
+        catLabel: `Cultuur & Historie`,
+        title: `Las Ramblas, Mercat de la Boqueria & Barri Gòtic`,
+        duration: `2 – 3 uur`,
+        distance: `15 min lopen of 1 metrohalte (L3)`,
+        desc: `Wandel vanaf het hotel richting Drassanes, pak een verse juice of tapas op overdekte markt La Boqueria en verdwaal in het middeleeuwse Barri Gòtic rond de Kathedraal en Plaça del Rei.`,
+        tip: `La Boqueria is op maandag geopend tot 20:30.`
+      },
+      {
+        id: `exp-blai`,
+        day: `maandag`,
+        dayLabel: `Maandag 30 nov · Avond`,
+        cat: `culinair`,
+        catLabel: `Eten & Sfeer`,
+        title: `Pintxos & tapas in Carrer de Blai (Poble-sec)`,
+        duration: `1,5 – 2 uur`,
+        distance: `5 min lopen vanaf hotel`,
+        desc: `De autovrije tapasstraat Carrer de Blai ligt vrijwel naast INNSiDE Apolo. Ideaal om op maandagavond laagdrempelig en sfeervol te eten zonder nog de stad door te hoeven.`,
+        tip: `Lekker dichtbij om na de vroege start (04:45) op tijd te rusten.`
+      },
+      {
+        id: `exp-gaudi`,
+        day: `dinsdag`,
+        dayLabel: `Dinsdag 1 dec · Ochtend`,
+        cat: `cultuur`,
+        catLabel: `Cultuur & Gaudí`,
+        title: `Sagrada Família & Passeig de Gràcia (Casa Batlló / La Pedrera)`,
+        duration: `2,5 – 3,5 uur`,
+        distance: `Metro L2/L3 vanaf Paral·lel (10–15 min)`,
+        desc: `Begin de dinsdag met Barcelona's beroemdste architectuur: wandel over de chique Passeig de Gràcia langs Casa Batlló en Casa Milà en bezoek daarna de Sagrada Família.`,
+        tip: `Boek voor de Sagrada Família vooraf een tijdslot online.`
+      },
+      {
+        id: `exp-born`,
+        day: `dinsdag`,
+        dayLabel: `Dinsdag 1 dec · Tussen de middag`,
+        cat: `culinair`,
+        catLabel: `Eten & Cultuur`,
+        title: `El Born, Santa Maria del Mar & Parc de la Ciutadella`,
+        duration: `2 uur`,
+        distance: `Metro L4/L3 of 25 min wandelen`,
+        desc: `Sfeervolle wijk met boetiekjes, uitstekende lunchplekken rond Passeig del Born, het Picasso Museum en de prachtige gotische kerk Santa Maria del Mar.`,
+        tip: `Perfect te combineren met een rustige lunch voordat u naar Fira gaat.`
+      },
+      {
+        id: `exp-fira-badge`,
+        day: `dinsdag`,
+        dayLabel: `Dinsdag 1 dec · 13:00–18:00`,
+        cat: `wandeling`,
+        catLabel: `Conferentie & Plaça d'Espanya`,
+        title: `Plaça d'Espanya, MNAC-uitzicht & Badge ophalen (Hall 8)`,
+        duration: `1,5 – 2 uur`,
+        distance: `Metro L3 naar Espanya + 10 min naar Fira`,
+        desc: `Haal tussen 13:00 en 18:00 alvast uw HPE Discover badge op (QR-code + ID mee) bij Fira Gran Via, en combineer dit met de imposante trappen van het Palau Nacional (MNAC) bij Plaça d'Espanya.`,
+        tip: `Zo loopt u woensdagochtend zonder rij direct door naar de keynote.`
+      },
+      {
+        id: `exp-barceloneta`,
+        day: `dinsdag`,
+        dayLabel: `Dinsdag 1 dec · Namiddag`,
+        cat: `wandeling`,
+        catLabel: `Kust & Haven`,
+        title: `Port Vell & Boulevard van Barceloneta`,
+        duration: `1,5 uur`,
+        distance: `Metro L3 Drassanes / L4 Barceloneta`,
+        desc: `Frisse zeelucht langs de jachthaven van Port Vell en het strand van Barceloneta — meteen een mooie verkenning van de omgeving waar woensdag het Country Dinner bij Restaurant Velissima plaatsvindt.`,
+        tip: `Mooi licht rond zonsondergang (ca. 17:25 begin december).`
+      },
+      {
+        id: `exp-sant-antoni`,
+        day: `dinsdag`,
+        dayLabel: `Dinsdag 1 dec · Avond / Koffie`,
+        cat: `culinair`,
+        catLabel: `Lokaal & Eten`,
+        title: `Mercat de Sant Antoni & tapas in Eixample-Zuid`,
+        duration: `1 – 2 uur`,
+        distance: `10 min lopen vanaf hotel`,
+        desc: `De prachtig gerestaureerde markthal van Sant Antoni is omringd door moderne koffiebars en authentieke Catalaanse bistro's op korte loopafstand van uw hotel.`,
+        tip: `Fijne rustige buurt voor het diner voorafgaand aan de conferentie.`
+      }
+    ];
 
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const MAP_LOCATIONS = [
+      {
+        id: `hotel`,
+        name: `INNSiDE by Meliá Barcelona Apolo`,
+        cat: `reis`,
+        catLabel: `Hotel`,
+        lat: 41.3746,
+        lng: 2.1695,
+        addr: `Avenida del Paralelo 57, 08004 Barcelona`,
+        desc: `Uw verblijf van ma 30 nov t/m vr 4 dec (geregeld door Wentzo B.V.). Praktisch naast metrostation Paral·lel (groene lijn L3 & paarse lijn L2).`
+      },
+      {
+        id: `fira`,
+        name: `Fira Barcelona Gran Via (Hall 8)`,
+        cat: `conferentie`,
+        catLabel: `Conferentie & Badge`,
+        lat: 41.3547,
+        lng: 2.1286,
+        addr: `North Entrance, Hall 8, Lobby (Gran Via)`,
+        desc: `Locatie HPE Discover Barcelona 2026 (2–3 dec) én badge-uitgifte (di 13:00–18:00 aanbevolen, QR-code + ID-kaart meenemen). Ca. 4,0 km ZW van hotel.`
+      },
+      {
+        id: `espanya`,
+        name: `Plaça d'Espanya (OV-knooppunt)`,
+        cat: `reis`,
+        catLabel: `Transfer & Overstap`,
+        lat: 41.3751,
+        lng: 2.1492,
+        addr: `Plaça d'Espanya, Barcelona`,
+        desc: `Halte voor de Aerobús (A1/A2) vanaf de luchthaven. Stap hier over op metro L3 richting Trinitat Nova (2 haltes naar Paral·lel) of FGC naar Fira Gran Via.`
+      },
+      {
+        id: `airport`,
+        name: `Barcelona-El Prat Airport (BCN)`,
+        cat: `reis`,
+        catLabel: `Luchthaven`,
+        lat: 41.2974,
+        lng: 2.0833,
+        addr: `Terminal 1 (A1) & Terminal 2 (A2)`,
+        desc: `Aankomst vlucht SN 3697 (ma 30 nov) en vertrek SN 3698 (vr 4 dec). Neem hier de Aerobús A1 (T1) of A2 (T2) naar Plaça d'Espanya.`
+      },
+      {
+        id: `velissima`,
+        name: `Restaurant Velissima`,
+        cat: `diner`,
+        catLabel: `HPE NL Country Dinner`,
+        lat: 41.3738,
+        lng: 2.1892,
+        addr: `Pg. de Joan de Borbó, 103, Ciutat Vella, 08039`,
+        desc: `Locatie van het HPE NL Country Dinner op woensdagavond 2 december aan het havenhoofd van Barceloneta.`
+      },
+      {
+        id: `montjuic`,
+        name: `Montjuïc & Mirador de Miramar`,
+        cat: `stad`,
+        catLabel: `Maandag · Uitzicht`,
+        lat: 41.3688,
+        lng: 2.1655,
+        addr: `Montjuïc-heuvel (achter Paral·lel)`,
+        desc: `Groene heuvel direct achter het hotel met kabelbaan en panoramisch uitzicht over stad en haven.`
+      },
+      {
+        id: `blai`,
+        name: `Carrer de Blai (Poble-sec)`,
+        cat: `stad`,
+        catLabel: `Maandagavond · Tapas`,
+        lat: 41.3733,
+        lng: 2.1636,
+        addr: `Carrer de Blai, Poble-sec`,
+        desc: `Bekende voetgangersstraat vol pintxos- en tapasbarretjes op slechts 5 minuten lopen van het hotel.`
+      },
+      {
+        id: `gotico`,
+        name: `Barri Gòtic & La Boqueria`,
+        cat: `stad`,
+        catLabel: `Maandag · Historisch centrum`,
+        lat: 41.3832,
+        lng: 2.1745,
+        addr: `Ciutat Vella / La Rambla`,
+        desc: `Historische binnenstad met de Kathedraal van Barcelona, Plaça del Rei en de beroemde versmarkt La Boqueria.`
+      },
+      {
+        id: `gracia`,
+        name: `Passeig de Gràcia (Casa Batlló)`,
+        cat: `stad`,
+        catLabel: `Dinsdag · Gaudí`,
+        lat: 41.3917,
+        lng: 2.1649,
+        addr: `Passeig de Gràcia, Eixample`,
+        desc: `Modernistische boulevard met Casa Batlló en La Pedrera (3 haltes met metro L3 vanaf Paral·lel).`
+      },
+      {
+        id: `sagrada`,
+        name: `Basílica de la Sagrada Família`,
+        cat: `stad`,
+        catLabel: `Dinsdag · Highlight`,
+        lat: 41.4036,
+        lng: 2.1744,
+        addr: `C/ de Mallorca, 401`,
+        desc: `Icoon van Gaudí in de wijk Eixample. Rechtstreeks bereikbaar vanaf Paral·lel met metro L2.`
+      },
+      {
+        id: `born`,
+        name: `El Born & Santa Maria del Mar`,
+        cat: `stad`,
+        catLabel: `Dinsdag · Lunch & Sfeer`,
+        lat: 41.3849,
+        lng: 2.1822,
+        addr: `El Born, Ciutat Vella`,
+        desc: `Levende wijk met boetiekjes, het Picasso Museum en volop lunchmogelijkheden naast Parc de la Ciutadella.`
+      }
+    ];
+
+    const DEFAULT_CHECKLIST = [
+      {
+        id: `chk-id`,
+        cat: `vertrek`,
+        title: `Geldig overheids-identiteitsbewijs met foto (Paspoort / ID-kaart)`,
+        note: `Verplicht voor zowel de vluchten SN 3697/3698 als het ophalen van uw conferentiebadge. Met een Europees paspoort is geen visum nodig.`,
+        done: false
+      },
+      {
+        id: `chk-qr`,
+        cat: `badge`,
+        title: `Persoonlijke QR-code uit de 'Know Before You Go'-mail opslaan`,
+        note: `Mail van 19 november 2026: nodig voor toegang tot Fira Barcelona Gran Via en versnelde check-in bij Hall 8.`,
+        done: false
+      },
+      {
+        id: `chk-parking`,
+        cat: `vertrek`,
+        title: `Parkeerreservering Brussels Airport Lock Parking (ZAVW21597022) bij de hand`,
+        note: `Nummerplaat N629FG · Ingang P2 uiterst rechtse rijstrook "Parking Lock" · € 141,00 betalen bij uitrijden (of Pcard).`,
+        done: false
+      },
+      {
+        id: `chk-app`,
+        cat: `badge`,
+        title: `HPE Discover mobiele app (sponsored by NVIDIA) downloaden`,
+        note: `Voor persoonlijke event-agenda, plattegronden van de beursvloer en live programma-updates.`,
+        done: false
+      },
+      {
+        id: `chk-whatsapp`,
+        cat: `vertrek`,
+        title: `Toevoeging aan Wentzo WhatsAppgroep controleren (eind november)`,
+        note: `Praktische afspraken en het definitieve tijdstip voor de Wentzo privé tour met HPE.`,
+        done: false
+      },
+      {
+        id: `chk-badge-pickup`,
+        cat: `badge`,
+        title: `Badge ophalen bij Fira Barcelona Gran Via (North Entrance, Hall 8, Lobby)`,
+        note: `Bij voorkeur op dinsdag 1 december tussen 13:00 – 18:00 CET (alternatief wo 07:30–18:30 / do 08:00–18:30). QR-code + ID meenemen.`,
+        done: false
+      },
+      {
+        id: `chk-sagrada`,
+        cat: `vertrek`,
+        title: `Eventueel tijdslot voor Sagrada Família of musea op dinsdag reserveren`,
+        note: `Aanrader voor dinsdagochtend 1 december zodat u ter plaatse niet in de wachtrij staat.`,
+        done: false
+      },
+      {
+        id: `chk-agenda`,
+        cat: `conferentie`,
+        title: `Sessies vullen in Content Catalog (Networking, Edge & IoT, NAC, Wireless)`,
+        note: `Kies breakouts en demo's van Beginner t/m Advanced in de Discover event portal / app.`,
+        done: false
+      },
+      {
+        id: `chk-wentzo-tour`,
+        cat: `conferentie`,
+        title: `Deelnemen aan de Wentzo privé tour & meet & greet met HPE`,
+        note: `Neem eventuele persoonlijke netwerkvraagstukken mee; let op mogelijke overlap met geselecteerde sessies.`,
+        done: false
+      },
+      {
+        id: `chk-showcase`,
+        cat: `conferentie`,
+        title: `HPE Discover Showcase (100+ interactieve demo's) bezoeken`,
+        note: `Spreek subject matter experts on-site op de beursvloer tijdens 2–3 december.`,
+        done: false
+      },
+      {
+        id: `chk-diners`,
+        cat: `conferentie`,
+        title: `Avondprogramma bijwonen: Velissima (wo 2 dec) & HPE Fiesta (do 3 dec)`,
+        note: `Woensdag: HPE NL Country Dinner bij Restaurant Velissima (Pg. de Joan de Borbó 103). Donderdag: HPE Fiesta (locatie TBC).`,
+        done: false
+      },
+      {
+        id: `chk-return`,
+        cat: `terugreis`,
+        title: `Terugreis SN 3698 & Lock Parking betalen/uitrijden vóór 15:30 (vr 4 dec)`,
+        note: `Ticket afrekenen bij de betaalautomaat (€ 141,00) vóór het verlaten van de parking (tenzij Pcard).`,
+        done: false
+      }
+    ];
+
+    const CHECKLIST_CATEGORIES = [
+      { key: `badge`, label: `Badge ophalen & App (Fira Gran Via · Hall 8)`, status: `info` },
+      { key: `vertrek`, label: `Voor vertrek & Reisdocumenten`, status: `ok` },
+      { key: `conferentie`, label: `Conferentiedagen (2 & 3 december)`, status: `info` },
+      { key: `terugreis`, label: `Terugreis (vrijdag 4 december)`, status: `warn` }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE & PERSISTENCE
+    // =========================================================================
+    let appState = {
+      activeTab: `overzicht`,
+      checklist: DEFAULT_CHECKLIST.map(item => Object.assign({}, item)),
+      selectedExploreIds: [`exp-montjuic`, `exp-blai`, `exp-gaudi`, `exp-fira-badge`]
+    };
+
+    let currentScheduleDay = `alle`;
+    let currentExploreDay = `alle`;
+    let currentExploreCat = `alle`;
+    let currentMapCat = `alle`;
+    let mapInstance = null;
+    let mapMarkerLayer = null;
+    let mapRouteLayer = null;
+    let mapRingLayer = null;
+    let mapMarkersById = {};
+
+    function getCssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState({
+            activeTab: appState.activeTab,
+            checklist: appState.checklist,
+            selectedExploreIds: appState.selectedExploreIds
+          });
+        }
+      } catch (err) {
+        // Fallback silently if shim unavailable in standalone preview
+      }
+    }
+
+    function restoreState(saved) {
+      if (!saved || typeof saved !== 'object') return;
+      if (typeof saved.activeTab === 'string') {
+        appState.activeTab = saved.activeTab;
+      }
+      if (Array.isArray(saved.checklist) && saved.checklist.length > 0) {
+        appState.checklist = saved.checklist.map(item => ({
+          id: String(item.id || `custom-${Date.now()}`),
+          cat: String(item.cat || `vertrek`),
+          title: String(item.title || ``),
+          note: String(item.note || ``),
+          done: Boolean(item.done),
+          custom: Boolean(item.custom)
+        }));
+      }
+      if (Array.isArray(saved.selectedExploreIds)) {
+        appState.selectedExploreIds = saved.selectedExploreIds.map(String);
+      }
+    }
+
+    // =========================================================================
+    // 3. TAB SWITCHING
+    // =========================================================================
+    function switchTab(tabName) {
+      const validTabs = [`overzicht`, `schema`, `verkennen`, `kaart`, `checklist`];
+      if (!validTabs.includes(tabName)) tabName = `overzicht`;
+
+      appState.activeTab = tabName;
+
+      validTabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const panel = document.getElementById(`tab-${t}`);
+        const isSelected = (t === tabName);
+        if (btn) btn.setAttribute(`aria-selected`, isSelected ? `true` : `false`);
+        if (panel) {
+          if (isSelected) panel.classList.add(`active`);
+          else panel.classList.remove(`active`);
         }
       });
-    });
-  </script>
 
+      if (tabName === `kaart`) {
+        initOrRefreshMap();
+      }
+      persistState();
+    }
+
+    function openScheduleDay(dayKey) {
+      switchTab(`schema`);
+      filterSchedule(dayKey);
+    }
+
+    // =========================================================================
+    // 4. SCHEDULE RENDERING
+    // =========================================================================
+    function filterSchedule(dayKey) {
+      currentScheduleDay = dayKey;
+      const buttons = document.querySelectorAll(`.schedule-filter`);
+      buttons.forEach(btn => {
+        btn.setAttribute(`aria-pressed`, btn.dataset.day === dayKey ? `true` : `false`);
+      });
+      renderSchedule();
+    }
+
+    function getCategoryChip(cat) {
+      if (cat === `reis`) return `<span class="chip" data-status="indigo">Reis &amp; Transfer</span>`;
+      if (cat === `stad`) return `<span class="chip">Stad verkennen</span>`;
+      if (cat === `diner`) return `<span class="chip" data-status="warn">Diner / Avond</span>`;
+      return `<span class="chip" data-status="info">Conferentie</span>`;
+    }
+
+    function renderSchedule() {
+      const container = document.getElementById(`schedule-container`);
+      if (!container) return;
+
+      const filtered = currentScheduleDay === `alle`
+        ? SCHEDULE_DATA
+        : SCHEDULE_DATA.filter(d => d.dayKey === currentScheduleDay);
+
+      container.innerHTML = filtered.map(day => `
+        <article class="panel-card day-section">
+          <div class="day-header">
+            <div>
+              <p class="kicker">${day.badge}</p>
+              <h3 class="card-title">${day.dayLabel}</h3>
+              <p class="kpi-caption">${day.subtitle}</p>
+            </div>
+            <span class="chip" data-status="info">${day.items.length} onderdelen</span>
+          </div>
+          <div class="timeline-list">
+            ${day.items.map(item => `
+              <div class="timeline-item" data-cat="${item.cat}">
+                <div class="time-col">${item.time}</div>
+                <div class="timeline-body">
+                  <div class="timeline-title">${item.title}</div>
+                  <p class="timeline-desc">${item.desc}</p>
+                  <div class="timeline-loc">
+                    <i data-lucide="map-pin" width="14" height="14" aria-hidden="true"></i>
+                    <span>${item.loc}</span>
+                  </div>
+                </div>
+                <div>${getCategoryChip(item.cat)}</div>
+              </div>
+            `).join(``)}
+          </div>
+        </article>
+      `).join(``);
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 5. EXPLORE SUGGESTIONS RENDERING
+    // =========================================================================
+    function filterExplore(day, cat) {
+      currentExploreDay = day;
+      currentExploreCat = cat;
+
+      document.querySelectorAll(`.explore-day-filter`).forEach(btn => {
+        btn.setAttribute(`aria-pressed`, btn.dataset.day === day ? `true` : `false`);
+      });
+      document.querySelectorAll(`.explore-cat-filter`).forEach(btn => {
+        btn.setAttribute(`aria-pressed`, btn.dataset.cat === cat ? `true` : `false`);
+      });
+
+      renderExplore();
+    }
+
+    function toggleExplorePick(id) {
+      const idx = appState.selectedExploreIds.indexOf(id);
+      if (idx === -1) {
+        appState.selectedExploreIds.push(id);
+      } else {
+        appState.selectedExploreIds.splice(idx, 1);
+      }
+      renderExplore();
+      persistState();
+    }
+
+    function renderExplore() {
+      const grid = document.getElementById(`explore-grid`);
+      const chip = document.getElementById(`explore-plan-chip`);
+      const routeList = document.getElementById(`personal-route-list`);
+      if (!grid) return;
+
+      const items = EXPLORE_SUGGESTIONS.filter(item => {
+        const dayMatch = currentExploreDay === `alle` || item.day === currentExploreDay;
+        const catMatch = currentExploreCat === `alle` || item.cat === currentExploreCat;
+        return dayMatch && catMatch;
+      });
+
+      grid.innerHTML = items.map(item => {
+        const picked = appState.selectedExploreIds.includes(item.id);
+        return `
+          <article class="explore-card" data-day="${item.day}" data-cat="${item.cat}">
+            <div style="display:grid; gap:var(--space-sm);">
+              <div class="explore-meta">
+                <span class="chip" data-status="${item.day === 'maandag' ? 'indigo' : 'ok'}">${item.dayLabel}</span>
+                <span class="chip" data-status="info">${item.catLabel}</span>
+              </div>
+              <h3 class="card-title">${item.title}</h3>
+              <p style="color:var(--on-surface-variant); font-size:0.9375rem;">${item.desc}</p>
+              <p class="kpi-caption"><strong>Tip:</strong> ${item.tip}</p>
+            </div>
+            <div class="explore-footer">
+              <div class="kpi-caption tabular">
+                <strong>${item.duration}</strong> · ${item.distance}
+              </div>
+              <button type="button" class="btn ${picked ? 'btn-primary' : 'btn-secondary'}" aria-pressed="${picked ? 'true' : 'false'}" onclick="toggleExplorePick('${item.id}')">
+                <i data-lucide="${picked ? 'check' : 'plus'}" width="16" height="16" aria-hidden="true"></i>
+                ${picked ? 'In mijn route' : 'Voeg toe aan route'}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join(``);
+
+      const selectedItems = EXPLORE_SUGGESTIONS.filter(s => appState.selectedExploreIds.includes(s.id));
+      if (chip) {
+        chip.textContent = `${selectedItems.length} ${selectedItems.length === 1 ? 'activiteit' : 'activiteiten'} geselecteerd in uw route`;
+      }
+
+      if (routeList) {
+        if (selectedItems.length === 0) {
+          routeList.innerHTML = `<p class="kpi-caption">Nog geen activiteiten geselecteerd. Klik bij een suggestie hierboven op “Voeg toe aan route”.</p>`;
+        } else {
+          const ma = selectedItems.filter(i => i.day === `maandag`);
+          const di = selectedItems.filter(i => i.day === `dinsdag`);
+          routeList.innerHTML = `
+            <div class="two-col">
+              <div class="status-card" data-status="indigo">
+                <span class="kpi-label">Maandag 30 nov (na vlucht)</span>
+                ${ma.length === 0
+                  ? `<p class="kpi-caption">Geen maandag-activiteit gekozen.</p>`
+                  : `<ul style="margin:0; padding-left:1.1rem; display:grid; gap:var(--space-xs);">${ma.map(i => `<li><strong>${i.title}</strong> (${i.duration})</li>`).join(``)}</ul>`}
+              </div>
+              <div class="status-card" data-status="ok">
+                <span class="kpi-label">Dinsdag 1 dec (gehele dag)</span>
+                ${di.length === 0
+                  ? `<p class="kpi-caption">Geen dinsdag-activiteit gekozen.</p>`
+                  : `<ul style="margin:0; padding-left:1.1rem; display:grid; gap:var(--space-xs);">${di.map(i => `<li><strong>${i.title}</strong> (${i.duration})</li>`).join(``)}</ul>`}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 6. INTERACTIVE BARCELONA SCHEMATIC MAP (Leaflet - Pattern 8, no tiles)
+    // =========================================================================
+    function getCategoryColor(cat) {
+      if (cat === `reis`) return getCssToken(`--data-4`);
+      if (cat === `conferentie`) return getCssToken(`--primary`);
+      if (cat === `diner`) return getCssToken(`--data-3`);
+      return getCssToken(`--tertiary`);
+    }
+
+    function initOrRefreshMap() {
+      const mapEl = document.getElementById(`barcelona-map`);
+      if (!mapEl || typeof L === 'undefined') return;
+
+      if (!mapInstance) {
+        mapInstance = L.map(`barcelona-map`, {
+          center: [41.3746, 2.1620],
+          zoom: 13,
+          scrollWheelZoom: false
+        });
+
+        mapInstance.attributionControl.setPrefix(false);
+        mapInstance.attributionControl.addAttribution(`Schematische coördinatenkaart · Afstanden hemelsbreed / OV-indicatie`);
+
+        mapRingLayer = L.layerGroup().addTo(mapInstance);
+        mapRouteLayer = L.layerGroup().addTo(mapInstance);
+        mapMarkerLayer = L.layerGroup().addTo(mapInstance);
+
+        // Scale distance rings around Hotel INNSiDE Apolo (1 km and 3 km)
+        const hotelCoord = [41.3746, 2.1695];
+        const ringColor = getCssToken(`--primary`);
+        L.circle(hotelCoord, {
+          radius: 1000,
+          color: ringColor,
+          weight: 1,
+          dashArray: `4 4`,
+          fillOpacity: 0.04
+        }).bindTooltip(`1 km vanaf hotel`).addTo(mapRingLayer);
+
+        L.circle(hotelCoord, {
+          radius: 3000,
+          color: ringColor,
+          weight: 1,
+          dashArray: `6 6`,
+          fillOpacity: 0.02
+        }).bindTooltip(`3 km vanaf hotel`).addTo(mapRingLayer);
+
+        // Route 1: Airport BCN -> Plaça d'Espanya (Aerobus) -> Hotel (Metro L3)
+        const airportRoute = [
+          [41.2974, 2.0833],
+          [41.3751, 2.1492],
+          [41.3746, 2.1695]
+        ];
+        L.polyline(airportRoute, {
+          color: getCssToken(`--data-4`),
+          weight: 3,
+          dashArray: `8 6`,
+          opacity: 0.8
+        }).bindTooltip(`Transfer: Aerobús A1/A2 (BCN → Pl. d'Espanya) + Metro L3 (→ Paral·lel)`).addTo(mapRouteLayer);
+
+        // Route 2: Hotel -> Plaça d'Espanya -> Fira Gran Via
+        const confRoute = [
+          [41.3746, 2.1695],
+          [41.3751, 2.1492],
+          [41.3547, 2.1286]
+        ];
+        L.polyline(confRoute, {
+          color: getCssToken(`--primary`),
+          weight: 3.5,
+          opacity: 0.85
+        }).bindTooltip(`Conferentieroute: Hotel (Paral·lel) → Pl. d'Espanya → Fira Gran Via`).addTo(mapRouteLayer);
+
+        renderMapLocations();
+        setMapView(`centrum`);
+      }
+
+      setTimeout(() => {
+        if (mapInstance) mapInstance.invalidateSize();
+      }, 120);
+    }
+
+    function renderMapLocations() {
+      const listEl = document.getElementById(`map-poi-list`);
+      if (!listEl) return;
+
+      const filtered = MAP_LOCATIONS.filter(loc => {
+        if (currentMapCat === `alle`) return true;
+        if (currentMapCat === `conferentie`) return loc.cat === `conferentie` || loc.cat === `diner`;
+        return loc.cat === currentMapCat;
+      });
+
+      if (mapMarkerLayer) {
+        mapMarkerLayer.clearLayers();
+        mapMarkersById = {};
+        const bgLight = getCssToken(`--background`);
+
+        filtered.forEach(loc => {
+          const color = getCategoryColor(loc.cat);
+          const isAnchor = (loc.id === `hotel` || loc.id === `fira`);
+          const marker = L.circleMarker([loc.lat, loc.lng], {
+            radius: isAnchor ? 11 : 8,
+            color: color,
+            fillColor: isAnchor ? color : bgLight,
+            fillOpacity: 1,
+            weight: 3
+          });
+
+          marker.bindPopup(`
+            <div style="min-width:200px; display:grid; gap:4px;">
+              <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:${color};">${loc.catLabel}</span>
+              <strong style="font-size:14px;">${loc.name}</strong>
+              <span style="font-size:12px; opacity:0.8;">${loc.addr}</span>
+              <p style="margin:4px 0 0; font-size:12px; line-height:1.45;">${loc.desc}</p>
+            </div>
+          `);
+
+          marker.bindTooltip(loc.name, { direction: `top`, offset: [0, -8] });
+          marker.addTo(mapMarkerLayer);
+          mapMarkersById[loc.id] = marker;
+        });
+      }
+
+      listEl.innerHTML = filtered.map(loc => `
+        <button type="button" class="poi-item" data-cat="${loc.cat}" id="poi-btn-${loc.id}" onclick="focusMapLocation('${loc.id}')">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-xs);">
+            <strong style="font-family:var(--font-headline); font-size:0.95rem;">${loc.name}</strong>
+            <span class="chip" data-status="${loc.cat === 'stad' ? 'ok' : loc.cat === 'diner' ? 'warn' : loc.cat === 'reis' ? 'indigo' : 'info'}">${loc.catLabel}</span>
+          </div>
+          <span class="kpi-caption">${loc.addr}</span>
+          <span style="font-size:0.85rem; color:var(--on-surface-variant);">${loc.desc}</span>
+        </button>
+      `).join(``);
+    }
+
+    function focusMapLocation(id) {
+      const loc = MAP_LOCATIONS.find(l => l.id === id);
+      if (!loc || !mapInstance) return;
+
+      document.querySelectorAll(`.poi-item`).forEach(el => el.classList.remove(`selected`));
+      const btn = document.getElementById(`poi-btn-${id}`);
+      if (btn) btn.classList.add(`selected`);
+
+      mapInstance.flyTo([loc.lat, loc.lng], loc.id === `airport` ? 12 : 14, { duration: 0.5 });
+      const marker = mapMarkersById[id];
+      if (marker) {
+        setTimeout(() => marker.openPopup(), 350);
+      }
+    }
+
+    function filterMapCategory(cat) {
+      currentMapCat = cat;
+      document.querySelectorAll(`.map-cat-btn`).forEach(btn => {
+        btn.setAttribute(`aria-pressed`, btn.dataset.cat === cat ? `true` : `false`);
+      });
+      renderMapLocations();
+    }
+
+    function setMapView(mode) {
+      if (!mapInstance) return;
+      const btnCenter = document.getElementById(`btn-zoom-center`);
+      const btnAir = document.getElementById(`btn-zoom-airport`);
+
+      if (mode === `luchthaven`) {
+        if (btnCenter) btnCenter.setAttribute(`aria-pressed`, `false`);
+        if (btnAir) btnAir.setAttribute(`aria-pressed`, `true`);
+        const allPts = MAP_LOCATIONS.map(l => [l.lat, l.lng]);
+        mapInstance.fitBounds(allPts, { padding: [36, 36] });
+      } else {
+        if (btnCenter) btnCenter.setAttribute(`aria-pressed`, `true`);
+        if (btnAir) btnAir.setAttribute(`aria-pressed`, `false`);
+        const cityPts = MAP_LOCATIONS.filter(l => l.id !== `airport`).map(l => [l.lat, l.lng]);
+        mapInstance.fitBounds(cityPts, { padding: [40, 40] });
+      }
+    }
+
+    // =========================================================================
+    // 7. CHECKLIST LOGIC & PROGRESS
+    // =========================================================================
+    function toggleChecklistItem(id) {
+      const item = appState.checklist.find(c => c.id === id);
+      if (!item) return;
+      item.done = !item.done;
+      renderChecklist();
+      persistState();
+    }
+
+    function removeCustomChecklistItem(id) {
+      appState.checklist = appState.checklist.filter(c => c.id !== id);
+      renderChecklist();
+      persistState();
+    }
+
+    function addCustomChecklistItem(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById(`new-item-title`);
+      const select = document.getElementById(`new-item-cat`);
+      const msg = document.getElementById(`checklist-feedback`);
+      if (!input || !select) return;
+
+      const text = input.value.trim();
+      if (!text) {
+        if (msg) msg.textContent = `Vul eerst een omschrijving in voordat u het item toevoegt.`;
+        input.focus();
+        return;
+      }
+
+      appState.checklist.push({
+        id: `custom-${Date.now()}`,
+        cat: select.value,
+        title: text,
+        note: `Eigen toegevoegd aandachtspunt`,
+        done: false,
+        custom: true
+      });
+
+      input.value = ``;
+      if (msg) msg.textContent = `Item “${text}” toegevoegd aan uw checklist.`;
+      renderChecklist();
+      persistState();
+    }
+
+    function handleResetChecklist(btn) {
+      const msg = document.getElementById(`checklist-feedback`);
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.innerHTML = `<i data-lucide="alert-triangle" width="16" height="16" aria-hidden="true"></i> Klik nogmaals om te resetten`;
+        if (msg) msg.textContent = `Bevestig reset: alle vinkjes en eigen items worden teruggezet naar de standaardlijst.`;
+        if (window.lucide) window.lucide.createIcons();
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.innerHTML = `<i data-lucide="rotate-ccw" width="16" height="16" aria-hidden="true"></i> Standaard herstellen`;
+      appState.checklist = DEFAULT_CHECKLIST.map(item => Object.assign({}, item));
+      if (msg) msg.textContent = `Checklist hersteld naar de standaardpunten.`;
+      renderChecklist();
+      persistState();
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById(`checklist-groups-container`);
+      const kpiCount = document.getElementById(`kpi-check-count`);
+      const kpiCap = document.getElementById(`kpi-check-caption`);
+      const progTitle = document.getElementById(`checklist-progress-title`);
+      const progBar = document.getElementById(`checklist-progressbar`);
+      const progFill = document.getElementById(`checklist-progress-fill`);
+
+      const total = appState.checklist.length;
+      const done = appState.checklist.filter(c => c.done).length;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      if (kpiCount) kpiCount.textContent = `${done} / ${total}`;
+      if (kpiCap) {
+        kpiCap.textContent = done === total && total > 0
+          ? `Volledig gereed voor vertrek en conferentie`
+          : `${pct}% afgerond · Open checklist`;
+      }
+      if (progTitle) progTitle.textContent = `${done} van ${total} taken afgerond (${pct}%)`;
+      if (progBar) progBar.setAttribute(`aria-valuenow`, String(pct));
+      if (progFill) progFill.style.width = `${pct}%`;
+
+      if (!container) return;
+
+      container.innerHTML = CHECKLIST_CATEGORIES.map(cat => {
+        const items = appState.checklist.filter(c => c.cat === cat.key);
+        const catDone = items.filter(c => c.done).length;
+        return `
+          <article class="status-card" data-status="${cat.status}" style="padding:var(--space-lg); gap:var(--space-md);">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+              <h3 class="card-title">${cat.label}</h3>
+              <span class="chip" data-status="${catDone === items.length && items.length > 0 ? 'ok' : cat.status}">
+                ${catDone} / ${items.length} afgerond
+              </span>
+            </div>
+            <div class="check-group">
+              ${items.length === 0
+                ? `<p class="kpi-caption">Geen items in deze categorie.</p>`
+                : items.map(item => `
+                  <div class="check-item ${item.done ? 'done' : ''}">
+                    <input type="checkbox" class="check-box" id="${item.id}" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${item.id}')">
+                    <label class="check-label" for="${item.id}">
+                      <span class="check-title">${item.title}</span>
+                      ${item.note ? `<span class="check-note">${item.note}</span>` : ``}
+                    </label>
+                    <div class="btn-row">
+                      <span class="chip" data-status="${item.done ? 'ok' : 'info'}">${item.done ? 'Gereed' : 'Open'}</span>
+                      ${item.custom ? `<button type="button" class="btn btn-ghost" style="min-height:36px; padding:var(--space-xs) var(--space-sm);" aria-label="Verwijder eigen item" onclick="removeCustomChecklistItem('${item.id}')"><i data-lucide="trash-2" width="14" height="14" aria-hidden="true"></i></button>` : ``}
+                    </div>
+                  </div>
+                `).join(``)}
+            </div>
+          </article>
+        `;
+      }).join(``);
+
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function exportChecklistTxt() {
+      const lines = [
+        `BARCELONA 2026 & HPE DISCOVER — CHECKLIST & KERNGEGEVENS`,
+        `Reiziger: Renco van Leeuwen`,
+        `Vluchten: SN 3697 (heen ma 30 nov) / SN 3698 (terug vr 4 dec)`,
+        `Parkeren: Brussels Airport P2 Lock Parking · Ref ZAVW21597022 · Plaat N629FG · € 141,00`,
+        `Hotel: INNSiDE by Meliá Barcelona Apolo (Av. del Paralelo 57, 08004 Barcelona)`,
+        `Conferentie: Fira Barcelona Gran Via · North Entrance, Hall 8, Lobby`,
+        ``,
+        `CHECKLIST:`
+      ];
+
+      appState.checklist.forEach(item => {
+        lines.push(`${item.done ? '[x]' : '[ ]'} ${item.title}${item.note ? ' — ' + item.note : ''}`);
+      });
+
+      const content = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `barcelona-2026-checklist.txt`
+        });
+      }
+      const msg = document.getElementById(`checklist-feedback`);
+      if (msg) msg.textContent = `Overzicht geëxporteerd als barcelona-2026-checklist.txt.`;
+    }
+
+    // =========================================================================
+    // 8. INITIALIZATION
+    // =========================================================================
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved) {
+            restoreState(saved);
+          }
+        }
+      } catch (err) {
+        // Proceed with defaults
+      }
+
+      renderSchedule();
+      renderExplore();
+      renderChecklist();
+      switchTab(appState.activeTab || `overzicht`);
+
+      if (window.lucide) window.lucide.createIcons();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (err) {
+        // Ignore if not in host container
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
 </body>
 </html>
